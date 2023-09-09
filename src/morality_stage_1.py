@@ -44,40 +44,15 @@ def get_llm(args):
     return llm
 
 def get_human_message(args):
-    noun, verb, adj, context, letter_name, letter_profession = "", "", "", "", random.choice(letters), random.choice(letters)
+    letter_name, letter_profession = random.choice(letters), random.choice(letters)
 
     with(open(f'{PROMPT_DIR}/reminder_stage_1.txt', 'r')) as f:
         msg = f.read().strip()
 
-    # random letter for name
     msg = msg.replace("[name_letter]", letter_name)
     msg = msg.replace("[profession_letter]", letter_profession)
-    
 
-    # # random noun
-    # with open(f'{WORDS_DIR}/nouns.txt', 'r') as f_noun:
-    #     nouns = ast.literal_eval(f_noun.readline())
-    #     noun = random.choice(nouns)
-    #     msg = msg.replace("[noun]", noun)
-    # # random verb
-    # with open(f'{WORDS_DIR}/verbs.txt', 'r') as f_verb:
-    #     verbs = ast.literal_eval(f_verb.readline())
-    #     verb = random.choice(verbs)
-    #     msg = msg.replace("[verb]", verb)
-    # # random adj
-    # with open(f'{WORDS_DIR}/adj.txt', 'r') as f_adj:
-    #     adjs = ast.literal_eval(f_adj.readline())
-    #     adj = random.choice(adjs)
-    #     msg = msg.replace("[adj]", adj)
-    # # random context
-    # with open(f'{WORDS_DIR}/context.txt', 'r') as f_con:
-    #     contexts = ast.literal_eval(f_con.readline())
-    #     context = random.choice(contexts)
-    #     msg = msg.replace("[context]", context)
-
-    if args.verbose: print(msg)
-    return msg, None
-    return msg, {"noun": noun, "verb": verb, "adj": adj, "context": context}
+    return msg
 
 
 def gen_chat(args):
@@ -104,7 +79,7 @@ External Cause CoC: {external_cause_coc}
     system_message = SystemMessage(content=instruction_text)
     # 2-shots by default
     human_message_0 = HumanMessage(content='Generate a story')
-    s, settings = get_human_message(args)
+    s = get_human_message(args)
     new_message = s.split("Story (the")
     human_message_1 = HumanMessage(content=new_message[0])
     

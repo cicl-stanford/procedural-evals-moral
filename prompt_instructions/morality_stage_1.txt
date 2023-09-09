@@ -1,4 +1,4 @@
-Generate a new story based on the following template. Make the moral harm in the story completely different from the examples. The name of the agent must start with [name_letter]. The profession of the agent must start with [profession_letter].
+Generate a new story based on the following template. Make the moral harm in the story completely different from the examples. The name of the agent must start with [name_letter]. The profession of the agent must start with [profession_letter]. 
 
 Context: [Agent], [profession], faces a moral dilemma. [Note, dont use titles such as Dr., Prof. or the likes. Just use a name.]
 

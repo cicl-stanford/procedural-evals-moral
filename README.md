@@ -12,14 +12,9 @@ We develop a method that uses large language models (LLMs) to procedurally gener
 
 ### 📂 Repo structure
 ```
-├── code                 
-│   └── analysis
-│   └── prolific-exp-1
-│   └── prompt_instructions
-│   └── src 
+├── prompt_instructions            
+├── src                 
 ├── data   
-│   ├── morality
-│   └── prolific
 ├── .gitignore
 ├── LICENSE            
 └── requirements.txt
@@ -37,11 +32,12 @@ We develop a method that uses large language models (LLMs) to procedurally gener
 Prompt for generating MoralEvals is in `code/prompt_instructions/morality_stage_1.txt` and the python script is at `code/src/morality_stage_1.py`. To generate, run the following commands:
 1. `cd code/src`
 2. `python morality_stage_1.py`
-2. `python morality_stage_2.py`
-3. `python generate_conditions.py`
+3. `python morality_stage_2.py`
+4. `python comine_stages.py`
+5. `python generate_conditions.py`
 
 #### Human Experiments
-We provide code to run Human experiments of 3 kinds:
+We provide code to run Human experiments of 2 kinds:
 1. Expert Ratings: `code/src/expert_evaluate.py`
 2. Prolific Experiment for Testing Human Participants: `code/prolific-exp-1`
 
