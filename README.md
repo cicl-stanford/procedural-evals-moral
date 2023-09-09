@@ -12,9 +12,16 @@ We develop a method that uses large language models (LLMs) to procedurally gener
 
 ### 📂 Repo structure
 ```
-├── prompt_instructions            
-├── src                 
+├── code                 
+│   └── analysis
+│   └── prolific-exp
+│   └── prolific-exp-2
+│   └── prompt_instructions
+│   └── src 
 ├── data   
+│   ├── morality 
+│   ├── ratings
+│   └── prolific
 ├── .gitignore
 ├── LICENSE            
 └── requirements.txt
