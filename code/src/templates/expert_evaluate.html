@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>Expert Evaluate</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.js"></script>
+
+  </head>
+  <body>
+    <div class="ui container">
+        <h1>Evaluate Stories</h1>
+        <div class="ui form">
+            <div class="ui placeholder segment">
+                <div class="ui two column stackable grid">
+                  <div class="column">
+                <div class="field">
+                    <label for="evaluator">Name of evaluator:</label>
+                    <input type="text" id="evaluator" name="evaluator">
+                </div>
+                    <button type="button" id="load_story_btn" class="ui float button">Load Story</button>
+                  </div>
+                  <div class="column">
+                    <p>ID: <span id="row"></span></p>
+                    <p>Number of stories Rated: <span id="num_stories"></span></p>
+            </div>
+            </div>
+            </div>  
+                    <div class="ui placeholder segment" id="story_content">
+                    Context:
+                    <p id="context"></p>
+                    CC: 
+                    <p id="cc"></p>
+                    Harm CC:
+                    <p id="harm_cc"></p>
+                    Good CC:
+                    <p id="good_cc"></p>
+                    Action CC:
+                    <p id="action_cc"></p>
+                    Prevention CC:
+                    <p id="prevention_cc"></p>
+                    External Cause CC:
+                    <p id="external_cause_cc"></p>
+                    CoC:
+                    <p id="coc"></p>
+                    Good CoC:
+                    <p id="good_coc"></p>
+                    Harm CoC:
+                    <p id="harm_coc"></p>
+                    Action CoC:
+                    <p id="action_coc"></p>
+                    Prevention CoC:
+                    <p id="prevention_coc"></p>
+                    External Cause CoC:
+                    <p id="external_cause_coc"></p>
+                    Evitable Action CC:
+                    <p id="evitable_action_cc"></p>
+                    Inevitable Action CC:
+                    <p id="inevitable_action_cc"></p>
+                    Evitable Prevention CC:
+                    <p id="evitable_prevention_cc"></p>
+                    Inevitable Prevention CC:
+                    <p id="inevitable_prevention_cc"></p>
+                    Action CC:
+                    <p id="action_sentence_cc"></p>
+                    Prevention CC:
+                    <p id="prevention_sentence_cc"></p>
+                    Evitable Action CoC:
+                    <p id="evitable_action_coc"></p>
+                    Inevitable Action CoC:
+                    <p id="inevitable_action_coc"></p>
+                    Evitable Prevention CoC:
+                    <p id="evitable_prevention_coc"></p>
+                    Inevitable Prevention CoC:
+                    <p id="inevitable_prevention_coc"></p>
+                    Action CoC:
+                    <p id="action_sentence_coc"></p>
+                    Prevention CoC:
+                    <p id="prevention_sentence_coc"></p>
+                </div>
+                    
+                <div class="inline fields">
+                    <div class="field">
+                        <label>Does the story follow the assigned structure?</label>
+                    <div class="field">
+                        <div class="ui radio checkbox">
+                            <input type="radio" name="story_structure" tabindex="0" value="yes" checked>
+                            <label>Yes</label>
+                        </div>
+                        <div class="ui radio checkbox">
+                            <input type="radio" name="story_structure" tabindex="1" value="no">
+                            <label>No</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="inline fields">
+                    <label>Do the stories test the desired behavior?</label>
+                    <div class="field">
+                        <div class="ui radio checkbox">
+                            <input type="radio" name="behavior_evaluation" value="1">
+                            <label>1 (Disagree)</label>
+                        </div>
+                    </div>
+                    <div class="field">
+                        <div class="ui radio checkbox">
+                            <input type="radio" name="behavior_evaluation" value="2">
+                            <label>2 (Slightly Disagree)</label>
+                        </div>
+                    </div>
+                    <div class="field">
+                        <div class="ui radio checkbox">
+                            <input type="radio" name="behavior_evaluation" value="3" checked>
+                            <label>3 (Neutral)</label>
+                        </div>
+                    </div>
+                    <div class="field">
+                        <div class="ui radio checkbox">
+                            <input type="radio" name="behavior_evaluation" value="4">
+                            <label>4 (Slightly Agree)</label>
+                        </div>
+                    </div>
+                    <div class="field">
+                        <div class="ui radio checkbox">
+                            <input type="radio" name="behavior_evaluation" value="5">
+                            <label>5 (Agree)</label>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    
+        <button type="button" id="store_btn" class="ui fluid primary button">Submit</button>
+
+    </div>
+<script>
+// Load context button
+$('#load_story_btn').click(function() {
+        $.ajax({
+        type: "POST",
+        url: "/load_story",
+        data: {
+            'evaluator': $('#evaluator').val(),
+        },
+        success: function(data) {
+            // fill all the story, question, answer fields
+            $('#context').text(data.context);
+            $('#cc').text(data.cc);
+            $('#harm_cc').text(data.harm_cc);
+            $('#good_cc').text(data.good_cc);
+            $('#action_cc').text(data.action_cc);
+            $('#prevention_cc').text(data.prevention_cc);
+            $('#external_cause_cc').text(data.external_cause_cc);
+            $('#coc').text(data.coc);
+            $('#good_coc').text(data.good_coc);
+            $('#harm_coc').text(data.harm_coc);
+            $('#action_coc').text(data.action_coc);
+            $('#prevention_coc').text(data.prevention_coc);
+            $('#external_cause_coc').text(data.external_cause_coc);
+            $('#evitable_action_cc').text(data.evitable_action_cc);
+            $('#inevitable_action_cc').text(data.inevitable_action_cc);
+            $('#evitable_prevention_cc').text(data.evitable_prevention_cc);
+            $('#inevitable_prevention_cc').text(data.inevitable_prevention_cc);
+            $('#action_sentence_cc').text(data.action_sentence_cc);
+            $('#prevention_sentence_cc').text(data.prevention_sentence_cc);
+            $('#evitable_action_coc').text(data.evitable_action_coc);
+            $('#inevitable_action_coc').text(data.inevitable_action_coc);
+            $('#evitable_prevention_coc').text(data.evitable_prevention_coc);
+            $('#inevitable_prevention_coc').text(data.inevitable_prevention_coc);
+            $('#action_sentence_coc').text(data.action_sentence_coc);
+            $('#prevention_sentence_coc').text(data.prevention_sentence_coc);
+            $('#row').text(data.row);
+            $('#num_stories').text(data.num_stories);
+            $("html, body").animate({ scrollTop: 0 }, "slow");
+
+            
+        },
+        error: function() {
+            alert("Error loadging data.");
+        }
+        });
+    });
+
+// Store button
+$('#store_btn').click(function() {
+        $.ajax({
+        type: "POST",
+        url: "/store",
+        data: {
+            // pass evaluator name and raitings
+            'evaluator': $('#evaluator').val(),
+            'row': $('#row').text(), 
+            'story_structure': $('input[name=story_structure]:checked').val(),
+            'behavior_evaluation': $('input[name=behavior_evaluation]:checked').val(),
+            // pass the story data
+            'context': $('#context').text(),
+            'cc': $('#cc').text(),
+            'harm_cc': $('#harm_cc').text(),
+            'good_cc': $('#good_cc').text(),
+            'action_cc': $('#action_cc').text(),
+            'prevention_cc': $('#prevention_cc').text(),
+            'external_cause_cc': $('#external_cause_cc').text(),
+            'coc': $('#coc').text(),
+            'good_coc': $('#good_coc').text(),
+            'harm_coc': $('#harm_coc').text(),
+            'action_coc': $('#action_coc').text(),
+            'prevention_coc': $('#prevention_coc').text(),
+            'external_cause_coc': $('#external_cause_coc').text(),
+            'evitable_action_cc': $('#evitable_action_cc').text(),
+            'inevitable_action_cc': $('#inevitable_action_cc').text(),
+            'evitable_prevention_cc': $('#evitable_prevention_cc').text(),
+            'inevitable_prevention_cc': $('#inevitable_prevention_cc').text(),
+            'action_sentence_cc': $('#action_sentence_cc').text(),
+            'prevention_sentence_cc': $('#prevention_sentence_cc').text(),
+            'evitable_action_coc': $('#evitable_action_coc').text(),
+            'inevitable_action_coc': $('#inevitable_action_coc').text(),
+            'evitable_prevention_coc': $('#evitable_prevention_coc').text(),
+            'inevitable_prevention_coc': $('#inevitable_prevention_coc').text(),
+            'action_sentence_coc': $('#action_sentence_coc').text(),
+            'prevention_sentence_coc': $('#prevention_sentence_coc').text(),
+
+
+            
+        },
+        success: function(data) {
+            $('#context').text(data.context);
+            $('#cc').text(data.cc);
+            $('#harm_cc').text(data.harm_cc);
+            $('#good_cc').text(data.good_cc);
+            $('#action_cc').text(data.action_cc);
+            $('#prevention_cc').text(data.prevention_cc);
+            $('#external_cause_cc').text(data.external_cause_cc);
+            $('#coc').text(data.coc);
+            $('#good_coc').text(data.good_coc);
+            $('#harm_coc').text(data.harm_coc);
+            $('#action_coc').text(data.action_coc);
+            $('#prevention_coc').text(data.prevention_coc);
+            $('#external_cause_coc').text(data.external_cause_coc);
+            $('#evitable_action_cc').text(data.evitable_action_cc);
+            $('#inevitable_action_cc').text(data.inevitable_action_cc);
+            $('#evitable_prevention_cc').text(data.evitable_prevention_cc);
+            $('#inevitable_prevention_cc').text(data.inevitable_prevention_cc);
+            $('#action_sentence_cc').text(data.action_sentence_cc);
+            $('#prevention_sentence_cc').text(data.prevention_sentence_cc);
+            $('#evitable_action_coc').text(data.evitable_action_coc);
+            $('#inevitable_action_coc').text(data.inevitable_action_coc);
+            $('#evitable_prevention_coc').text(data.evitable_prevention_coc);
+            $('#inevitable_prevention_coc').text(data.inevitable_prevention_coc);
+            $('#action_sentence_coc').text(data.action_sentence_coc);
+            $('#prevention_sentence_coc').text(data.prevention_sentence_coc);
+            $('#row').text(data.row);
+            $('#num_stories').text(data.num_stories);
+            
+            
+            $("html, body").animate({ scrollTop: 0 }, "slow");
+        },
+        error: function() {
+            alert("Error storing.");
+        }
+        });
+    });
+</script>
+</body>
+</html>

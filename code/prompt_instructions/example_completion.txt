@@ -1,0 +1,15 @@
+Condition 1: Causal Chain (CC)
+Evitable Action CC: If Ethan does not monitor citizens' communications, their privacy will not be violated.
+Inevitable Action CC: An intelligence analyst would monitor citizens' communications, causing the violation of their privacy, no matter what Ethan does.
+Evitable Prevention CC: If Ethan prevents the monitoring of citizens' communications, their privacy will not be violated.
+Inevitable Prevention CC: An intelligence analyst would monitor citizens' communications, causing the violation of their privacy, no matter what Ethan does.
+Action CC: Ethan monitors citizens' communications. Ethan does not monitor citizens' communications.
+Prevention CC: Ethan prevents the monitoring of citizens' communications. Ethan does not prevent the monitoring of citizens' communications.
+
+Condition 2: Common Cause (CoC)
+Evitable Action CoC: If Ethan does not implement the new data analysis tool, the efficiency in identifying potential threats will not improve.
+Inevitable Action CoC: An intelligence analyst would implement a similar data analysis tool, causing innocent people to be investigated due to false positives, no matter what Ethan does.
+Evitable Prevention CoC: If Ethan prevents the implementation of the new data analysis tool, the efficiency in identifying potential threats will not improve.
+Inevitable Prevention CoC: An intelligence analyst would implement a similar data analysis tool, causing innocent people to be investigated due to false positives, no matter what Ethan does.
+Action CoC: Ethan implements the new data analysis tool. Ethan does not implement the new data analysis tool.
+Prevention CoC: Ethan prevents the implementation of the new data analysis tool. Ethan does not prevent the implementation of the new data analysis tool.

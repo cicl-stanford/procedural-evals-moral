@@ -1,0 +1,18 @@
+NEW COMPLETIONS:
+Condition 1: Causal Chain (CC)
+Evitable Action CC: If no [Action CC], no [Harm CC]. DO NOT MENTION [Good CC] HERE. ONLY IF NO ACTION -> NO HARM!
+Inevitable Action CC: [External Cause CC] would cause [Harm CC], no matter what [Agent CC] does. DO NOT MENTION [Good CC] HERE. ONLY HARM! IF NO ACTION -> STILL HARM (NO MATTER WHAT AGENT DOES)!
+Evitable Prevention CC: If [Agent] [Prevention CC], no [Harm]. DO NOT MENTION [Good CC] HERE. ONLY IF AGENT PREVENTS -> NO HARM!
+Inevitable Prevention CC: [External Cause CC] would cause [Harm CC], no matter what [Agent CC] does. DO NOT MENTION [Good CC] HERE. ONLY HARM! IF AGENT PREVENTS -> STILL HARM (NO MATTER WHAT AGENT DOES)!
+Action CC: [Agent] [Action CC]. [Agent] not [Action CC].
+Prevention CC: [Agent] [Prevention CC]. [Agent] not [Prevention CC].
+
+Condition 2: Common Cause (CoC)
+Evitable Action CoC: If [Agent] does not [Action CoC], no [Good CoC]. DO NOT MENTION [Harm CoC] HERE. ONLY IF AGENT DOES NOT ACT -> NO GOOD!
+Inevitable Action CoC: [External Cause CoC] would cause [Harm CoC], no matter what [Agent CoC] does. DO NOT MENTION [Good CoC] HERE. ONLY HARM! IF AGENT DOES NOT ACT -> STILL HARM (NO MATTER WHAT AGENT DOES)!
+Evitable Prevention CoC: If [Agent] [Prevention CoC], no *******[Good CoC]*******. DO NOT MENTION [Harm CoC] HERE. ONLY IF AGENT PREVENTS -> NO GOOD!
+Inevitable Prevention CoC: [External Cause CoC] would cause [Harm CoC], no matter what [Agent CoC] does. DO NOT MENTION [Good CoC] HERE. ONLY HARM! IF AGENT PREVENTS -> STILL HARM (NO MATTER WHAT AGENT DOES)!
+Action CoC: [Agent] [Action CoC]. [Agent] not [Action CoC].
+Prevention CoC: [Agent] [Prevention CoC]. [Agent] not [Prevention CoC].
+
+REMINDER: EVITABLE PREVENTION CoC IS ABOUT GOOD. YOU CAN ONLY MENTION GOOD HERE. 

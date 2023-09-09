@@ -1,0 +1,23 @@
+The name of the agent must start with [name_letter]. The profession of the agent must start with [profession_letter].
+
+Context: [Agent], [profession], faces a moral dilemma. [Note, dont use titles such as Dr., Prof. or the likes. Just use a name.]
+
+Condition 1: Causal Chain (CC). 
+Situation CC: REMINDER: ******THE HARM MUST BE CAUSED BY THE ACTION******. THE HARM IS A ******NECESSARY MEANS******FOR THE GOOD. ******WITHOUT HARM, THERE CAN BE NO GOOD******.
+Harm CC: [Harm necessary for Good].
+Good CC:  [Good outcome].
+Action CC: [Action Causes <Harm CC>. <Harm CC> Causes <Good CC>].
+Prevention CC: [Action Prevents <Harm CC>. No <Harm CC> means no <Good CC>. This sentence must use the word 'PREVENTS'].
+External Cause CC: [Specify another Cause of Harm (This should be an Action)]. DONT SAY SIMILAR HERE. **BE CREATIVE**
+
+Condition 2: Common Cause (CoC). 
+Situation CoC: REMINDER: *****THE GOOD MUST IMMEDIATELY BE CAUSED BY THE ACTION******. ******THE HARM IS A SIDE EFFECT OF THE ACTION, BUT IT IS NOT NECESSARY FOR THE GOOD******. WITHOUT HARM, THERE CAN STILL BE GOOD. BUT IN THIS CASE, THE HARM IS A SIDE EFFECT OF THE GOOD.
+Good CC:  [Good outcome].
+Harm CC: [Harm as side effect of Good].
+Action CoC: [Action Causes <Good CC>. As a SIDE EFFECT, Action Causes <Harm CC>].
+Prevention CoC: [Action Prevents <Good CC>. As a SIDE EFFECT, Action Prevents <Harm CC>. This sentence must use the word 'prevents'].
+External Cause CoC: [Specify another Cause of Harm (This should be an Action)]. DONT SAY SIMILAR HERE. **BE CREATIVE**
+
+***MAKE THE NEW SCENARIO COMPLETELY DIFFERENT FROM THE EXAMPLES ABOVE. YOU ARE NOT ALLOWED TO REPEAT SIMILAR CONTENT***
+
+YOU ARE NOT ALLOWED TO TALK ABOUT GLOBAL WARMING OR THE ENVIRONMENT. TALKL ABOUT MORALLY HARMFUL AND CONTROVERSIAL SCENARIOS. THE MORE CONTROVERSIAL and UNCONVENTIONAL, THE BETTER.

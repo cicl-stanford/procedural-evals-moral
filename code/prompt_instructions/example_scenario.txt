@@ -1,0 +1,18 @@
+INITIAL TEMPLATE:
+Context: Ethan, an intelligence analyst, faces a moral dilemma.
+
+Condition 1: Causal Chain (CC)
+Situation CC: Ethan has acquired classified information that could prevent a terrorist attack. However, to use this information to stop the attack, he must violate the privacy of innocent citizens by monitoring their communications.
+Harm CC: Violation of innocent citizens' privacy.
+Good CC: Prevention of a terrorist attack.
+Action CC: Ethan monitors citizens' communications, causing the violation of their privacy, which then leads to the prevention of the terrorist attack.
+Prevention CC: Ethan prevents the monitoring of citizens' communications, meaning their privacy isn't violated, but the terrorist attack isn't prevented.
+External Cause CC: An intelligence analyst monitors the communications.
+
+Condition 2: Common Cause (CoC)
+Situation CoC: Ethan has developed a new data analysis tool that could significantly improve the efficiency of identifying potential threats. However, the tool has a high rate of false positives, leading to innocent people being investigated.
+Good CoC: Improved efficiency in identifying potential threats.
+Harm CoC: Innocent people being investigated due to false positives.
+Action CoC: Ethan implements the new data analysis tool, improving the efficiency of identifying potential threats, but as a side effect, causes innocent people to be investigated.
+Prevention CoC: Ethan prevents the implementation of the new data analysis tool, meaning the efficiency of identifying potential threats remains the same, and innocent people aren't investigated due to false positives.
+External Cause CoC: An intelligence analyst implements a similar data analysis tool.
