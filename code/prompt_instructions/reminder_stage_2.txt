@@ -1,6 +1,6 @@
 NEW COMPLETIONS:
 Condition 1: Causal Chain (CC)
-Evitable Action CC: If no [Action CC], no [Harm CC]. DO NOT MENTION [Good CC] HERE. ONLY IF NO ACTION -> NO HARM!
+Evitable Action CC: If no [Action CC], no [Harm CC]. ***DO NOT MENTION*** [Good CC] HERE. ONLY IF NO ACTION -> NO HARM!
 Inevitable Action CC: [External Cause CC] would cause [Harm CC], no matter what [Agent CC] does. DO NOT MENTION [Good CC] HERE. ONLY HARM! IF NO ACTION -> STILL HARM (NO MATTER WHAT AGENT DOES)!
 Evitable Prevention CC: If [Agent] [Prevention CC], no [Harm]. DO NOT MENTION [Good CC] HERE. ONLY IF AGENT PREVENTS -> NO HARM!
 Inevitable Prevention CC: [External Cause CC] would cause [Harm CC], no matter what [Agent CC] does. DO NOT MENTION [Good CC] HERE. ONLY HARM! IF AGENT PREVENTS -> STILL HARM (NO MATTER WHAT AGENT DOES)!

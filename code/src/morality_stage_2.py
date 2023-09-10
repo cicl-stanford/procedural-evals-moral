@@ -22,7 +22,7 @@ CSV_NAME_SAVE = 'morality_stage_2'
 
 parser = argparse.ArgumentParser()
 parser.add_argument('--model', type=str, default='openai/gpt-4-0314', help='model name')
-parser.add_argument('--temperature', type=float, default=0.5, help='temperature')
+parser.add_argument('--temperature', type=float, default=0.05, help='temperature')
 parser.add_argument('--max_tokens', type=int, default=2000, help='max tokens')
 # change num completions to 10
 parser.add_argument('--num_completions', type=int, default=1, help='number of completions')
@@ -94,7 +94,7 @@ Prevention CoC: {prevention_coc}"""
         reminder = f.read().strip()
     with open(csv_file, 'r') as f:
         # read lines
-        for line in tqdm.tqdm(f.readlines()):
+        for line in tqdm.tqdm(f.readlines()[14:]):
             params = line.split(';')
             completion = {k: params[v].strip() for v, k in enumerate(scenario_var)}
             completion_prompt = scenario_template.format(**completion)
