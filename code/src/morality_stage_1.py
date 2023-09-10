@@ -29,7 +29,7 @@ parser.add_argument('--max_tokens', type=int, default=2000, help='max tokens')
 # change num completions to 10
 parser.add_argument('--num_completions', type=int, default=1, help='number of completions')
 parser.add_argument('--num_shots', type=int, default=3, help='number of shots')
-parser.add_argument('--num_stories', type=int, default=1, help='number of stories to generate')
+parser.add_argument('--num_stories', type=int, default=2, help='number of stories to generate')
 parser.add_argument('--verbose', action='store_true', help='verbose')
 
 

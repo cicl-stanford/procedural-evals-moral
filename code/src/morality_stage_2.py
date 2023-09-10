@@ -94,7 +94,7 @@ Prevention CoC: {prevention_coc}"""
         reminder = f.read().strip()
     with open(csv_file, 'r') as f:
         # read lines
-        for line in tqdm.tqdm(f.readlines()[14:]):
+        for line in tqdm.tqdm(f.readlines()[48:]):
             params = line.split(';')
             completion = {k: params[v].strip() for v, k in enumerate(scenario_var)}
             completion_prompt = scenario_template.format(**completion)
