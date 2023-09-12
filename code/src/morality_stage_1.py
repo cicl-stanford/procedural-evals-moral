@@ -19,7 +19,6 @@ letters = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L',
 DATA_DIR = '../../data'
 PROMPT_DIR = '../prompt_instructions'
 WORDS_DIR = '../words'
-REPO_URL = 'https://github.com/ayeshakhawaja/moral-judgment-prompt.git'
 CSV_NAME = 'morality_stage_1'
 
 parser = argparse.ArgumentParser()

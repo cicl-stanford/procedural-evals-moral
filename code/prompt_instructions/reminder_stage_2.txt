@@ -14,5 +14,3 @@ Evitable Prevention CoC: If [Agent] [Prevention CoC], no *******[Good CoC]******
 Inevitable Prevention CoC: [External Cause CoC] would cause [Harm CoC], no matter what [Agent CoC] does. DO NOT MENTION [Good CoC] HERE. ONLY HARM! IF AGENT PREVENTS -> STILL HARM (NO MATTER WHAT AGENT DOES)!
 Action CoC: [Agent] [Action CoC]. [Agent] not [Action CoC].
 Prevention CoC: [Agent] [Prevention CoC]. [Agent] not [Prevention CoC].
-
-REMINDER: EVITABLE PREVENTION CoC IS ABOUT GOOD. YOU CAN ONLY MENTION GOOD HERE. 

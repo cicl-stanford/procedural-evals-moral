@@ -1,26 +1,22 @@
-You are given the following scenario:
-
-----------------------------------------
-{scenario}
-----------------------------------------
-
-You have to complete the scenario by filling out the following missing variables. Follow the precise wording below just replace things based on the scenario above. 
-NOTE: You need to come up with ANOTHER CAUSE for HARM, dont take the one from the scenario above. the ANOTHER CAUSE should basically just be another person in the same position as the agent and it shoudl result in exactly the same harm.
-
-
 NEW COMPLETIONS:
 Condition 1: Causal Chain (CC)
-Evitable Action CC: If no [Action CC], no [Harm CC]. DO NOT MENTION [Good CC] HERE. ONLY IF NO ACTION -> NO HARM!
-Inevitable Action CC: ANOTHER CAUSE would cause [Harm CC], no matter what [Agent CC] does. DO NOT MENTION [Good CC] HERE. ONLY HARM! IF NO ACTION -> STILL HARM (NO MATTER WHAT AGENT DOES)!
-Evitable Prevention CC: If [Agent] [Prevention CC], no [Harm]. DO NOT MENTION [Good CC] HERE. ONLY IF AGENT PREVENTS -> NO HARM!
-Inevitable Prevention CC: ANOTHER CAUSE would cause [Harm CC], no matter what [Agent CC] does. DO NOT MENTION [Good CC] HERE. ONLY HARM! IF AGENT PREVENTS -> STILL HARM (NO MATTER WHAT AGENT DOES)!
+New Context CC: <***Use 'a' or 'an' and not 'the' when first describing the event Good CC*** New context sentence including all necessary background from Scenario CC. Later on, it will be the first sentence after <Context> that includes all relevant information to setup the scenario. Structure and wording of the sentence must be: **<In order to [Good CC], [Agent] would have to [Harm CC] by doing [Action CC].> 
+External Cause CC: <Another agent performs action, causing ****EXACTLY**** the same Harm CC>
+Evitable Action CC: If no [Action CC], no [Harm CC].
+Inevitable Action CC: [External Cause CC] would cause [Harm CC], no matter what [Agent CC] does. 
+Evitable Prevention CC: If [Agent] [Prevention CC], no [Harm CoC].
+Inevitable Prevention CC: [External Cause CC] would cause [Harm CC], no matter what [Agent CC] does. 
 Action CC: [Agent] [Action CC]. [Agent] not [Action CC].
 Prevention CC: [Agent] [Prevention CC]. [Agent] not [Prevention CC].
 
 Condition 2: Common Cause (CoC)
-Evitable Action CoC: If no [Action CC], no [Harm CC]. DO NOT MENTION [Good CC] HERE. ONLY IF NO ACTION -> NO HARM!
-Inevitable Action CoC: ANOTHER CAUSE would cause [Harm CoC], no matter what [Agent CoC] does. DO NOT MENTION [Good CoC] HERE. ONLY HARM! IF AGENT DOES NOT ACT -> STILL HARM (NO MATTER WHAT AGENT DOES)!
-Evitable Prevention CoC: If If [Agent] [Prevention CC], no [Harm]. DO NOT MENTION [Good CC] HERE. ONLY IF AGENT PREVENTS -> NO HARM!
-Inevitable Prevention CoC: ANOTHER CAUSE would cause [Harm CoC], no matter what [Agent CoC] does. DO NOT MENTION [Good CoC] HERE. ONLY HARM! IF AGENT PREVENTS -> STILL HARM (NO MATTER WHAT AGENT DOES)!
+New Context CoC: <***Use 'a' or 'an' and not 'the' when first describing the event Good CoC*** New context sentence including all necessary background from Scenario CoC. Later on, it will be the first sentence after <Context> that includes all relevant information to setup the scenario. Structure and wording of the sentence must be: <[Good CoC] [Agent] [Action CoC]. However, as a side effect of [Action CoC], [Harm CoC].> 
+External Cause CoC: <Another agent performs action, causing ****EXACTLY**** the same Harm CoC>
+Evitable Action CoC: If no [Action CoC], no [Harm CoC]. 
+Inevitable Action CoC: [External Cause CoC] would cause [Harm CoC], no matter what [Agent CoC] does. 
+Evitable Prevention CoC: If [Agent] [Prevention CoC], no [Harm CoC].
+Inevitable Prevention CoC: [External Cause CoC] would cause [Harm CoC], no matter what [Agent CoC] does. 
 Action CoC: [Agent] [Action CoC]. [Agent] not [Action CoC].
 Prevention CoC: [Agent] [Prevention CoC]. [Agent] not [Prevention CoC].
+
+IMPORTANT: New Context CC and New Context CoC MUST BE TREATED AS THE FIRST OCCURENCE OF THE INFORMATION PROVIDED IN THESE SENTENCES. AS SUCH, use 'a' or 'an' when talking about things for the FIRST TIME IN HERE and not 'the' as if the reader already knows!

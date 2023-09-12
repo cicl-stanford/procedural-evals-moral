@@ -3,7 +3,7 @@ import csv
 
 DATA_DIR = '../../data'
 CONDITION_DIR = os.path.join(DATA_DIR, 'conditions')
-CSV_NAME = os.path.join(DATA_DIR, 'morality.csv')
+CSV_NAME = os.path.join(DATA_DIR, 'morality_v2.csv')
 INTENTION = ['means', 'side_effect']
 ACTION = ['action_yes', 'prevention_yes', 'action_no', 'prevention_no']
 EVITABILITY = ['evitable', 'inevitable']
@@ -17,7 +17,7 @@ def get_completions():
     return completions
 
 def generate_conditions(completions):
-    list_var = ["Context", "Situation CC", "Harm CC", "Good CC", "Action CC", "Prevention CC", "External Cause CC", "CoC", "Good CoC", "Harm CoC", "Action CoC", "Prevention CoC", "External Cause CoC", "Evitable Action CC", "Inevitable Action CC", "Evitable Prevention CC", "Inevitable Prevention CC", "Action Sentence CC", "Prevention Sentence CC", "Evitable Action CoC", "Inevitable Action CoC", "Evitable Prevention CoC", "Inevitable Prevention CoC", "Action Sentence CoC", "Prevention Sentence CoC"]
+    list_var = ["Context", "Situation CC", "Harm CC", "Good CC", "Action CC", "Prevention CC", "External Cause CC 2", "CoC", "Good CoC", "Harm CoC", "Action CoC", "Prevention CoC", "External Cause CoC 2", "New Context CC", "External Cause CC", "Evitable Action CC", "Inevitable Action CC", "Evitable Prevention CC", "Inevitable Prevention CC", "Action Sentence CC", "Prevention Sentence CC", "New Context CoC", "External Cause CoC", "Evitable Action CoC", "Inevitable Action CoC", "Evitable Prevention CoC", "Inevitable Prevention CoC", "Action Sentence CoC", "Prevention Sentence CoC"]
 
     for completion_idx, completion in enumerate(completions):
 
@@ -36,9 +36,10 @@ def generate_conditions(completions):
         for intention in INTENTION:
 
             if intention == 'means':
-                situation = dict_var['Situation CC'] # CC
+                situation = dict_var['Situation CC']
                 harm = dict_var['Harm CC'] # Harm CC
                 good = dict_var['Good CC'] # Good CC
+                combine = dict_var['New Context CC']
                
                 for evitabiltiy in EVITABILITY:
  
@@ -96,14 +97,16 @@ def generate_conditions(completions):
                         new_csv_file = os.path.join(CONDITION_DIR, f'{intention}_{evitabiltiy}_{action}', f'stories.csv')
                         with open(new_csv_file, "a" if completion_idx > 0 else "w", newline='') as csvfile:
                             writer = csv.writer(csvfile, delimiter=";")
-                            writer.writerow([context, situation, f"Harm (Necessary): {harm}", f"Good: {good}", evitable_action, action_sentence, belief_question, intention_question])
+                            writer.writerow([context, situation, f"Harm: {harm}", f"Good: {good}", evitable_action, action_sentence, belief_question, intention_question])
+                            # writer.writerow([context, situation])
 
 
             if intention == 'side_effect':
 
-                situation = dict_var['CoC'] # CoC
+                situation = dict_var['CoC']
                 harm = dict_var['Harm CoC'] # Harm CoC
                 good = dict_var['Good CoC'] # Good CoC
+                combine = dict_var['New Context CoC']
 
                 for evitabiltiy in EVITABILITY:
 
@@ -156,9 +159,8 @@ def generate_conditions(completions):
                         new_csv_file = os.path.join(CONDITION_DIR, f'{intention}_{evitabiltiy}_{action}', f'stories.csv')
                         with open(new_csv_file, "a" if completion_idx > 0 else "w", newline='') as csvfile:
                             writer = csv.writer(csvfile, delimiter=";")
-                            writer.writerow([context, situation, f"Good: {good}", f"Harm (Side Effect): {harm}", evitable_action, action_sentence, belief_question, intention_question])
-
-
+                            writer.writerow([context, situation, f"Good caused by Action: {good}", f"Side effect caused by action: {harm}", evitable_action, action_sentence, belief_question, intention_question])
+                            # writer.writerow([context, situation])
 
 if __name__ == "__main__":  
     completions = get_completions()

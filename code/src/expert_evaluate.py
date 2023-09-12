@@ -9,7 +9,6 @@ from utils import push_data, get_num_items, edit_csv_row
 
 app = Flask(__name__)
 DATA_DIR = '../../data'
-REPO_URL = 'https://github.com/ayeshakhawaja/moral-judgment-prompt.git'
 
 # get index
 @app.route('/')
@@ -33,7 +32,7 @@ def get_stories(evaluator):
         idx = 0
     
     story_dict = {}
-    story_file = f'{DATA_DIR}/morality.csv'
+    story_file = f'{DATA_DIR}/morality_v2.csv'
     if not os.path.exists(story_file):
         raise Exception('No context file found')
     with open(story_file, 'r') as f:
@@ -81,7 +80,7 @@ def load():
 def store():
     evaluator = request.form['evaluator']
     row = int(request.form['row'])
-    story_file = f'{DATA_DIR}/morality.csv'
+    story_file = f'{DATA_DIR}/morality_v2.csv'
     with open(story_file, 'r') as f:
         stories = list(csv.reader(f, delimiter=';'))
         story = stories[row]

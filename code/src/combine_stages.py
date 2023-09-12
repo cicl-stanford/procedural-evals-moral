@@ -2,9 +2,9 @@ import csv
 
 DATA_DIR = '../../data'
 REPO_URL = 'https://github.com/ayeshakhawaja/moral-judgment-prompt.git'
-CSV_NAME = 'morality'
+CSV_NAME = 'morality_v2'
 CSV_NAME_STAGE_1 = 'morality_stage_1'
-CSV_NAME_STAGE_2 = 'morality_stage_2'
+CSV_NAME_STAGE_2 = 'morality_stage_2_v2_old'
 
 # load both stages and stich each line together separated by; and write to new csv in same format
 def stich_csv():
