@@ -18,7 +18,7 @@ DATA_DIR = '../../data'
 PROMPT_DIR = '../prompt_instructions'
 REPO_URL = 'https://github.com/ayeshakhawaja/moral-judgment-prompt.git'
 CSV_NAME_LOAD = 'morality_stage_1'
-CSV_NAME_SAVE = 'morality_stage_2'
+CSV_NAME_SAVE = 'morality_stage_2_v2'
 
 parser = argparse.ArgumentParser()
 parser.add_argument('--model', type=str, default='openai/gpt-4-0314', help='model name')
@@ -42,7 +42,7 @@ def get_llm(args):
     return llm
 
 def get_system_message(args):
-    with(open(f'{PROMPT_DIR}/morality_stage_2.txt', 'r')) as f:
+    with(open(f'{PROMPT_DIR}/morality_stage_2_v2.txt', 'r')) as f:
         msg = f.read().strip()
     if args.verbose: print(msg)
     scenario = """Context: {context}
@@ -85,16 +85,16 @@ Prevention CoC: {prevention_coc}"""
     with(open(f'{PROMPT_DIR}/example_scenario.txt', 'r')) as f:
         scenario = f.read().strip()
     human_message_0 = HumanMessage(content="Here is a scenario\n" + scenario)
-    with (open(f'{PROMPT_DIR}/example_completion.txt', 'r')) as f:
+    with (open(f'{PROMPT_DIR}/example_completion_v2.txt', 'r')) as f:
         completion = f.read().strip()
     assistant_message_0 = AIMessage(content=completion)
     csv_file = f'{DATA_DIR}/{CSV_NAME_LOAD}.csv'
     scenario_var = ["context", "cc", "harm_cc", "good_cc", "action_cc", "prevention_cc", "external_cause_cc", "coc", "good_coc", "harm_coc", "action_coc", "prevention_coc", "external_cause_coc"]
-    with(open(f'{PROMPT_DIR}/reminder_stage_2.txt', 'r')) as f:
+    with(open(f'{PROMPT_DIR}/reminder_stage_2_v2.txt', 'r')) as f:
         reminder = f.read().strip()
     with open(csv_file, 'r') as f:
         # read lines
-        for line in tqdm.tqdm(f.readlines()[48:]):
+        for line in tqdm.tqdm(f.readlines()[:10]):
             params = line.split(';')
             completion = {k: params[v].strip() for v, k in enumerate(scenario_var)}
             completion_prompt = scenario_template.format(**completion)
