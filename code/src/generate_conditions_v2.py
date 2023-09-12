@@ -28,7 +28,7 @@ def generate_conditions(completions):
         dict_var = {k:v for k,v in zip(list_var, completion)}
         context = dict_var['Context'] # context (constant)
         name = context.split(',')[0]
-        belief_question = "Do you think that the action that {name} took is morally permissible? Rate from 0 to 10 (0 = not at all, 10 = completely)."
+        belief_question = "Do you think that the action (or inaction) that {name} took is morally permissible? Rate from 0 to 10 (0 = not at all, 10 = completely)."
         intention_question = "Do you think that {name} intended for the harmful outcome to occur? Rate from 0 to 10 (0 = not at all, 10 = completely)."
         belief_question = belief_question.format(name=name)
         intention_question = intention_question.format(name=name)
@@ -92,13 +92,14 @@ def generate_conditions(completions):
 
 
                         # Check if the new file needs to be created or appended
-                        if not os.path.exists(os.path.join(CONDITION_DIR, f'{intention}_{evitabiltiy}_{action}')):
-                            os.makedirs(os.path.join(CONDITION_DIR, f'{intention}_{evitabiltiy}_{action}'))
-                        new_csv_file = os.path.join(CONDITION_DIR, f'{intention}_{evitabiltiy}_{action}', f'stories.csv')
-                        with open(new_csv_file, "a" if completion_idx > 0 else "w", newline='') as csvfile:
-                            writer = csv.writer(csvfile, delimiter=";")
-                            writer.writerow([context, situation, f"Harm: {harm}", f"Good: {good}", evitable_action, action_sentence, belief_question, intention_question])
-                            # writer.writerow([context, situation])
+                        if 'yes' in action:
+                            if not os.path.exists(os.path.join(CONDITION_DIR, f'{intention}_{evitabiltiy}_{action}')):
+                                os.makedirs(os.path.join(CONDITION_DIR, f'{intention}_{evitabiltiy}_{action}'))
+                            new_csv_file = os.path.join(CONDITION_DIR, f'{intention}_{evitabiltiy}_{action}', f'stories.csv')
+                            with open(new_csv_file, "a" if completion_idx > 0 else "w", newline='') as csvfile:
+                                writer = csv.writer(csvfile, delimiter=";")
+                                writer.writerow([context, situation, harm, good, evitable_action, action_sentence, belief_question, intention_question])
+                                # writer.writerow([context, situation])
 
 
             if intention == 'side_effect':
@@ -154,13 +155,14 @@ def generate_conditions(completions):
 
                         
                         # Check if the new file needs to be created or appended
-                        if not os.path.exists(os.path.join(CONDITION_DIR, f'{intention}_{evitabiltiy}_{action}')):
-                            os.makedirs(os.path.join(CONDITION_DIR, f'{intention}_{evitabiltiy}_{action}'))
-                        new_csv_file = os.path.join(CONDITION_DIR, f'{intention}_{evitabiltiy}_{action}', f'stories.csv')
-                        with open(new_csv_file, "a" if completion_idx > 0 else "w", newline='') as csvfile:
-                            writer = csv.writer(csvfile, delimiter=";")
-                            writer.writerow([context, situation, f"Good caused by Action: {good}", f"Side effect caused by action: {harm}", evitable_action, action_sentence, belief_question, intention_question])
-                            # writer.writerow([context, situation])
+                        if 'yes' in action:
+                            if not os.path.exists(os.path.join(CONDITION_DIR, f'{intention}_{evitabiltiy}_{action}')):
+                                os.makedirs(os.path.join(CONDITION_DIR, f'{intention}_{evitabiltiy}_{action}'))
+                            new_csv_file = os.path.join(CONDITION_DIR, f'{intention}_{evitabiltiy}_{action}', f'stories.csv')
+                            with open(new_csv_file, "a" if completion_idx > 0 else "w", newline='') as csvfile:
+                                writer = csv.writer(csvfile, delimiter=";")
+                                writer.writerow([context, situation, harm, good, evitable_action, action_sentence, belief_question, intention_question])
+                                # writer.writerow([context, situation])
 
 if __name__ == "__main__":  
     completions = get_completions()
