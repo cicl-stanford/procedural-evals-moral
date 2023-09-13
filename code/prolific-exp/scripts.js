@@ -144,7 +144,7 @@ $(document).ready(function () {
             surveyData.trialPages[`trial${i}`] = {
                 likertResponses: {},
                 background: trialData.background,
-                sample_idx: trialData.idx,
+                sample_idx: trialData.sample_idx,
                 condition: trialData.condition,
                 scenario_id: trialData.scenario_id,
                 evitability: trialData.evitability,
