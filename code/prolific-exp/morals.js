@@ -24,8 +24,8 @@ async function createTrialPages(condition) {
     let questions = [question_1, question_2];
 
     // read stories rom a json file
-    // let response = await fetch(`https://kanishkg.github.io/batch_${condition}.json`);
-    let response = await fetch(`batch_1.json`);
+    let response = await fetch(`https://kanishkg.github.io/batch_${condition}.json`);
+    // let response = await fetch(`batch_1.json`);
     let trials = await response.json();
     shuffleArray(trials);
 
