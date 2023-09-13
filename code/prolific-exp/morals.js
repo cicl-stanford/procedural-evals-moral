@@ -46,7 +46,7 @@ async function createTrialPages(condition) {
         for (let q = 1; q <= 2; q++) {
             trialPages += `<div class="question" id="question-${i}-${q}">`;
             trialPages += `
-            <p><b>Statement ${q}: ${questions[q-1]}</b></p>
+            <p><b>Statement</b> ${q}: ${questions[q-1]}</p>
                 <div class="form-check form-check-inline">
                     <input class="form-check-input" type="radio" name="likert-${i}-${q}" id="likert-${i}-${q}-1" value="1">
                     <label class="form-check-label" for="likert-${i}-${q}-1">Strongly Disagree</label>
