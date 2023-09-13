@@ -98,7 +98,8 @@ def generate_conditions(completions):
                             new_csv_file = os.path.join(CONDITION_DIR, f'{intention}_{evitabiltiy}_{action}', f'stories.csv')
                             with open(new_csv_file, "a" if completion_idx > 0 else "w", newline='') as csvfile:
                                 writer = csv.writer(csvfile, delimiter=";")
-                                writer.writerow([context, situation, f"Harm: {harm}", f"Good: {good}", evitable_action, action_sentence, belief_question, intention_question])
+                                writer.writerow([context, situation, evitable_action, action_sentence, belief_question, intention_question])
+                                # writer.writerow([context, situation, f"Harm: {harm}", f"Good: {good}", evitable_action, action_sentence, belief_question, intention_question])
                                 # writer.writerow([context, situation])
 
 
@@ -151,7 +152,7 @@ def generate_conditions(completions):
                             if action == 'prevention_no':
                                 action_var = dict_var['Prevention CoC']
                                 evitable_action = dict_var['Inevitable Prevention CoC']
-                                action_sentence = dict_var['Prevention Sentence CoC'].split('.')[1][1:]
+                                action_sentence = dict_var['Prevention Sentence CoC'].split('.')[1][1:] + "."
 
                         
                         # Check if the new file needs to be created or appended
@@ -161,7 +162,8 @@ def generate_conditions(completions):
                             new_csv_file = os.path.join(CONDITION_DIR, f'{intention}_{evitabiltiy}_{action}', f'stories.csv')
                             with open(new_csv_file, "a" if completion_idx > 0 else "w", newline='') as csvfile:
                                 writer = csv.writer(csvfile, delimiter=";")
-                                writer.writerow([context, situation, f"Harm: {harm}", f"Good: {good}", evitable_action, action_sentence, belief_question, intention_question])
+                                writer.writerow([context, situation, evitable_action, action_sentence, belief_question, intention_question])
+                                # writer.writerow([context, situation, f"Harm: {harm}", f"Good: {good}", evitable_action, action_sentence, belief_question, intention_question])
                                 # writer.writerow([context, situation])
 
 if __name__ == "__main__":  

@@ -16,32 +16,62 @@ function shuffleArray(array) {
 async function createTrialPages(condition) {
 
     let trialPages = '';
-    let num_trials = 12;
+    let num_trials = 16;
+    let question_1 = 'The action that the agent took is morally permissible.';
+    let question_2 = 'The agent intended for the harmful outcome to occur.';
 
-    // read stories from a json file
-    let response = await fetch(`https://kanishkg.github.io/condition_${condition}_mcq_rerun_bwd.json`);
-    // let response = await fetch(`condition_${condition}_mcq_rerun_bwd.json`);
+    // create a list of the questions
+    let questions = [question_1, question_2];
+
+    // read stories rom a json file
+    // let response = await fetch(`https://kanishkg.github.io/batch_${condition}.json`);
+    let response = await fetch(`batch_1.json`);
     let trials = await response.json();
     shuffleArray(trials);
 
     window.trials = trials;
+    console.log(trials);
 
     for (let i = 1; i <= num_trials; i++) {
 
         trialPages += `
             <div id="trial-page-${i}" class="page d-none">
                 <h4> Story </h4>
-                <p> ${trials[i-1].story}</p>
-                <h4> Question </h4>
-                <p>${trials[i-1].question}</p>
-                <h4> Answer Options </h4>
-                <form>
-                ${trials[i-1].answers_no_label.map((answer, j) => `
-                <div class="form-check">
-                    <input class="form-check-input" type="radio" name="mcq-${i}" id="mcq-${i}-${j}" value="${j}">
-                    <label class="form-check-label" for="mcq-${i}-${j}">${answer}</label>
+                <p> ${trials[i-1].background}</p>
+
+                <p> ${trials[i-1].evitability}</p>
+
+                <p> ${trials[i-1].action}</p>`
+        
+                trialPages += `<h4> Answer the following questions </h4>`;
+        for (let q = 1; q <= 2; q++) {
+            trialPages += `<div class="question" id="question-${i}-${q}">`;
+            trialPages += `
+            <p>Question ${q}: ${questions[q-1]}</p>
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="radio" name="likert-${i}-${q}" id="likert-${i}-${q}-1" value="1">
+                    <label class="form-check-label" for="likert-${i}-${q}-1">Strongly Disagree</label>
                 </div>
-                `).join('')}
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="radio" name="likert-${i}-${q}" id="likert-${i}-${q}-2" value="2">
+                    <label class="form-check-label" for="likert-${i}-${q}-2">Disagree</label>
+                </div>
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="radio" name="likert-${i}-${q}" id="likert-${i}-${q}-3" value="3">
+                    <label class="form-check-label" for="likert-${i}-${q}-3">Neutral</label>
+                </div>
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="radio" name="likert-${i}-${q}" id="likert-${i}-${q}-4" value="4">
+                    <label class="form-check-label" for="likert-${i}-${q}-4">Agree</label>
+                </div>
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="radio" name="likert-${i}-${q}" id="likert-${i}-${q}-5" value="5">
+                    <label class="form-check-label" for="likert-${i}-${q}-5">Strongly Agree</label>
+                </div>
+            <br><br></div>
+                    `;
+        }
+        trialPages += `
                 </form>
             </div>`;
     }
@@ -49,7 +79,6 @@ async function createTrialPages(condition) {
     var $trialPages = $("#trial-pages");
     $trialPages.append(trialPages);
 }
-
 
 $(document).ready(function () {
     
@@ -90,9 +119,9 @@ $(document).ready(function () {
     function validateComprehensionTest() {
         // Check if the correct answers are selected
         const correctAnswers = {
-            "comprehension-1": "false",
-            "comprehension-2": "true",
-            "comprehension-3": "false",
+            "comprehension-1": "true",
+            "comprehension-2": "false",
+            "comprehension-3": "true",
             "comprehension-4": "false",
             "comprehension-5": "false"
         };
@@ -110,18 +139,17 @@ $(document).ready(function () {
     function submitExitSurvey() {
         // Gather trial page answers
         surveyData.trialPages = {};
-        for (let i = 1; i <= 12; i++) {
+        for (let i = 1; i <= 16; i++) {
             let trialData = window.trials[i-1];
             surveyData.trialPages[`trial${i}`] = {
-                selected_answer_idx: $('input[name="mcq-' + i + '"]:checked').val(),
-                story: trialData.story,
-                question: trialData.question,
-                answers: trialData.answers,
-                answers_no_label: trialData.answers_no_label,
-                true_labels: trialData.true_labels,
-                data_source: trialData.data_source,
-                id: trialData.id,
+                likertResponses: {},
+                background: trialData.background,
+                evitability: trialData.evitability,
+                action: trialData.action,
             };
+            for (let q = 1; q <= 2; q++) {
+                surveyData.trialPages[`trial${i}`].likertResponses[`likert${q}`] = $('input[name="likert-' + i + '-' + q + '"]:checked').val();
+            }
         }
 
         // Gather exit survey answers
@@ -134,6 +162,8 @@ $(document).ready(function () {
             // Add more input fields as needed
         };
     
+        // Submit the survey data using proliferate
+        console.log(surveyData);
         proliferate.submit(surveyData); // Uncomment this line when you're ready to use Proliferate
         // Show a thank you message or redirect to a thank you page
         // alert("Thank you for completing the survey!");
@@ -165,7 +195,6 @@ $(document).ready(function () {
             $("#prev-btn").removeClass("d-none");
         }
         showPage(currentPage);
-        $("#next-btn").prop("disabled", true);
     }
 
     function goToPrevPage() {
@@ -201,14 +230,17 @@ $(document).ready(function () {
 
     function checkAllAnswered() {
         let allAnswered = true;
-        // Get the form on the current page
-        let currentForm = $(`.page:eq(${currentPage}) form`);
+        // Get all question sets on the current page
+        let questionSets = $(`.page:eq(${currentPage}) .question`);
     
-        // Check if the form has a selected answer
-        if (!currentForm.find('input[type="radio"]').is(':checked')) {
-            allAnswered = false;
-        }
-        
+        questionSets.each(function() {
+            // Check if this question set has a selected answer
+            if (!$(this).find('input[type="radio"]').is(':checked')) {
+                allAnswered = false;
+                return false; // Exit the loop
+            }
+        });
+    
         return allAnswered;
     }
     
@@ -220,10 +252,7 @@ $(document).ready(function () {
         else if (currentPage === 0 && $("#consent-checkbox").is(":checked")){
             $("#next-btn").prop("disabled", false);
         } 
-        else if (currentPage >= 1 && currentPage <= 5) {
-            $("#next-btn").prop("disabled", false);
-        }
-        else if (currentPage >= 5) {
+        else if (currentPage >= 6) {
             if (checkAllAnswered()) {
                 $("#next-btn").prop("disabled", false);
             } else {

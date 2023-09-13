@@ -23,11 +23,11 @@
             <div id="consent" class="page">
                 <h2>Consent Form</h2>
                 <p><strong>Description</strong></p>
-                <p>Welcome! You are invited to participate in a research study. You will be asked to answer questions about various short social reasoning stories. All information collected will remain confidential.</p>
+                <p>Welcome! You are invited to participate in a research study. You will be asked to rate the quality of various short scenarios. All information collected will remain confidential.</p>
                 <p><strong>Risks and benefits:</strong></p>
                 <p>Risks involved in this study are the same as those normally associated with using a computer (e.g., mild eye/arm strain). If you have any pre-existing conditions that might make reading and completing a computer-based survey strenuous for you, you should probably elect to not participate in this study. If at any time during the study you feel unable to participate because you are experiencing strain, you may end your participation without penalty. We cannot and do not guarantee or promise that you will receive any benefits from this study. Your decision whether or not to participate in this study will not affect your employment, medical care, and/or grades in school.</p>
                 <p><strong>Time involvement:</strong></p>
-                <p>Your participation in this experiment will take around 5-10 minutes.</p>
+                <p>Your participation in this experiment will take around 20 minutes.</p>
                 <p><strong>Payment:</strong></p>
                 <p>If recruitment materials indicate payment (e.g., Prolific or other recruitment), you will receive compensation as indicated.</p>
                 <p><strong>Subject's rights:</strong></p>
@@ -51,23 +51,69 @@
             </div>
             <div id="intro1" class="page d-none">
                 <h2>Instructions</h2>
-                <p>In this online experiment, you will be presented with short social reasoning scenarios. Each scenario includes a story, a question, and answer options. Your task is to select the best answer based on your understanding of the scenario.</p>
+                <p>In this online experiment, you will evaluate the moral choices and intentions of agents facing dilemmas in 16 scenarios. Each scenario features a brief story, a question about the <b>moral permissibility</b> of the agent's action, and a question about the agent's <b>intention</b>.</p>
             </div>
             <div id="intro2" class="page d-none">
-                <h3>An example scenario can look like this:</h3>
+                <h3>An example moral dilemma can look like this:</h3>
                     <h4>Story</h4>
-                    Noor is working as a barista at a busy coffee shop. Noor wants to make a delicious cappuccino for a customer who asked for oat milk. Noor grabs a milk pitcher and fills it with oat milk. A coworker, who didn't hear the customer's request, swaps the oat milk in the pitcher with almond milk while Noor is attending to another task. Noor sees her coworker swapping the milk.
-                    <h4>Question</h4>
-                    Does Noor believe the milk pitcher contains oat milk or almond milk?
-                    <h4>Answer Options</h4>
-                    <ol>
-                    <li>Almond Milk
-                    <li>Oat Milk
-                    </ol>
+                    Jake, an urban planner, faces a moral dilemma. Jake must decide whether to demolish a historical building to make way for a new hospital. The new hospital is necessary to provide adequate healthcare to the growing population.
+                    <br><br>
+                    If Jake does not order the demolition of the historical building, the building will not be demolished.
+                    <br><br>
+                    Jake orders the demolition of the historical building.
+                    <br><br>
+                    <h4> Answer the following questions </h4>
+                    <!-- Question 1 -->
+                    <p>Question 1: The action that the agent took is morally permissible.</p>
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" name="likert-${i}-${q}-question1" id="likert-${i}-${q}-1-q1" value="1">
+                        <label class="form-check-label" for="likert-${i}-${q}-1-q1">Strongly Disagree</label>
+                    </div>
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" name="likert-${i}-${q}-question1" id="likert-${i}-${q}-2-q1" value="2">
+                        <label class="form-check-label" for="likert-${i}-${q}-2-q1">Disagree</label>
+                    </div>
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" name="likert-${i}-${q}-question1" id="likert-${i}-${q}-3-q1" value="3">
+                        <label class="form-check-label" for="likert-${i}-${q}-3-q1">Neutral</label>
+                    </div>
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" name="likert-${i}-${q}-question1" id="likert-${i}-${q}-4-q1" value="4">
+                        <label class="form-check-label" for="likert-${i}-${q}-4-q1">Agree</label>
+                    </div>
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" name="likert-${i}-${q}-question1" id="likert-${i}-${q}-5-q1" value="5">
+                        <label class="form-check-label" for="likert-${i}-${q}-5-q1">Strongly Agree</label>
+                    </div>
+
+                    <!-- Question 2 -->
+                    <br><br>
+                    <p>Question 2: The agent intended for the harmful outcome to occur.</p>
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" name="likert-${i}-${q}-question2" id="likert-${i}-${q}-1-q2" value="1">
+                        <label class="form-check-label" for="likert-${i}-${q}-1-q2">Strongly Disagree</label>
+                    </div>
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" name="likert-${i}-${q}-question2" id="likert-${i}-${q}-2-q2" value="2">
+                        <label class="form-check-label" for="likert-${i}-${q}-2-q2">Disagree</label>
+                    </div>
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" name="likert-${i}-${q}-question2" id="likert-${i}-${q}-3-q2" value="3">
+                        <label class="form-check-label" for="likert-${i}-${q}-3-q2">Neutral</label>
+                    </div>
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" name="likert-${i}-${q}-question2" id="likert-${i}-${q}-4-q2" value="4">
+                        <label class="form-check-label" for="likert-${i}-${q}-4-q2">Agree</label>
+                    </div>
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" name="likert-${i}-${q}-question2" id="likert-${i}-${q}-5-q2" value="5">
+                        <label class="form-check-label" for="likert-${i}-${q}-5-q2">Strongly Agree</label>
+                    </div>
+
             </div>
             <div id="intro3" class="page d-none">
                 <h2>Instructions</h2>
-                <p>In total, you will answer 12 questions. It is important to read each story carefully and respond to the questions to the best of your ability.</p>
+                <p>In total, you will evaluate 16 scenarios. It is important to read each of them carefully and respond to the best of your ability.</p>
                 <!-- Add your introduction content and example here -->
             </div>
             <!-- Comprehension test -->
@@ -75,7 +121,7 @@
                 <h2>Comprehension Quiz</h2>
                 <form>
                     <div class="question">
-                        <p>1. Your task in this online experiment is to evaluate the quality of different short social reasoning scenarios based on the understandability of the story and whether the question and answer options make sense with respect to the story.</p>
+                        <p>1. The main task in this online experiment is to evaluate moral dilemmas by assessing the moral permissibility and intention behind an agent's action.</p>
                         <div>
                             <input type="radio" id="comp-1-true" name="comprehension-1" value="true">
                             <label for="comp-1-true">True</label>
@@ -86,7 +132,7 @@
                         </div>
                     </div>
                     <div class="question">
-                        <p>2. Each short social reasoning scenario consists of a story, a question, and different answer options.</p>
+                        <p>2. The scale for rating the moral permissibility of an agent's action has four response options: Disagree, Slightly Agree, Agree, and Strongly Agree.</p>
                         <div>
                             <input type="radio" id="comp-2-true" name="comprehension-2" value="true">
                             <label for="comp-2-true">True</label>
@@ -97,7 +143,7 @@
                         </div>
                     </div>
                     <div class="question">
-                        <p>3. There are at least three answer options.</p>
+                        <p>3. Each moral dilemma is composed of a short story, a question about the moral permissibility of the agent's action, and a question about the agent's intention.</p>
                         <div>
                             <input type="radio" id="comp-3-true" name="comprehension-3" value="true">
                             <label for="comp-3-true">True</label>
@@ -108,7 +154,7 @@
                         </div>
                     </div>
                     <div class="question">
-                        <p>4. The study focuses on testing someone's social reasoning abilities using short mathematical reasoning scenarios.</p>
+                        <p>4. The focus of the study is to test one's moral reasoning abilities through math quizzes.</p>
                         <div>
                             <input type="radio" id="comp-4-true" name="comprehension-4" value="true">
                             <label for="comp-4-true">True</label>
@@ -119,7 +165,7 @@
                         </div>
                     </div>
                     <div class="question">
-                        <p>5. All scenarios in this study involve a short story followed by a question with exactly three multiple-choice response options for you to select from.</p>
+                        <p>5. Every scenario in the study involves a short story followed by two multiple-choice questions with two answer options each.</p>
                         <div>
                             <input type="radio" id="comp-5-true" name="comprehension-5" value="true">
                             <label for="comp-5-true">True</label>

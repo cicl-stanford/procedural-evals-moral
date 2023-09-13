@@ -1,20 +1,13 @@
 import random
+import os
 import json
 
-NUM_CONDITIONS = 1
-# true belief
-NUM_FORWARD_BELIEF_TRUE = 5
-NUM_BACKWARD_BELIEF_TRUE = 5
-NUM_FORWARD_ACTION_TRUE = 5
-NUM_BACKWARD_DESIRE_TRUE = 20
-NUM_BACKWARD_DESIRE_TRUE_CORRECT = 5
-# false belief
-NUM_FORWARD_BELIEF_FALSE = 5
-NUM_BACKWARD_BELIEF_FALSE = 5
-NUM_FORWARD_ACTION_FALSE = 5
-NUM_BACKWARD_DESIRE_FALSE = 20
-NUM_BACKWARD_DESIRE_FALSE_CORRECT = 5
+NUM_CONDITIONS = 8
+NUM_SCENARIOS = 10
+NUM_STORIES = 50
+N_BATCH = 5
 
+DATA_DIR = '../../data/conditions/'
 
 def read_csv(csv_file):
     with open(csv_file, 'r') as f:
@@ -22,98 +15,63 @@ def read_csv(csv_file):
     for i, line in enumerate(lines):
         lines[i] = line.strip().split(';')
     return lines
-
-def stitch_csv(tb, fb):
-    combined_true = []
-    combined_false = []
-    for i in range(len(tb)): 
-        t_story = [tb[i][0], tb[i][1], tb[i][2], fb[i][2]]
-        f_story = [fb[i][0], fb[i][1], fb[i][2], tb[i][2]]
-        combined_true.append(t_story)
-        combined_false.append(f_story)
-    return combined_true, combined_false
             
-def convert_to_task(stories, data_source):
-    tasks = []
-    for i, s in enumerate(stories):
-        if s[2] == s[3]:
-            continue
-        else:
-            task = {}
-            task['story'] = s[0]
-            task['question'] = s[1]
-            s[2] = s[2] + " (Correct Answer)"
-            answers = s[2:]
-            random.shuffle(answers)
-            task['answers'] = answers
-            task['data_source'] = data_source
-            task['id'] = f"{data_source}_{i:02d}"
-            tasks.append(task)
-    return tasks
+# variables
+causal_structure = ['means', 'side_effect']
+evitability = ['evitable', 'inevitable']
+action = ['action_yes', 'prevention_no']
 
-# true belief
-forward_belief_true = read_csv('../../data/conditions/1_forward_belief_true_belief/stories.csv')
-backward_belief_true = read_csv('../../data/conditions/1_backward_belief_true_belief/stories.csv')
-forward_action_true = read_csv('../../data/conditions/1_forward_action_true_belief/stories.csv')
-backward_desire_true = read_csv('../../data/conditions/1_backward_desire_true_belief/stories.csv')
-# false belief
-forward_belief_false = read_csv('../../data/conditions/1_forward_belief_false_belief/stories.csv')
-backward_belief_false = read_csv('../../data/conditions/1_backward_belief_false_belief/stories.csv')
-forward_action_false = read_csv('../../data/conditions/1_forward_action_false_belief/stories.csv')
-backward_desire_false = read_csv('../../data/conditions/1_backward_desire_false_belief/stories.csv')
+# Random scenarios
+random_scenario_idx = random.sample(range(0, NUM_STORIES), NUM_SCENARIOS)
+random_scenario_idx = [39, 18, 24, 34, 31, 23, 10, 2, 19, 4] # sampled 09-12-2023 6:31pm
 
-forward_belief_true, forward_belief_false = stitch_csv(forward_belief_true, forward_belief_false)
-backward_belief_true, backward_belief_false = stitch_csv(backward_belief_true, backward_belief_false)
-forward_action_true, forward_action_false = stitch_csv(forward_action_true, forward_action_false)
-backward_desire_true, backward_desire_false = stitch_csv(backward_desire_true, backward_desire_false)
+# Full data dict
+data = {}
 
-zipped = list(zip(forward_belief_true, 
-                  backward_belief_true, 
-                  forward_action_true, 
-                  backward_desire_true, 
-                  forward_belief_false, 
-                  backward_belief_false, 
-                  forward_action_false, 
-                  backward_desire_false))
-random.shuffle(zipped)
+# Loop through all variables to generate condition names
+for cs in causal_structure:
+    for ev in evitability:
+        for act in action:
+            # Concatenate to form the condition name
+            condition_name = f"{cs}_{ev}_{act}"
+            
+            # Construct the path to the CSV file for this condition
+            csv_path = os.path.join(DATA_DIR, condition_name, 'stories.csv')
+            
+            # Assuming csv_path is valid and the file exists, read the CSV file
+            try:
+                csv_data = read_csv(csv_path)
+            except FileNotFoundError:
+                print(f"File {csv_path} not found.")
+                continue
+            
+            # Selectt rows based on random scenario indices
+            data[condition_name] = [csv_data[i] for i in random_scenario_idx]
 
-forward_belief_true, backward_belief_true, forward_action_true, backward_desire_true, \
-    forward_belief_false, backward_belief_false, forward_action_false, backward_desire_false = zip(*zipped)
+# Initialize an empty list to keep track of used indices for each key
+used_indices = {key: [] for key in data.keys()}
 
-forward_belief_true = forward_belief_true[:NUM_FORWARD_BELIEF_TRUE*NUM_CONDITIONS]
-backward_belief_true = backward_belief_true[:NUM_BACKWARD_BELIEF_TRUE*NUM_CONDITIONS]
-forward_action_true = forward_action_true[:NUM_FORWARD_ACTION_TRUE*NUM_CONDITIONS]
-backward_desire_true = backward_desire_true[:NUM_BACKWARD_DESIRE_TRUE*NUM_CONDITIONS]
-forward_belief_false = forward_belief_false[:NUM_FORWARD_BELIEF_FALSE*NUM_CONDITIONS]
-backward_belief_false = backward_belief_false[:NUM_BACKWARD_BELIEF_FALSE*NUM_CONDITIONS]
-forward_action_false = forward_action_false[:NUM_FORWARD_ACTION_FALSE*NUM_CONDITIONS]
-backward_desire_false = backward_desire_false[:NUM_BACKWARD_DESIRE_FALSE*NUM_CONDITIONS]
-
-forward_belief_true = convert_to_task(forward_belief_true, 'forward_belief_true')
-backward_belief_true = convert_to_task(backward_belief_true, 'backward_belief_true')
-forward_action_true = convert_to_task(forward_action_true, 'forward_action_true')
-backward_desire_true = convert_to_task(backward_desire_true, 'backward_desire_true')
-forward_belief_false = convert_to_task(forward_belief_false, 'forward_belief_false')
-backward_belief_false = convert_to_task(backward_belief_false, 'backward_belief_false')
-forward_action_false = convert_to_task(forward_action_false, 'forward_action_false')
-backward_desire_false = convert_to_task(backward_desire_false, 'backward_desire_false')
-
-
-
-for i in range(NUM_CONDITIONS):
-    json_file = './condition_' + str(i) + '.json'
-    forward_belief_true = forward_belief_true[i*NUM_FORWARD_BELIEF_TRUE:(i+1)*NUM_FORWARD_BELIEF_TRUE]
-    backward_belief_true = backward_belief_true[i*NUM_BACKWARD_BELIEF_TRUE:(i+1)*NUM_BACKWARD_BELIEF_TRUE]
-    forward_action_true = forward_action_true[i*NUM_FORWARD_ACTION_TRUE:(i+1)*NUM_FORWARD_ACTION_TRUE]
-    backward_desire_true = backward_desire_true[i*NUM_BACKWARD_DESIRE_TRUE_CORRECT:(i+1)*NUM_BACKWARD_DESIRE_TRUE_CORRECT]
-    forward_belief_false = forward_belief_false[i*NUM_FORWARD_BELIEF_FALSE:(i+1)*NUM_FORWARD_BELIEF_FALSE]
-    backward_belief_false = backward_belief_false[i*NUM_BACKWARD_BELIEF_FALSE:(i+1)*NUM_BACKWARD_BELIEF_FALSE]
-    forward_action_false = forward_action_false[i*NUM_FORWARD_ACTION_FALSE:(i+1)*NUM_FORWARD_ACTION_FALSE]
-    backward_desire_false = backward_desire_false[i*NUM_BACKWARD_DESIRE_FALSE_CORRECT:(i+1)*NUM_BACKWARD_DESIRE_FALSE_CORRECT]
-    tasks = forward_belief_true + backward_belief_true + forward_action_true + backward_desire_true + \
-        forward_belief_false + backward_belief_false + forward_action_false + backward_desire_false
-    random.shuffle(tasks)
-    with open(json_file, 'w') as f:
-        json.dump(tasks, f)
+for batch in range(N_BATCH):
+    stories = []  # Create an empty list to collect stories for this batch
     
-
+    for key in data.keys():
+        available_indices = [i for i in range(len(data[key])) if i not in used_indices[key]]
+        
+        # Randomly sample two different entries for this key
+        sample_indices = random.sample(available_indices, 2)
+        
+        # Add these indices to used_indices to ensure they won't be used again
+        used_indices[key].extend(sample_indices)
+        
+        for idx in sample_indices:
+            background = data[key][idx][0] + ' ' + data[key][idx][1]
+            evitability = data[key][idx][2]
+            action = data[key][idx][3]
+            
+            # Create the story and add it to the list for this batch
+            story = {'background': background, 'evitability': evitability, 'action': action}
+            stories.append(story)
+    
+    # Write the stories list to a JSON file
+    with open(f'batch_{batch}.json', 'w') as f:
+        json.dump(stories, f)
