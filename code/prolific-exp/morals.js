@@ -41,13 +41,12 @@ async function createTrialPages(condition) {
 
                 <p> ${trials[i-1].evitability}</p>
 
-                <p> ${trials[i-1].action}</p>`
+                <p> ${trials[i-1].action}</p>`;
         
-                trialPages += `<h4> Answer the following questions </h4>`;
         for (let q = 1; q <= 2; q++) {
             trialPages += `<div class="question" id="question-${i}-${q}">`;
             trialPages += `
-            <p>Question ${q}: ${questions[q-1]}</p>
+            <p><b>Statement ${q}: ${questions[q-1]}</b></p>
                 <div class="form-check form-check-inline">
                     <input class="form-check-input" type="radio" name="likert-${i}-${q}" id="likert-${i}-${q}-1" value="1">
                     <label class="form-check-label" for="likert-${i}-${q}-1">Strongly Disagree</label>
@@ -122,8 +121,6 @@ $(document).ready(function () {
             "comprehension-1": "true",
             "comprehension-2": "false",
             "comprehension-3": "true",
-            "comprehension-4": "false",
-            "comprehension-5": "false"
         };
     
         for (const question in correctAnswers) {
