@@ -18,7 +18,7 @@ async function createTrialPages(condition) {
     let trialPages = '';
     let num_trials = 16;
     let question_1 = 'The action that the agent took is morally permissible.';
-    let question_2 = 'The agent intended for the harmful outcome to occur.';
+    let question_2 = 'The agent intended for the negative outcome to occur.';
 
     // create a list of the questions
     let questions = [question_1, question_2];
