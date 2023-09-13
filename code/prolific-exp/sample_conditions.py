@@ -60,6 +60,7 @@ for batch in range(N_BATCH):
         # Randomly sample two different entries for this key
         sample_indices = random.sample(available_indices, 2)
         
+
         # Add these indices to used_indices to ensure they won't be used again
         used_indices[key].extend(sample_indices)
         
