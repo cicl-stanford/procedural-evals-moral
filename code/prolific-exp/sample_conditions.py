@@ -70,7 +70,7 @@ for batch in range(N_BATCH):
             action = data[key][idx][3]
             
             # Create the story and add it to the list for this batch
-            story = {'background': background, 'evitability': evitability, 'action': action}
+            story = {'background': background, 'evitability': evitability, 'action': action, "sample_idx": idx, "condition": key, "scenario_id": random_scenario_idx[idx]}
             stories.append(story)
     
     # Write the stories list to a JSON file
