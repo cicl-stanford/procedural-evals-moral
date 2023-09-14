@@ -16,7 +16,7 @@ function shuffleArray(array) {
 async function createTrialPages(condition) {
 
     let trialPages = '';
-    let num_trials = 8;
+    let num_trials = 16;
     let question_1 = 'The action that the agent took is morally permissible.';
     let question_2 = 'The agent intended for the negative outcome to occur.';
 
