@@ -16,7 +16,7 @@ function shuffleArray(array) {
 async function createTrialPages(condition) {
 
     let trialPages = '';
-    let num_trials = 16;
+    let num_trials = 8;
     let question_1 = 'The action that the agent took is morally permissible.';
     let question_2 = 'The agent intended for the negative outcome to occur.';
 
@@ -136,7 +136,7 @@ $(document).ready(function () {
     function submitExitSurvey() {
         // Gather trial page answers
         surveyData.trialPages = {};
-        for (let i = 1; i <= 16; i++) {
+        for (let i = 1; i <= 8; i++) {
             let trialData = window.trials[i-1];
             surveyData.trialPages[`trial${i}`] = {
                 likertResponses: {},

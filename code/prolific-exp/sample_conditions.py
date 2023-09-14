@@ -1,15 +1,15 @@
-import random
-import os
+from collections import defaultdict
 import json
-from collections import Counter, defaultdict
+import os
+import numpy as np
 
+# Constants
+DATA_DIR = '../../data/conditions'
 NUM_CONDITIONS = 8
 NUM_SCENARIOS = 10
-NUM_STORIES = 50
-N_BATCH = 5
+NUM_BATCHES = 10
 
-DATA_DIR = '../../data/conditions/'
-
+# Function to read CSV
 def read_csv(csv_file):
     with open(csv_file, 'r') as f:
         lines = f.readlines()
@@ -17,60 +17,37 @@ def read_csv(csv_file):
         lines[i] = line.strip().split(';')
     return lines
 
-# Variables
+# Define all conditions
 causal_structure = ['means', 'side_effect']
 evitability = ['evitable', 'inevitable']
 action = ['action_yes', 'prevention_no']
 
-# Random scenarios
-random_scenario_idx = random.sample(range(0, NUM_STORIES), NUM_SCENARIOS)
+# Sample 10 random indexes between 0 and 50 without replacement 
+rand_story_idxs = np.random.choice(50, NUM_SCENARIOS, replace=False) # [24  1  4 46 13 47 22 16  0 33]
+print(rand_story_idxs)
 
-# Data dict
-data = {}
-for cs in causal_structure:
-    for ev in evitability:
-        for act in action:
-            condition_name = f"{cs}_{ev}_{act}"
-            csv_path = os.path.join(DATA_DIR, condition_name, 'stories.csv')
-            try:
-                csv_data = read_csv(csv_path)
-            except FileNotFoundError:
-                print(f"File {csv_path} not found.")
-                continue
-            data[condition_name] = [csv_data[i] for i in random_scenario_idx]
+# Initialize batches
+batches = [[] for _ in range(NUM_BATCHES)]
 
-# Create a list of all stories
-all_stories = []
-for key in data.keys():
-    for idx, story_data in enumerate(data[key]):
-        background = story_data[0] + ' ' + story_data[1]
-        evitability = story_data[2]
-        action = story_data[3]
-        story = {'background': background, 'evitability': evitability, 'action': action, "sample_idx": idx, "condition": key, "scenario_id": random_scenario_idx[idx]}
-        all_stories.append(story)
-
-# Shuffle the list of all stories
-random.shuffle(all_stories)
-
-# Initialize batches and scenario counter
-batches = [[] for _ in range(N_BATCH)]
-scenario_counter = Counter()
-
-# Plan for each scenario: appear twice in 4 batches, and zero times in 1 batch
-scenario_plan = defaultdict(lambda: [2, 2, 2, 2, 0])
-for scenario_id in random_scenario_idx:
-    random.shuffle(scenario_plan[scenario_id])
-
-# Distribute stories into batches
-for story in all_stories:
-    for batch_idx in range(N_BATCH):
-        # Check if this story's scenario should appear in this batch according to the plan
-        if scenario_plan[story['scenario_id']][batch_idx] > 0:
-            # Add the story to the batch
-            batches[batch_idx].append(story)
-            
-            # Update the plan
-            scenario_plan[story['scenario_id']][batch_idx] -= 1
+# Generate all stories
+for batch_idx in range(NUM_BATCHES):
+    random_idx = rand_story_idxs[batch_idx]
+    for cs in causal_structure:
+        for ev in evitability:
+            for act in action:
+                condition_name = f"{cs}_{ev}_{act}"
+                csv_path = os.path.join(DATA_DIR, condition_name, "stories.csv")
+                try:
+                    csv_data = read_csv(csv_path)
+                except FileNotFoundError:
+                    print(f"File {csv_path} not found.")
+                    continue
+                
+                story_data = csv_data[random_idx]  # Get the story corresponding to the random index
+                context, background, evitability_sentence, action_sentence = story_data
+                story = {'background': context + " " + background, 'evitability': evitability_sentence, 'action': action_sentence, "condition": condition_name, "scenario_id": int(random_idx)}
+                
+                batches[batch_idx].append(story)
 
 # Write the batches to JSON files
 for i, batch in enumerate(batches):
