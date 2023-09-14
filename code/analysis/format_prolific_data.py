@@ -4,9 +4,9 @@ import pandas as pd
 DATA_PATH = "../../data/prolific/"
 N_TRIALS = 30
 
-df_trials = pd.read_csv(DATA_PATH + "main_trials_combined.csv")
-df_ids = pd.read_csv(DATA_PATH + "main_ids_combined.csv")
-df_exit = pd.read_csv(DATA_PATH + "main_exit_combined.csv")
+df_trials = pd.read_csv(DATA_PATH + "trials.csv")
+df_ids = pd.read_csv(DATA_PATH + "ids.csv")
+df_exit = pd.read_csv(DATA_PATH + "exit_survey.csv")
 
 # Initialize an empty list to hold the transformed data
 data = []

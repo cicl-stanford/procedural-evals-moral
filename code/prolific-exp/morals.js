@@ -30,7 +30,7 @@ async function createTrialPages(condition) {
     shuffleArray(trials);
 
     window.trials = trials;
-    console.log(trials);
+    // console.log(trials);
 
     for (let i = 1; i <= num_trials; i++) {
 
@@ -94,7 +94,7 @@ $(document).ready(function () {
     let progressStep = 100 / totalPages;
 
 
-    console.log(surveyData);
+    // console.log(surveyData);
     function updateProgressBar() {
         let progress = progressStep * (currentPage + 1);
         $("#progress-bar").css("width", progress + "%").attr("aria-valuenow", progress);
@@ -163,6 +163,7 @@ $(document).ready(function () {
         };
     
         // Submit the survey data using proliferate
+        console.log('submitting');
         console.log(surveyData);
         proliferate.submit(surveyData); // Uncomment this line when you're ready to use Proliferate
         // Show a thank you message or redirect to a thank you page
