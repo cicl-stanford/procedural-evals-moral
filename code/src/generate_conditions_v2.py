@@ -28,8 +28,8 @@ def generate_conditions(completions):
         dict_var = {k:v for k,v in zip(list_var, completion)}
         context = dict_var['Context'] # context (constant)
         name = context.split(',')[0]
-        belief_question = "Do you think that the action that {name} took is morally permissible? Rate from 0 to 10 (0 = not at all, 10 = completely)."
-        intention_question = "Do you think that {name} intended for the harmful outcome to occur? Rate from 0 to 10 (0 = not at all, 10 = completely)."
+        belief_question = ""
+        intention_question = ""
         belief_question = belief_question.format(name=name)
         intention_question = intention_question.format(name=name)
 
