@@ -136,7 +136,7 @@ $(document).ready(function () {
     function submitExitSurvey() {
         // Gather trial page answers
         surveyData.trialPages = {};
-        for (let i = 1; i <= 8; i++) {
+        for (let i = 1; i <= 16; i++) {
             let trialData = window.trials[i-1];
             surveyData.trialPages[`trial${i}`] = {
                 likertResponses: {},
