@@ -98,7 +98,7 @@ def generate_conditions(completions):
                             new_csv_file = os.path.join(CONDITION_DIR, f'{intention}_{evitabiltiy}_{action}', f'stories.csv')
                             with open(new_csv_file, "a" if completion_idx > 0 else "w", newline='') as csvfile:
                                 writer = csv.writer(csvfile, delimiter=";")
-                                writer.writerow([context, situation, evitable_action, action_sentence, belief_question, intention_question])
+                                writer.writerow([context, situation, evitable_action, action_sentence])
                                 # writer.writerow([context, situation, f"Harm: {harm}", f"Good: {good}", evitable_action, action_sentence, belief_question, intention_question])
                                 # writer.writerow([context, situation])
 
@@ -162,7 +162,7 @@ def generate_conditions(completions):
                             new_csv_file = os.path.join(CONDITION_DIR, f'{intention}_{evitabiltiy}_{action}', f'stories.csv')
                             with open(new_csv_file, "a" if completion_idx > 0 else "w", newline='') as csvfile:
                                 writer = csv.writer(csvfile, delimiter=";")
-                                writer.writerow([context, situation, evitable_action, action_sentence, belief_question, intention_question])
+                                writer.writerow([context, situation, evitable_action, action_sentence])
                                 # writer.writerow([context, situation, f"Harm: {harm}", f"Good: {good}", evitable_action, action_sentence, belief_question, intention_question])
                                 # writer.writerow([context, situation])
 
