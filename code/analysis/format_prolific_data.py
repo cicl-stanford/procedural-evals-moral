@@ -2,10 +2,10 @@ import ast
 import pandas as pd
 
 DATA_PATH = "../../data/prolific/"
-N_TRIALS = 30
+N_TRIALS = 16
 
 df_trials = pd.read_csv(DATA_PATH + "trials.csv")
-df_ids = pd.read_csv(DATA_PATH + "ids.csv")
+df_ids = pd.read_csv(DATA_PATH + "pid.csv")
 df_exit = pd.read_csv(DATA_PATH + "exit_survey.csv")
 
 # Initialize an empty list to hold the transformed data
@@ -27,45 +27,54 @@ for i, row in df_trials.iterrows():
         item = ast.literal_eval(row[f"trial{trial}"])
         item_ratings = item["likertResponses"]
         ratings = [int(item_ratings[key]) for key in sorted(item_ratings.keys())]
-        average_rating = sum(ratings) / len(ratings)
 
-        # Group survey types
-        survey_type_dict = {
-            "dodell": "expert",
-            "ullman": "expert",
-            "kosinski": "expert",
-            "false_belief": "ours",
-            "true_belief": "ours",
-            "social_iqa": "social_iqa",
-        }
-        survey_type = survey_type_dict.get(item["data_source"], "unknown")
+
+        condition = item["condition"]
+
+        if 'means' in condition:
+            causal_structure = 0
+
+        if 'side_effect' in condition:
+            causal_structure = 1
+
+        if 'evitable' in condition:
+            evitability = 0
+
+        if 'inevitable' in condition:
+            evitability = 1
+
+        if 'action_yes' in condition:
+            action = 0
+
+        if 'prevention_no' in condition:
+            action = 1
+
 
         # Append transformed data to the list
         data.append({
-            "data_source": item["data_source"],
             "split": row["proliferate.condition"],
-            "survey_type": survey_type,
-            "item_id": item["id"],
-            "worker_id": row["workerid"],
-            "prolific_id": prolific_id,
-            "age": age,
-            "ethnicity": ethnicity,
-            "gender": gender,
-            "race": race, 
-            "item_story": item["story"],
-            "item_question": item["question"],
-            "item_answers": item["answers"],
-            "understandability": ratings[0],
-            "coherent_q_a": ratings[1],
-            "unambiguous": ratings[2],
-            "average_rating": average_rating,
+            # "worker_id": row["workerid"],
+            # "prolific_id": prolific_id,
+            # "age": age,
+            # "ethnicity": ethnicity,
+            # "gender": gender,
+            # "race": race, 
+            # "causal_structure_sentence": item["background"],
+            "condition": item["condition"],
+            "scenario_id": item["scenario_id"],
+            # "evitability_sentence": item["evitability"],
+            # "action_sentence": item["action"],
+            "permissibility_rating": ratings[0],
+            "intention_rating": ratings[1],
+            "causal_structure": causal_structure,
+            "evitability": evitability,
+            "action": action,
+            "full_scenario": item["background"] + " " + item["evitability"] + " " + item["action"]
         })
+
 
 # Convert the list of dictionaries into a DataFrame
 df_long = pd.DataFrame(data)
 
-# Sort DataFrame
-df_long.sort_values(by=['survey_type', 'item_id'], inplace=True)
-
 # Save the DataFrame as a CSV file
-df_long.to_csv(DATA_PATH + "main_long_combined.csv", index=False)
+df_long.to_csv(DATA_PATH + "data_long.csv", index=False)

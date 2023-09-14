@@ -1,6 +1,7 @@
 import random
 import os
 import json
+from collections import Counter, defaultdict
 
 NUM_CONDITIONS = 8
 NUM_SCENARIOS = 10
@@ -15,64 +16,63 @@ def read_csv(csv_file):
     for i, line in enumerate(lines):
         lines[i] = line.strip().split(';')
     return lines
-            
-# variables
+
+# Variables
 causal_structure = ['means', 'side_effect']
 evitability = ['evitable', 'inevitable']
 action = ['action_yes', 'prevention_no']
 
 # Random scenarios
 random_scenario_idx = random.sample(range(0, NUM_STORIES), NUM_SCENARIOS)
-random_scenario_idx = [39, 18, 24, 34, 31, 23, 10, 2, 19, 4] # sampled 09-12-2023 6:31pm
 
-# Full data dict
+# Data dict
 data = {}
-
-# Loop through all variables to generate condition names
 for cs in causal_structure:
     for ev in evitability:
         for act in action:
-            # Concatenate to form the condition name
             condition_name = f"{cs}_{ev}_{act}"
-            
-            # Construct the path to the CSV file for this condition
             csv_path = os.path.join(DATA_DIR, condition_name, 'stories.csv')
-            
-            # Assuming csv_path is valid and the file exists, read the CSV file
             try:
                 csv_data = read_csv(csv_path)
             except FileNotFoundError:
                 print(f"File {csv_path} not found.")
                 continue
-            
-            # Selectt rows based on random scenario indices
             data[condition_name] = [csv_data[i] for i in random_scenario_idx]
 
-# Initialize an empty list to keep track of used indices for each key
-used_indices = {key: [] for key in data.keys()}
+# Create a list of all stories
+all_stories = []
+for key in data.keys():
+    for idx, story_data in enumerate(data[key]):
+        background = story_data[0] + ' ' + story_data[1]
+        evitability = story_data[2]
+        action = story_data[3]
+        story = {'background': background, 'evitability': evitability, 'action': action, "sample_idx": idx, "condition": key, "scenario_id": random_scenario_idx[idx]}
+        all_stories.append(story)
 
-for batch in range(N_BATCH):
-    stories = []  # Create an empty list to collect stories for this batch
-    
-    for key in data.keys():
-        available_indices = [i for i in range(len(data[key])) if i not in used_indices[key]]
-        
-        # Randomly sample two different entries for this key
-        sample_indices = random.sample(available_indices, 2)
-        
+# Shuffle the list of all stories
+random.shuffle(all_stories)
 
-        # Add these indices to used_indices to ensure they won't be used again
-        used_indices[key].extend(sample_indices)
-        
-        for idx in sample_indices:
-            background = data[key][idx][0] + ' ' + data[key][idx][1]
-            evitability = data[key][idx][2]
-            action = data[key][idx][3]
+# Initialize batches and scenario counter
+batches = [[] for _ in range(N_BATCH)]
+scenario_counter = Counter()
+
+# Plan for each scenario: appear twice in 4 batches, and zero times in 1 batch
+scenario_plan = defaultdict(lambda: [2, 2, 2, 2, 0])
+for scenario_id in random_scenario_idx:
+    random.shuffle(scenario_plan[scenario_id])
+
+# Distribute stories into batches
+for story in all_stories:
+    for batch_idx in range(N_BATCH):
+        # Check if this story's scenario should appear in this batch according to the plan
+        if scenario_plan[story['scenario_id']][batch_idx] > 0:
+            # Add the story to the batch
+            batches[batch_idx].append(story)
             
-            # Create the story and add it to the list for this batch
-            story = {'background': background, 'evitability': evitability, 'action': action, "sample_idx": idx, "condition": key, "scenario_id": random_scenario_idx[idx]}
-            stories.append(story)
-    
-    # Write the stories list to a JSON file
-    with open(f'batch_{batch}.json', 'w') as f:
-        json.dump(stories, f)
+            # Update the plan
+            scenario_plan[story['scenario_id']][batch_idx] -= 1
+
+# Write the batches to JSON files
+for i, batch in enumerate(batches):
+    with open(f'batch_{i}.json', 'w') as f:
+        json.dump(batch, f)

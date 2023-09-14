@@ -25,7 +25,7 @@ async function createTrialPages(condition) {
 
     // read stories rom a json file
     let response = await fetch(`https://kanishkg.github.io/batch_${condition}.json`);
-    // let response = await fetch(`batch_1.json`);
+    // let response = await fetch(`batch_0.json`);
     let trials = await response.json();
     shuffleArray(trials);
 
@@ -152,8 +152,6 @@ $(document).ready(function () {
             }
         }
 
-        // Gather exit survey answers
-        // Replace 'input1', 'input2', etc. with the actual names or IDs of your input fields in the exit survey
         surveyData.exitSurvey = {
             age: $("#age").val(),
             gender: $("#gender").val(),
@@ -161,6 +159,7 @@ $(document).ready(function () {
             ethnicity: $("#ethnicity").val(),
             // Add more input fields as needed
         };
+
     
         // Submit the survey data using proliferate
         console.log('submitting');
