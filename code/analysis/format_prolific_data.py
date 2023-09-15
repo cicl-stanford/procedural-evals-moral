@@ -53,7 +53,7 @@ for i, row in df_trials.iterrows():
         # Append transformed data to the list
         data.append({
             "split": row["proliferate.condition"],
-            # "worker_id": row["workerid"],
+            "worker_id": row["workerid"],
             # "prolific_id": prolific_id,
             # "age": age,
             # "ethnicity": ethnicity,

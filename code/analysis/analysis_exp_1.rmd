@@ -7,22 +7,12 @@ library("dplyr")
 ```
 
 ```{r}
-df.exp_1 = read_csv("../../data/prolific/exp_1/main_long_combined.csv") 
-df.exp_1$survey_type <- factor(df.exp_1$survey_type, levels = c("ours", "social_iqa", "expert")) # same order as things appear in fig_2 in paper
+df.exp_1 = read_csv("../../data/prolific/data_long.csv") 
 head(df.exp_1)
 ```
 ```{r}
-sub_df = df.exp_1[df.exp_1$survey_type == "expert", ]
-head(sub_df)
-mean_res <- aggregate(average_rating ~ data_source, data = sub_df, FUN = mean, na.rm = TRUE)
-std_res <- aggregate(average_rating ~ data_source, data = sub_df, FUN = sd, na.rm = TRUE)
-mean_res
-std_res
-```
-
-```{r}
 # main regression
-fit.brm_exp_1= brm(formula = average_rating ~ 1 + survey_type + (1 | worker_id) + (1 | item_id),
+fit.brm_exp_1= brm(formula = permissibility_rating ~ 1 + causal_structure + evitability + action + (1 | worker_id) + (1 | scenario_id),
                       data = df.exp_1,
                       seed = 1)
 ```
@@ -33,34 +23,8 @@ fit.brm_exp_1 %>%
 ```{r}
 # contrasts
 emm = fit.brm_exp_1 %>% 
-  emmeans(specs = pairwise ~ survey_type,
+  emmeans(specs = pairwise ~ action,
           type = "response")
-```
-
-```{r}
-# bayes r2
-bayes_R2(fit.brm_exp_1)
-```
-```{r}
-# comparing  gp4 vs claude generated data 
-df.gpt_claude = read_csv("gpt_claude_regression.csv")
-
-head(df.gpt_claude)
-
-```
-
-```{r}
-# Fit the model using glm for logistic regression
-fit <- glm(correct ~ 1 + model_name * data_source, data = df.gpt_claude, family = binomial)
-
-# Display model summary
-summary(fit)
-
-# Calculate means and standard deviations
-agg_data <- aggregate(correct ~ model_name + data_source, data = df.gpt_claude, FUN = function(x) c(mean = mean(x), sd = sd(x)))
-print(agg_data)
-
-conf_int <- confint(fit)
-exp(conf_int)
+emm
 ```
 
