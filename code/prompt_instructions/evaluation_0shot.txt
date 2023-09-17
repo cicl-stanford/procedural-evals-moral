@@ -1,0 +1,3 @@
+Rate the query based on the story from Strongly Disagree-1, Disagree-2, Neutral-3, Agree-4, Strongly Agree-5.
+Write your final answer as 'A:<rating>'.
+Always pick one of the options, do not say none of the above or that there is not enough information.
