@@ -15,7 +15,15 @@ from langchain.schema import (
 )
 
 def parse_response(raw_response):
-    response = raw_response.split("A:")[1].lower().strip()
+    if "a:" in raw_response.lower():
+        response = raw_response.split("A:")[1].lower().strip()
+    elif "answer:" in raw_response.lower():
+        response = raw_response.split("Answer:")[1].lower().strip()
+    else:
+        print(f"Response: {raw_response}")
+        parsed_response = int(input("Enter response(1-5):"))
+        return parsed_response
+    
     if "strongly agree" in response or "5" in response:
         parsed_response = 5
     elif "strongly disagree" in response or "1" in response:
@@ -98,7 +106,7 @@ if args.model in ["gpt-4-0613", "gpt-3.5-turbo"]:
     llm = crfmChatLLM(model_name=f"openai/{args.model}",
                     temperature=args.temperature,
                     max_tokens = args.max_tokens)
-elif args.model in ["claude-v2"]:
+elif args.model in ["claude-2"]:
     llm = ChatAnthropic(model_name=args.model,
                     temperature=args.temperature,
                     max_tokens = args.max_tokens)
@@ -120,7 +128,7 @@ for condition in conditions:
         story = data[condition][i]
         query_1 = f"{story}\nQ: {question_1}"
         query_2 = f"{story}\nQ: {question_2}"
-        if args.model in ["gpt-4-0613", "gpt-3.5-turbo", "claude-v2"]:
+        if args.model in ["gpt-4-0613", "gpt-3.5-turbo", "claude-2"]:
             messages_1 = [SystemMessage(content=prompt), HumanMessage(content=query_1)]
             messages_2 = [SystemMessage(content=prompt), HumanMessage(content=query_2)]
             response_1 = llm.generate([messages_1], stop=["Q:"]).generations[0][0].text
