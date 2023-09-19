@@ -95,6 +95,15 @@ if args.prompt == "0shot":
 elif args.prompt == "0shot_cot":
     with open(os.path.join(PROMPT_DIR, "evaluation_0shot_cot.txt"), 'r') as f:
         prompt = f.read().strip()
+elif args.prompt == "0shot_util":
+    with open(os.path.join(PROMPT_DIR, "evaluation_0shot_util.txt"), 'r') as f:
+        prompt = f.read().strip()
+elif args.prompt == "0shot_cot_util":
+    with open(os.path.join(PROMPT_DIR, "evaluation_0shot_cot_util.txt"), 'r') as f:
+        prompt = f.read().strip()
+elif args.prompt == "0shot_kant":
+    with open(os.path.join(PROMPT_DIR, "evaluation_0shot_kant.txt"), 'r') as f:
+        prompt = f.read().strip()
 else:
     raise ValueError(f"Prompt {args.prompt} not found.")
 
