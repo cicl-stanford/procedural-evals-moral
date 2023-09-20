@@ -8,9 +8,9 @@ library("dplyr")
 
 ```{r}
 df.exp_1 = read_csv("../../data/prolific/data_long.csv") 
+df.exp_1 = df.exp_1[df.exp_1$scenario_id == '0' | df.exp_1$scenario_id == '1' |  df.exp_1$scenario_id == '5', ]
 
 
-df.exp_1 = df.exp_1[df.exp_1$scenario_id == '0',]
 head(df.exp_1)
 
 ```
@@ -28,7 +28,7 @@ fit.brm_exp_1 %>%
 ```{r}
 # contrasts
 emm = fit.brm_exp_1 %>% 
-  emmeans(specs = pairwise ~ causal_structure,
+  emmeans(specs = pairwise ~ action,
           type = "response")
 emm
 ```
