@@ -90,6 +90,7 @@ def prepare_data(df_model, df_human, factor1, factor2, rating_type):
     data['human'] = {
         '0': list(df_human[(df_human[factor1] == factor2[0])][rating_type]),
         '1': list(df_human[(df_human[factor1] == factor2[1])][rating_type]),
+        'worker_ids': list(df_human[(df_human[factor1] == factor2[1])]['worker_id']),
     }
     
     return data

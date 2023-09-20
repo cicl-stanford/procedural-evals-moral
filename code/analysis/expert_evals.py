@@ -34,4 +34,8 @@ percentage_agreement = sum(df["Rater 1"] == df["Rater 2"]) / len(df) * 100
 
 print(f"Percentage Agreement: {percentage_agreement}")
 print(f"Average Ratings Rater 1: {expert_1['desired_format'].mean()}, {expert_1['rating'].mean()}")
+print(f"""CI Ratings Rater 1: {expert_1['desired_format'].mean() + expert_1['desired_format'].sem() * 1.96}, {expert_1['desired_format'].mean() - expert_1['desired_format'].sem() * 1.96}, 
+{expert_1['rating'].mean() + expert_1['rating'].sem() * 1.96}, {expert_1['rating'].mean() - expert_1['rating'].sem() * 1.96}""")
 print(f"Average Ratings Rater 2: {expert_2['desired_format'].mean()}, {expert_2['rating'].mean()}")
+print(f"""CI Ratings Rater 2: {expert_2['desired_format'].mean() + expert_2['desired_format'].sem() * 1.96}, {expert_2['desired_format'].mean() - expert_2['desired_format'].sem() * 1.96},
+{expert_2['rating'].mean() + expert_2['rating'].sem() * 1.96}, {expert_2['rating'].mean() - expert_2['rating'].sem() * 1.96}""")

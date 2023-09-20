@@ -18,29 +18,38 @@ for cs, ev, ac, model, method in [(cs, ev, ac, model, method)
                                              for ac in ['action_yes', 'prevention_no']
                                              for model in ['claude-2', 'gpt-4-0613']
                                              for method in ['0shot', '0shot_cot']]:
-
-    condition = f"{cs}_{ev}_{ac}"
-    txt_file_permissibility = f"{model}_{method}_0.0_50_0_graded_answers_1.txt"
-    txt_file_intention = f"{model}_{method}_0.0_50_0_graded_answers_2.txt"
-    txt_file_path_permissibility = os.path.join(DATA_PATH, condition, txt_file_permissibility)
-    txt_file_path_intention = os.path.join(DATA_PATH, condition, txt_file_intention)
     
-    lines_permissibility = read_txt_to_int_list(txt_file_path_permissibility)
-    lines_intention = read_txt_to_int_list(txt_file_path_intention)
 
-    
-    num_lines = len(lines_permissibility)
-    full_df['model'].extend(expand_list(model, num_lines))
-    full_df['method'].extend(expand_list(method, num_lines))
-    full_df['causal_structure'].extend(expand_list(cs, num_lines))
-    full_df['evitability'].extend(expand_list(ev, num_lines))
-    full_df['action'].extend(expand_list(ac, num_lines))
-    full_df['permissibility_rating'].extend(lines_permissibility)
-    full_df['intention_rating'].extend(lines_intention)
-    full_df['scenario_id'].extend(list(range(1, num_lines + 1)))
+    try:
 
+        condition = f"{cs}_{ev}_{ac}"
+        txt_file_permissibility = f"{model}_{method}_util_0.0_50_0_graded_answers_1.txt"
+        txt_file_intention = f"{model}_{method}_util_0.0_50_0_graded_answers_2.txt"
+        txt_file_path_permissibility = os.path.join(DATA_PATH, condition, txt_file_permissibility)
+        txt_file_path_intention = os.path.join(DATA_PATH, condition, txt_file_intention)
+        
+        lines_permissibility = read_txt_to_int_list(txt_file_path_permissibility)
+        lines_intention = read_txt_to_int_list(txt_file_path_intention)
+
+        means = 0 if cs == 'side_effect' else 1
+        evitable = 0 if ev == 'inevitable' else 1
+        action = 0 if ac == 'prevention_no' else 1
+
+        
+        num_lines = len(lines_permissibility)
+        full_df['model'].extend(expand_list(model, num_lines))
+        full_df['method'].extend(expand_list(method, num_lines))
+        full_df['causal_structure'].extend(expand_list(means, num_lines))
+        full_df['evitability'].extend(expand_list(evitable, num_lines))
+        full_df['action'].extend(expand_list(action, num_lines))
+        full_df['permissibility_rating'].extend(lines_permissibility)
+        full_df['intention_rating'].extend(lines_intention)
+        full_df['scenario_id'].extend(list(range(1, num_lines + 1)))
+
+    except FileNotFoundError:
+        print(f"Skipping {condition}")
 
 df = pd.DataFrame(full_df)
 
 # save to csv
-df.to_csv(os.path.join(DATA_PATH, "model_results_long.csv"), index=False)
+df.to_csv(os.path.join(DATA_PATH, "model_results_long_util.csv"), index=False)

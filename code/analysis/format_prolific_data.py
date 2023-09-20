@@ -32,23 +32,22 @@ for i, row in df_trials.iterrows():
         condition = item["condition"]
 
         if 'means' in condition:
-            causal_structure = 'means'
+            causal_structure = 1
 
         if 'side_effect' in condition:
-            causal_structure = 'side_effect'
+            causal_structure = 0
 
         if 'evitable' in condition:
-            evitability = 'evitable'
+            evitability = 1
 
         if 'inevitable' in condition:
-            evitability = 'inevitable'
+            evitability = 0
 
         if 'action_yes' in condition:
-            action = 'action_yes'
+            action = 1
 
         if 'prevention_no' in condition:
-            action = 'prevention_no'
-
+            action = 0
 
         # Append transformed data to the list
         data.append({
@@ -62,6 +61,7 @@ for i, row in df_trials.iterrows():
             # "causal_structure_sentence": item["background"],
             # "condition": item["condition"],
             "scenario_id": item["scenario_id"],
+            "scenario_harm": 0,
             # "evitability_sentence": item["evitability"],
             # "action_sentence": item["action"],
             "permissibility_rating": ratings[0],
@@ -69,7 +69,7 @@ for i, row in df_trials.iterrows():
             "causal_structure": causal_structure,
             "evitability": evitability,
             "action": action,
-            # "full_scenario": item["background"] + " " + item["evitability"] + " " + item["action"]
+            "full_scenario": item["background"] + " " + item["evitability"] + " " + item["action"]
         })
 
 
