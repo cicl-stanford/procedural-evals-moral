@@ -44,7 +44,7 @@ for cs, ev, ac, model, method in [(cs, ev, ac, model, method)
         full_df['action'].extend(expand_list(action, num_lines))
         full_df['permissibility_rating'].extend(lines_permissibility)
         full_df['intention_rating'].extend(lines_intention)
-        full_df['scenario_id'].extend(list(range(1, num_lines + 1)))
+        full_df['scenario_id'].extend(list(range(0, num_lines)))
 
     except FileNotFoundError:
         print(f"Skipping {condition}")
