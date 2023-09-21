@@ -8,11 +8,11 @@ df_trials = pd.read_csv(DATA_PATH + "prolific/trials.csv")
 df_ids = pd.read_csv(DATA_PATH + "prolific/pid.csv")
 df_exit = pd.read_csv(DATA_PATH + "prolific/exit_survey.csv")
 # Read the CSV with a semicolon as the delimiter
-harm_ratings = pd.read_csv(DATA_PATH + "ratings/harm.csv", delimiter=';', header=None)
+harm_ratings = pd.read_csv(DATA_PATH + "ratings/average_harm_ratings.csv", delimiter=';', header=None)
 harm_ratings.columns = ['means', 'side_effect']
 
 
-good_ratings = pd.read_csv(DATA_PATH + "ratings/good.csv", delimiter=';', header=None)
+good_ratings = pd.read_csv(DATA_PATH + "ratings/average_good_ratings.csv", delimiter=';', header=None)
 good_ratings.columns = ['evitable', 'inevitable']
 
 
