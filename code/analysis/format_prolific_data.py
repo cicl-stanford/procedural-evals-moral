@@ -1,12 +1,18 @@
 import ast
 import pandas as pd
 
-DATA_PATH = "../../data/prolific/"
+DATA_PATH = "../../data/"
 N_TRIALS = 16
 
-df_trials = pd.read_csv(DATA_PATH + "trials.csv")
-df_ids = pd.read_csv(DATA_PATH + "pid.csv")
-df_exit = pd.read_csv(DATA_PATH + "exit_survey.csv")
+df_trials = pd.read_csv(DATA_PATH + "prolific/trials.csv")
+df_ids = pd.read_csv(DATA_PATH + "prolific/pid.csv")
+df_exit = pd.read_csv(DATA_PATH + "prolific/exit_survey.csv")
+# Read the CSV with a semicolon as the delimiter
+harm_ratings = pd.read_csv(DATA_PATH + "ratings/harm.csv", delimiter=';')
+harm_ratings.columns = ['means', 'side_effect']
+good_ratings = pd.read_csv(DATA_PATH + "ratings/good.csv", delimiter=';')
+good_ratings.columns = ['evitable', 'inevitable']
+
 
 # Initialize an empty list to hold the transformed data
 data = []
@@ -33,9 +39,16 @@ for i, row in df_trials.iterrows():
 
         if 'means' in condition:
             causal_structure = 1
+            harm = list(harm_ratings['means'])[int(item['scenario_id'])]
+            good = list(good_ratings['evitable'])[int(item['scenario_id'])]
 
         if 'side_effect' in condition:
             causal_structure = 0
+            print(len(harm_ratings['side_effect']))
+            print(harm_ratings)
+            print(item['scenario_id'])
+            harm = list(harm_ratings['side_effect'])[int(item['scenario_id'])]
+            good = list(good_ratings['inevitable'])[int(item['scenario_id'])]
 
         if 'evitable' in condition:
             evitability = 1
@@ -48,7 +61,7 @@ for i, row in df_trials.iterrows():
 
         if 'prevention_no' in condition:
             action = 0
-
+      
         # Append transformed data to the list
         data.append({
             "split": row["proliferate.condition"],
