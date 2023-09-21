@@ -7,8 +7,8 @@ library("dplyr")
 ```
 
 ```{r}
-df.exp_1 = read_csv("../../data/prolific/data_long.csv") 
-df.exp_1 = df.exp_1[df.exp_1$scenario_id == '0' | df.exp_1$scenario_id == '1' |  df.exp_1$scenario_id == '5', ]
+df.exp_1 = read_csv("../../data/data_long.csv")
+
 
 
 head(df.exp_1)
@@ -16,7 +16,7 @@ head(df.exp_1)
 ```
 ```{r}
 # main regression
-fit.brm_exp_1= brm(formula = permissibility_rating ~ 1 + causal_structure + evitability + action + (1 | worker_id),
+fit.brm_exp_1= brm(formula = intention_rating ~ 1 + causal_structure + evitability + action + harm + good + (1 | worker_id) + (1 | scenario_id),
                       data = df.exp_1,
                       seed = 1)
 ```
@@ -28,7 +28,7 @@ fit.brm_exp_1 %>%
 ```{r}
 # contrasts
 emm = fit.brm_exp_1 %>% 
-  emmeans(specs = pairwise ~ action,
+  emmeans(specs = pairwise ~ evitability,
           type = "response")
 emm
 ```

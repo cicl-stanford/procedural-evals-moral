@@ -8,10 +8,13 @@ df_trials = pd.read_csv(DATA_PATH + "prolific/trials.csv")
 df_ids = pd.read_csv(DATA_PATH + "prolific/pid.csv")
 df_exit = pd.read_csv(DATA_PATH + "prolific/exit_survey.csv")
 # Read the CSV with a semicolon as the delimiter
-harm_ratings = pd.read_csv(DATA_PATH + "ratings/harm.csv", delimiter=';')
+harm_ratings = pd.read_csv(DATA_PATH + "ratings/harm.csv", delimiter=';', header=None)
 harm_ratings.columns = ['means', 'side_effect']
-good_ratings = pd.read_csv(DATA_PATH + "ratings/good.csv", delimiter=';')
+
+
+good_ratings = pd.read_csv(DATA_PATH + "ratings/good.csv", delimiter=';', header=None)
 good_ratings.columns = ['evitable', 'inevitable']
+
 
 
 # Initialize an empty list to hold the transformed data
@@ -44,9 +47,6 @@ for i, row in df_trials.iterrows():
 
         if 'side_effect' in condition:
             causal_structure = 0
-            print(len(harm_ratings['side_effect']))
-            print(harm_ratings)
-            print(item['scenario_id'])
             harm = list(harm_ratings['side_effect'])[int(item['scenario_id'])]
             good = list(good_ratings['inevitable'])[int(item['scenario_id'])]
 
@@ -75,6 +75,8 @@ for i, row in df_trials.iterrows():
             # "condition": item["condition"],
             "scenario_id": item["scenario_id"],
             "scenario_harm": 0,
+            "harm": harm,
+            "good": good,
             # "evitability_sentence": item["evitability"],
             # "action_sentence": item["action"],
             "permissibility_rating": ratings[0],
