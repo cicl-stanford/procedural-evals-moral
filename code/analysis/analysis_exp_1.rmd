@@ -7,16 +7,19 @@ library("dplyr")
 ```
 
 ```{r}
-df.exp_1 = read_csv("../../data/data_long.csv")
+
+df.exp_1 = read_csv("../../data/results/model_results_long.csv")
+
+df.exp_1 = df.exp_1[df.exp_1$model == "gpt-4-0613" & df.exp_1$method == "0shot",]
 
 
-# predict kant vs util
+# predict kant vs
 head(df.exp_1)
 
 ```
 ```{r}
 # main regression
-fit.brm_exp_1= brm(formula = permissibility_rating ~ 1 + causal_structure + evitability + action + harm + good + (1 | worker_id) + (1 | scenario_id),
+fit.brm_exp_1= brm(formula = permissibility_rating ~ 1 + causal_structure + evitability + action + (1 | scenario_id),
                       data = df.exp_1,
                       seed = 1)
 ```
@@ -28,7 +31,7 @@ fit.brm_exp_1 %>%
 ```{r}
 # contrasts
 emm = fit.brm_exp_1 %>% 
-  emmeans(specs = pairwise ~ causal_structure,
+  emmeans(specs = pairwise ~ action,
           type = "response")
 emm
 ```
@@ -42,8 +45,17 @@ df.data = df.exp_1 %>%
 df.model = df.exp_1 %>% 
               distinct(scenario_id, harm, good, causal_structure, evitability, action)
 
-fit.brm_exp_1 %>% 
+df.model
+
+# write to csv 
+getwd()
+write.csv(df.data, 'permissibility_human.csv')
+write.csv(df.model, 'permissibility_human_predicted.csv')
+
+df.predicted = fit.brm_exp_1 %>% 
   fitted(df.model,
          re_formula = NA)
+
+write.csv(df.predicted, 'permissibility_human_predicted.csv')
 
 ```
