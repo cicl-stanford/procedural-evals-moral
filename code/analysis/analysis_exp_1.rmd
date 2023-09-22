@@ -10,13 +10,13 @@ library("dplyr")
 df.exp_1 = read_csv("../../data/data_long.csv")
 
 
-
+# predict kant vs util
 head(df.exp_1)
 
 ```
 ```{r}
 # main regression
-fit.brm_exp_1= brm(formula = intention_rating ~ 1 + causal_structure + evitability + action + harm + good + (1 | worker_id) + (1 | scenario_id),
+fit.brm_exp_1= brm(formula = permissibility_rating ~ 1 + causal_structure + evitability + action + harm + good + (1 | worker_id) + (1 | scenario_id),
                       data = df.exp_1,
                       seed = 1)
 ```
@@ -28,8 +28,22 @@ fit.brm_exp_1 %>%
 ```{r}
 # contrasts
 emm = fit.brm_exp_1 %>% 
-  emmeans(specs = pairwise ~ evitability,
+  emmeans(specs = pairwise ~ causal_structure,
           type = "response")
 emm
 ```
 
+```{r}
+# contrasts
+df.data = df.exp_1 %>%
+  group_by(scenario_id, harm, good, causal_structure, evitability, action) %>% 
+  summarize(mean = mean(permissibility_rating))
+
+df.model = df.exp_1 %>% 
+              distinct(scenario_id, harm, good, causal_structure, evitability, action)
+
+fit.brm_exp_1 %>% 
+  fitted(df.model,
+         re_formula = NA)
+
+```
