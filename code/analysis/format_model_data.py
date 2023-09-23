@@ -3,6 +3,14 @@ import os
 
 DATA_PATH = "../../data/results"
 
+harm_ratings = pd.read_csv("../../data/ratings/average_harm.csv", delimiter=';')
+harm_ratings.columns = ['means', 'side_effect']
+
+good_ratings = pd.read_csv("../../data/ratings/average_good.csv", delimiter=';')
+good_ratings.columns = ['means', 'side_effect']
+
+
+
 def read_txt_to_int_list(file_path):
     with open(file_path) as f:
         return [int(line.strip()) for line in f.readlines()]
@@ -34,6 +42,9 @@ for cs, ev, ac, model, method in [(cs, ev, ac, model, method)
         means = 0 if cs == 'side_effect' else 1
         evitable = 0 if ev == 'inevitable' else 1
         action = 0 if ac == 'prevention_no' else 1
+
+
+
 
         
         num_lines = len(lines_permissibility)
