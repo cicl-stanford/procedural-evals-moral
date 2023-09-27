@@ -8,12 +8,12 @@ df_trials = pd.read_csv(DATA_PATH + "prolific/trials.csv")
 df_ids = pd.read_csv(DATA_PATH + "prolific/pid.csv")
 df_exit = pd.read_csv(DATA_PATH + "prolific/exit_survey.csv")
 # Read the CSV with a semicolon as the delimiter
-harm_ratings = pd.read_csv(DATA_PATH + "ratings/average_harm_ratings.csv", delimiter=';', header=None)
+harm_ratings = pd.read_csv(DATA_PATH + "ratings/average_harm.csv", delimiter=';')
 harm_ratings.columns = ['means', 'side_effect']
 
 
-good_ratings = pd.read_csv(DATA_PATH + "ratings/average_good_ratings.csv", delimiter=';', header=None)
-good_ratings.columns = ['evitable', 'inevitable']
+good_ratings = pd.read_csv(DATA_PATH + "ratings/average_good.csv", delimiter=';')
+good_ratings.columns = ['means', 'side_effect']
 
 
 
@@ -42,13 +42,14 @@ for i, row in df_trials.iterrows():
 
         if 'means' in condition:
             causal_structure = 1
+            print(harm_ratings)
             harm = list(harm_ratings['means'])[int(item['scenario_id'])]
-            good = list(good_ratings['evitable'])[int(item['scenario_id'])]
+            good = list(good_ratings['means'])[int(item['scenario_id'])]
 
         if 'side_effect' in condition:
             causal_structure = 0
             harm = list(harm_ratings['side_effect'])[int(item['scenario_id'])]
-            good = list(good_ratings['inevitable'])[int(item['scenario_id'])]
+            good = list(good_ratings['side_effect'])[int(item['scenario_id'])]
 
         if 'evitable' in condition:
             evitability = 1

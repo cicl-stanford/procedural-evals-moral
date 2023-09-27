@@ -3,6 +3,14 @@ import os
 
 DATA_PATH = "../../data/results"
 
+harm_ratings = pd.read_csv("../../data/ratings/average_harm.csv", delimiter=';')
+harm_ratings.columns = ['means', 'side_effect']
+
+good_ratings = pd.read_csv("../../data/ratings/average_good.csv", delimiter=';')
+good_ratings.columns = ['means', 'side_effect']
+
+
+
 def read_txt_to_int_list(file_path):
     with open(file_path) as f:
         return [int(line.strip()) for line in f.readlines()]
@@ -23,8 +31,8 @@ for cs, ev, ac, model, method in [(cs, ev, ac, model, method)
     try:
 
         condition = f"{cs}_{ev}_{ac}"
-        txt_file_permissibility = f"{model}_{method}_util_0.0_50_0_graded_answers_1.txt"
-        txt_file_intention = f"{model}_{method}_util_0.0_50_0_graded_answers_2.txt"
+        txt_file_permissibility = f"{model}_{method}_0.0_50_0_graded_answers_1.txt"
+        txt_file_intention = f"{model}_{method}_0.0_50_0_graded_answers_2.txt"
         txt_file_path_permissibility = os.path.join(DATA_PATH, condition, txt_file_permissibility)
         txt_file_path_intention = os.path.join(DATA_PATH, condition, txt_file_intention)
         
@@ -34,6 +42,9 @@ for cs, ev, ac, model, method in [(cs, ev, ac, model, method)
         means = 0 if cs == 'side_effect' else 1
         evitable = 0 if ev == 'inevitable' else 1
         action = 0 if ac == 'prevention_no' else 1
+
+
+
 
         
         num_lines = len(lines_permissibility)
@@ -52,4 +63,4 @@ for cs, ev, ac, model, method in [(cs, ev, ac, model, method)
 df = pd.DataFrame(full_df)
 
 # save to csv
-df.to_csv(os.path.join(DATA_PATH, "model_results_long_util.csv"), index=False)
+df.to_csv(os.path.join(DATA_PATH, "model_results_long.csv"), index=False)
