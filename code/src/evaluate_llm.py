@@ -104,6 +104,9 @@ elif args.prompt == "0shot_cot_util":
 elif args.prompt == "0shot_kant":
     with open(os.path.join(PROMPT_DIR, "evaluation_0shot_kant.txt"), 'r') as f:
         prompt = f.read().strip()
+elif args.prompt == "0shot_cot_kant":
+    with open(os.path.join(PROMPT_DIR, "evaluation_0shot_cot_kant.txt"), 'r') as f:
+        prompt = f.read().strip()
 else:
     raise ValueError(f"Prompt {args.prompt} not found.")
 
@@ -130,7 +133,8 @@ else:
 
 # evaluate
 
-for condition in conditions:
+for condition in conditions[-2:]:
+    print(condition)
     predicted_answers_1, predicted_answers_2 = [], []
     graded_answers_1, graded_answers_2 = [], []
     for i in tqdm(range(args.offset, args.num)):
