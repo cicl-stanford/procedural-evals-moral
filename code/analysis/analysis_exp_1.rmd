@@ -36,8 +36,8 @@ fit.brm_exp_1_permissibility %>%
 ```
 ```{r}
 # contrasts
-emm = fit.brm_exp_1_intention_harm_good %>% 
-  emmeans(specs = pairwise ~ action,
+emm = fit.brm_exp_1_permissibility_harm_good %>% 
+  emmeans(specs = pairwise ~ evitability,
           type = "response")
 emm
 ```
@@ -262,7 +262,7 @@ fit.brm_exp_1_intention_utilitarian_harm_good_cot = brm(formula = intention_rati
 
 ```
 ```{r}
-emm = fit.brm_exp_1_permissibility_kantian_harm_good_cot %>% 
+emm = fit.brm_exp_1_permissibility_utilitarian_harm_good_cot %>% 
   emmeans(specs = pairwise ~ evitability,
           type = "response")
 emm
