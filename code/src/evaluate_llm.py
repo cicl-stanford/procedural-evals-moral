@@ -16,7 +16,14 @@ from langchain.schema import (
 
 def parse_response(raw_response):
     if "a:" in raw_response.lower():
-        response = raw_response.split("A:")[1].lower().strip()
+        if "a:" in raw_response:
+            response = raw_response.split("a:")[1].lower().strip()
+        elif "A:" in raw_response:
+            response = raw_response.split("A:")[1].lower().strip()
+        else:
+            print(f"Response: {raw_response}")
+            parsed_response = int(input("Enter response(1-5):"))
+            return parsed_response
     elif "answer:" in raw_response.lower():
         response = raw_response.split("Answer:")[1].lower().strip()
     else:
@@ -133,7 +140,7 @@ else:
 
 # evaluate
 
-for condition in conditions[-2:]:
+for condition in conditions[3:]:
     print(condition)
     predicted_answers_1, predicted_answers_2 = [], []
     graded_answers_1, graded_answers_2 = [], []
