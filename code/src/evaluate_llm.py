@@ -140,7 +140,7 @@ else:
 
 # evaluate
 
-for condition in conditions[3:]:
+for condition in conditions[-1:]:
     print(condition)
     predicted_answers_1, predicted_answers_2 = [], []
     graded_answers_1, graded_answers_2 = [], []
