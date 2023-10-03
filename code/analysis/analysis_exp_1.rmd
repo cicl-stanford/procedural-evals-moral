@@ -31,7 +31,7 @@ fit.brm_exp_1_intention_harm_good = brm(formula = intention_rating ~ 1 + causal_
 ```
 
 ```{r}
-fit.brm_exp_1_permissibility %>% 
+fit.brm_exp_1_permissibility_harm_good %>% 
   summary()
 ```
 ```{r}
@@ -62,115 +62,11 @@ df.predicted = fit.brm_exp_1_intention %>%
 
 write.csv(df.predicted, 'intention_human_predicted.csv')
 ```
-```{r}
-# model
-df.exp_1_model_neutral = read_csv("../../data/results/model_results_long.csv")
-head(df.exp_1_model_neutral)
 
-df.exp_1_model_neutral_gpt_4
-```
-
-```{r}
-# model utilitarian 
-df.exp_1_model_utilitarian = read_csv("../../data/results/model_results_long_util.csv")
-df.exp_1_model_utilitarian <- df.exp_1_model_utilitarian %>% filter(between(scenario_id, 0, 9))
-df.exp_1_model_utilitarian$harm <- NA  # Initialize new column 'harm' with NAs
-df.exp_1_model_utilitarian$good <- NA  # Initialize new column 'good' with NAs
-
-# Loop over unique values of causal_structure and scenario_id
-for(cs in unique(df.exp_1$causal_structure)) {
-  for(sid in unique(df.exp_1$scenario_id)) {
-    
-    # Filter df.exp_1 for the specific combination of causal_structure and scenario_id
-    sub_df <- subset(df.exp_1, causal_structure == cs & scenario_id == sid)
-    
-    # Calculate the value you want to assign, e.g., mean, median, etc.
-    harm_val <- mean(sub_df$harm, na.rm = TRUE)
-    good_val <- mean(sub_df$good, na.rm = TRUE)
-    
-    # Assign the calculated values to the corresponding rows in df.exp_1_model
-    df.exp_1_model_utilitarian[df.exp_1_model_utilitarian$causal_structure == cs & df.exp_1_model_utilitarian$scenario_id == sid, "harm"] <- harm_val
-    df.exp_1_model_utilitarian[df.exp_1_model_utilitarian$causal_structure == cs & df.exp_1_model_utilitarian$scenario_id == sid, "good"] <- good_val
-  }
-}
-```
-
-```{r}
-fit.brm_exp_1_permissibility_utilitarian = brm(formula = permissibility_rating ~ 1 + causal_structure + evitability + action + (1 | scenario_id),
-                      data = df.exp_1_model_utilitarian,
-                      seed = 1)
-
-fit.brm_exp_1_intention_utilitarian = brm(formula = intention_rating ~ 1 + causal_structure + evitability + action + (1 | scenario_id),
-                      data = df.exp_1_model_utilitarian,
-                      seed = 1)
-
-fit.brm_exp_1_permissibility_utilitarian_harm_good = brm(formula = permissibility_rating ~ 1 + causal_structure + evitability + action + harm + good + (1 | scenario_id),
-                      data = df.exp_1_model_utilitarian,
-                      seed = 1)
-
-fit.brm_exp_1_intention_utilitarian_harm_good = brm(formula = intention_rating ~ 1 + causal_structure + evitability + action + harm + good + (1 | scenario_id),
-                      data = df.exp_1_model_utilitarian,
-                      seed = 1)
-
-```
-```{r}
-emm = fit.brm_exp_1_intention_utilitarian_harm_good %>% 
-  emmeans(specs = pairwise ~ action,
-          type = "response")
-emm
-```
-```{r}
-# model kantian
-df.exp_1_model_kant = read_csv("../../data/results/model_results_long_kant.csv")
-df.exp_1_model_kant <- df.exp_1_model_kant %>% filter(between(scenario_id, 0, 9))
-df.exp_1_model_kant$harm <- NA  # Initialize new column 'harm' with NAs
-df.exp_1_model_kant$good <- NA  # Initialize new column 'good' with NAs
-
-# Loop over unique values of causal_structure and scenario_id
-for(cs in unique(df.exp_1$causal_structure)) {
-  for(sid in unique(df.exp_1$scenario_id)) {
-    
-    # Filter df.exp_1 for the specific combination of causal_structure and scenario_id
-    sub_df <- subset(df.exp_1, causal_structure == cs & scenario_id == sid)
-    
-    # Calculate the value you want to assign, e.g., mean, median, etc.
-    harm_val <- mean(sub_df$harm, na.rm = TRUE)
-    good_val <- mean(sub_df$good, na.rm = TRUE)
-    
-    # Assign the calculated values to the corresponding rows in df.exp_1_model
-    df.exp_1_model_kant[df.exp_1_model_kant$causal_structure == cs & df.exp_1_model_kant$scenario_id == sid, "harm"] <- harm_val
-    df.exp_1_model_kant[df.exp_1_model_kant$causal_structure == cs & df.exp_1_model_kant$scenario_id == sid, "good"] <- good_val
-  }
-}
-```
-```{r}
-fit.brm_exp_1_permissibility_kant = brm(formula = permissibility_rating ~ 1 + causal_structure + evitability + action + (1 | scenario_id),
-                      data = df.exp_1_model_kant,
-                      seed = 1)
-
-fit.brm_exp_1_intention_kant = brm(formula = intention_rating ~ 1 + causal_structure + evitability + action + (1 | scenario_id),
-                      data = df.exp_1_model_kant,
-                      seed = 1)
-
-fit.brm_exp_1_permissibility_kant_harm_good = brm(formula = permissibility_rating ~ 1 + causal_structure + evitability + action + harm + good + (1 | scenario_id),
-                      data = df.exp_1_model_kant,
-                      seed = 1)
-
-fit.brm_exp_1_intention_kant_harm_good = brm(formula = intention_rating ~ 1 + causal_structure + evitability + action + harm + good + (1 | scenario_id),
-                      data = df.exp_1_model_kant,
-                      seed = 1)
-
-```
-```{r}
-emm = fit.brm_exp_1_intention_kant_harm_good %>% 
-  emmeans(specs = pairwise ~ action,
-          type = "response")
-emm
-```
 ```{r}
 # model neutral
-df.exp_1_model_neutral = read_csv("../../data/results/model_results_long.csv")
-df.exp_1_model_neutral = df.exp_1_model_neutral[df.exp_1_model_neutral$model == "gpt-4-0613" & df.exp_1_model_neutral$method == "0shot",]
+df.exp_1_model_neutral = read_csv("../../data/results/model_results_long_neutral.csv")
+df.exp_1_model_neutral = df.exp_1_model_neutral[df.exp_1_model_neutral$model == "gpt-4-0613" & df.exp_1_model_neutral$method == "0shot_cot",] 
 df.exp_1_model_neutral <- df.exp_1_model_neutral %>% filter(between(scenario_id, 0, 9))
 
 df.exp_1_model_neutral$harm <- NA  # Initialize new column 'harm' with NAs
@@ -212,15 +108,19 @@ fit.brm_exp_1_intention_n_harm_good = brm(formula = intention_rating ~ 1 + causa
                       seed = 1)
 ```
 ```{r}
-emm = fit.brm_exp_1_intention_n_harm_good %>% 
+fit.brm_exp_1_intention_n_harm_good %>% 
   emmeans(specs = pairwise ~ action,
           type = "response")
-emm
+
+
+fit.brm_exp_1_permissibility_n_harm_good %>% 
+  summary()
 ```
 ```{r}
 # model utilitarian cot
 getwd()
-df.exp_1_model_utilitarian_cot = read_csv("../../data/results/model_results_long_util_cot.csv")
+df.exp_1_model_utilitarian_cot = read_csv("../../data/results/model_results_long_util.csv")
+df.exp_1_model_utilitarian_cot = df.exp_1_model_utilitarian_cot[df.exp_1_model_utilitarian_cot$model == "gpt-4-0613" & df.exp_1_model_utilitarian_cot$method == "0shot_cot_util",] 
 df.exp_1_model_utilitarian_cot <- df.exp_1_model_utilitarian_cot %>% filter(between(scenario_id, 0, 9))
 df.exp_1_model_utilitarian_cot$harm <- NA  # Initialize new column 'harm' with NAs
 df.exp_1_model_utilitarian_cot$good <- NA  # Initialize new column 'good' with NAs
@@ -262,7 +162,7 @@ fit.brm_exp_1_intention_utilitarian_harm_good_cot = brm(formula = intention_rati
 
 ```
 ```{r}
-emm = fit.brm_exp_1_permissibility_utilitarian_harm_good_cot %>% 
+emm = fit.brm_exp_1_intention_utilitarian_harm_good_cot %>% 
   emmeans(specs = pairwise ~ causal_structure,
           type = "response")
 emm
@@ -271,7 +171,8 @@ emm
 ```{r}
 # model kant cot
 getwd()
-df.exp_1_model_kant_cot = read_csv("../../data/results/model_results_long_kant_cot.csv")
+df.exp_1_model_kant_cot = read_csv("../../data/results/model_results_long_kant.csv")
+df.exp_1_model_kant_cot = df.exp_1_model_kant_cot[df.exp_1_model_kant_cot$model == "gpt-4-0613" & df.exp_1_model_kant_cot$method == "0shot_cot_kant",] 
 df.exp_1_model_kant_cot <- df.exp_1_model_kant_cot %>% filter(between(scenario_id, 0, 9))
 df.exp_1_model_kant_cot$harm <- NA  # Initialize new column 'harm' with NAs
 df.exp_1_model_kant_cot$good <- NA  # Initialize new column 'good' with NAs
@@ -315,10 +216,10 @@ fit.brm_exp_1_intention_kant_harm_good_cot = brm(formula = intention_rating ~ 1 
 
 ```{r}
 emm = fit.brm_exp_1_intention_kant_harm_good_cot %>% 
-  emmeans(specs = pairwise ~ action,
+  emmeans(specs = pairwise ~ causal_structure,
           type = "response")
 emm
 
-fit.brm_exp_1_permissibility_kant_harm_good_cot %>% 
+fit.brm_exp_1_permissibility_utilitarian_harm_good_cot %>% 
   summary()
 ```

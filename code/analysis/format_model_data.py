@@ -31,8 +31,8 @@ for cs, ev, ac, model, method in [(cs, ev, ac, model, method)
     try:
 
         condition = f"{cs}_{ev}_{ac}"
-        txt_file_permissibility = f"{model}_{method}_cot_kant_0.0_50_0_graded_answers_1.txt"
-        txt_file_intention = f"{model}_{method}_cot_kant_0.0_50_0_graded_answers_2.txt"
+        txt_file_permissibility = f"{model}_{method}_0.0_50_0_graded_answers_1.txt"
+        txt_file_intention = f"{model}_{method}_0.0_50_0_graded_answers_2.txt"
         txt_file_path_permissibility = os.path.join(DATA_PATH, condition, txt_file_permissibility)
         txt_file_path_intention = os.path.join(DATA_PATH, condition, txt_file_intention)
         
@@ -63,4 +63,4 @@ for cs, ev, ac, model, method in [(cs, ev, ac, model, method)
 df = pd.DataFrame(full_df)
 
 # save to csv
-df.to_csv(os.path.join(DATA_PATH, "model_results_long_kant_cot.csv"), index=False)
+df.to_csv(os.path.join(DATA_PATH, "model_results_long_neutral.csv"), index=False)
