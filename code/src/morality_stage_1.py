@@ -1,16 +1,17 @@
 import random
 import csv
 import tqdm
+import os
 import argparse
 import ast
 
-from langchain.chat_models import ChatOpenAI
+from langchain.chat_models import ChatOpenAI, AzureChatOpenAI
 from langchain.schema import (
     AIMessage,
     HumanMessage,
     SystemMessage
 )
-from crfm import crfmChatLLM
+# from crfm import crfmChatLLM
 
 from utils import push_data, get_num_items, get_vars_from_out
 
@@ -29,17 +30,34 @@ parser.add_argument('--max_tokens', type=int, default=2000, help='max tokens')
 parser.add_argument('--num_completions', type=int, default=1, help='number of completions')
 parser.add_argument('--num_shots', type=int, default=3, help='number of shots')
 parser.add_argument('--num_stories', type=int, default=2, help='number of stories to generate')
-parser.add_argument('--verbose', action='store_true', help='verbose')
+parser.add_argument('--verbose', type=bool, default=True, help='verbose')
+parser.add_argument('--api', type=str, default='azure', help='which api to use')
+
 
 
 def get_llm(args):
-    llm = crfmChatLLM(
-        model_name=args.model,
-        temperature=args.temperature,
-        max_tokens=args.max_tokens,
-        num_completions=args.num_completions,
-        request_timeout=180
-    )
+
+    if args.api == 'azure':
+
+        llm = AzureChatOpenAI(
+            openai_api_base=os.getenv("BASE_URL"),
+            openai_api_version="2023-05-15",
+            deployment_name='gpt-4',
+            openai_api_key=os.getenv("API_KEY"),
+            openai_api_type="azure",
+            temperature=args.temperature,
+        )
+
+    # elif args.api == "crfm":
+
+    #     llm = crfmChatLLM(
+    #         model_name=args.model,
+    #         temperature=args.temperature,
+    #         max_tokens=args.max_tokens,
+    #         num_completions=args.num_completions,
+    #         request_timeout=180
+    #     )
+
     return llm
 
 def get_human_message(args):
@@ -117,13 +135,8 @@ External Cause CoC: {external_cause_coc}
             print(f"------ messages ------")	
             print(messages)	
         responses = llm.generate([messages], stop=["System:"])
-        # prompt_tokens_used += responses.llm_output['token_usage']['prompt_tokens']
-        # completion_tokens_used += responses.llm_output['token_usage']['completion_tokens']
-        # price = (prompt_tokens_used * 0.03 + completion_tokens_used * 0.06) / 1000.
-        # update tqdm progress bar with price
-        # tqdm.tqdm.write(f"Price: {price:.2f} USD, Price per story: {price/(n_story+args.num_completions):.2f} USD")
+       
         for g, generation in enumerate(responses.generations[0]):
-            # print(f"AYESHA LOOK HERE \n: {generation.text}")
             if args.verbose:
                 print(f"------ Generated Story {n_story+g} ------")
                 print(generation.text)
@@ -140,13 +153,10 @@ External Cause CoC: {external_cause_coc}
             with open(story_file, 'a') as csvfile:
                 writer = csv.writer(csvfile, delimiter=';')
                 writer.writerow(data)
-        # push to github
-        # push_data(DATA_DIR, REPO_URL)
+   
     
     
 if __name__ == "__main__":
     args = parser.parse_args()
-    # print(f"Generating {args.num_stories} stories")
-    # if args.verbose:
-    #     print(args)
+    
     gen_chat(args)
