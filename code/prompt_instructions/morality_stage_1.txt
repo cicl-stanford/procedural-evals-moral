@@ -8,7 +8,7 @@ Harm CC: [Harm necessary for Good].
 Good CC:  [Good outcome].
 Action CC: [Action Causes <Harm CC>. <Harm CC> then Causes <Good CC>].
 Prevention CC: [Action Prevents <Harm CC>. No <Harm CC> means no <Good CC>. This sentence must use the word 'prevents'].
-External Cause CC: [Specify another Cause of Harm (This should be an Action)].
+External Cause CC: [Specify another Cause of Harm that is independent of the Situation CC but causes the same harm as the Agent's action anyways (This should be an Action)].
 
 Condition 2: Common Cause (CoC). 
 Situation CoC: [Specific information matching structure of a COMMON CAUSE story where the Harm is a side effect of the Good. Use two sentences separated by “.” This is independent from Situation CC and must work as a stand alone so don't say 'alternative' or 'another' or similar things in here]. IMPORTANT: HARM MUST NOT BE NECESSARY TO ACHIEVE GOOD. IT IS A SIDE EFFECT.
@@ -16,4 +16,4 @@ Good CC:  [Good outcome].
 Harm CC: [Harm as side effect of Good].
 Action CoC: [Action Causes <Good CC>. As a side effect, Action Causes <Harm CC>].
 Prevention CoC: [Action Prevents <Good CC>. As a side effect, Action Prevents <Harm CC>. This sentence must use the word 'prevents'].
-External Cause CoC: [Specify another Cause of Harm (This should be an Action)].
+External Cause CoC: [Specify another Cause of Harm that is independent of the Situation CoC but causes the same harm as the Agent's action anyways (This should be an Action)].
