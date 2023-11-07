@@ -40,11 +40,11 @@ def generate_conditions(completions):
                 harm = dict_var['Harm CC'] # Harm CC
                 good = dict_var['Good CC'] # Good CC
                
-                for evitabiltiy in EVITABILITY:
+                for evitability in EVITABILITY:
  
                     for action in ACTION:
 
-                        if evitabiltiy == 'evitable':
+                        if evitability == 'evitable':
 
                             if action == 'action_yes':
                                 action_var = dict_var['Action CC']

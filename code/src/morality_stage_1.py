@@ -3,14 +3,15 @@ import csv
 import tqdm
 import argparse
 import ast
+import os
 
-from langchain.chat_models import ChatOpenAI
+from langchain.chat_models import ChatOpenAI, AzureChatOpenAI
 from langchain.schema import (
     AIMessage,
     HumanMessage,
     SystemMessage
 )
-from crfm import crfmChatLLM
+# from crfm import crfmChatLLM
 
 from utils import push_data, get_num_items, get_vars_from_out
 
@@ -29,17 +30,31 @@ parser.add_argument('--max_tokens', type=int, default=2000, help='max tokens')
 parser.add_argument('--num_completions', type=int, default=1, help='number of completions')
 parser.add_argument('--num_shots', type=int, default=3, help='number of shots')
 parser.add_argument('--num_stories', type=int, default=2, help='number of stories to generate')
-parser.add_argument('--verbose', action='store_true', help='verbose')
+parser.add_argument('--verbose', type=bool, default=True, help='verbose')
+parser.add_argument('--api', type=str, default='azure', help='which api to use')
 
 
 def get_llm(args):
-    llm = crfmChatLLM(
-        model_name=args.model,
-        temperature=args.temperature,
-        max_tokens=args.max_tokens,
-        num_completions=args.num_completions,
-        request_timeout=180
-    )
+
+    # llm = crfmChatLLM(
+    #     model_name=args.model,
+    #     temperature=args.temperature,
+    #     max_tokens=args.max_tokens,
+    #     num_completions=args.num_completions,
+    #     request_timeout=180
+    # )
+
+    if args.api == 'azure':
+
+        llm = AzureChatOpenAI(
+            openai_api_base=os.getenv("BASE_URL"),
+            openai_api_version="2023-05-15",
+            deployment_name='gpt-4',
+            openai_api_key=os.getenv("API_KEY"),
+            openai_api_type="azure",
+            temperature=args.temperature,
+        )
+
     return llm
 
 def get_human_message(args):
@@ -139,6 +154,7 @@ External Cause CoC: {external_cause_coc}
             story_file = f'{DATA_DIR}/{CSV_NAME}.csv'
             with open(story_file, 'a') as csvfile:
                 writer = csv.writer(csvfile, delimiter=';')
+                # print(data)
                 writer.writerow(data)
         # push to github
         # push_data(DATA_DIR, REPO_URL)
