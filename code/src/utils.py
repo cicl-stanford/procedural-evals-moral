@@ -2,6 +2,8 @@ import os
 import csv
 from subprocess import Popen, PIPE
 import itertools
+from langchain.chat_models import ChatOpenAI, AzureChatOpenAI
+# from crfm import crfmChatLLM
 
 
 def push_data(data_dir: str, repo_url: str):
@@ -77,3 +79,28 @@ def get_vars_from_out(out:str, var_list: list) -> dict[str, str]:
     for i, lines in enumerate(out):
         var_dict[var_list[i]] = lines.split(': ')[1].strip()
     return var_dict
+
+def get_llm(args):
+
+    llm = None
+ 
+    if args.api == 'azure':
+
+        llm = AzureChatOpenAI(
+            openai_api_base=os.getenv("BASE_URL"),
+            openai_api_version="2023-05-15",
+            deployment_name='gpt-4',
+            openai_api_key=os.getenv("API_KEY"),
+            openai_api_type="azure",
+            temperature=args.temperature,
+        )
+    # else:
+    #     llm = crfmChatLLM(
+    #         model_name=args.model,
+    #         temperature=args.temperature,
+    #         max_tokens=args.max_tokens,
+    #         num_completions=args.num_completions,
+    #         request_timeout=180
+    #     )
+
+    return llm

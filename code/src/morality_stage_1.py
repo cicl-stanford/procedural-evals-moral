@@ -13,7 +13,7 @@ from langchain.schema import (
 )
 # from crfm import crfmChatLLM
 
-from utils import push_data, get_num_items, get_vars_from_out
+from utils import push_data, get_num_items, get_vars_from_out, get_llm
 
 letters = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L',
            'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W','X', 'Y', 'Z']
@@ -32,30 +32,6 @@ parser.add_argument('--num_shots', type=int, default=3, help='number of shots')
 parser.add_argument('--num_stories', type=int, default=2, help='number of stories to generate')
 parser.add_argument('--verbose', type=bool, default=True, help='verbose')
 parser.add_argument('--api', type=str, default='azure', help='which api to use')
-
-
-def get_llm(args):
-
-    # llm = crfmChatLLM(
-    #     model_name=args.model,
-    #     temperature=args.temperature,
-    #     max_tokens=args.max_tokens,
-    #     num_completions=args.num_completions,
-    #     request_timeout=180
-    # )
-
-    if args.api == 'azure':
-
-        llm = AzureChatOpenAI(
-            openai_api_base=os.getenv("BASE_URL"),
-            openai_api_version="2023-05-15",
-            deployment_name='gpt-4',
-            openai_api_key=os.getenv("API_KEY"),
-            openai_api_type="azure",
-            temperature=args.temperature,
-        )
-
-    return llm
 
 def get_human_message(args):
     letter_name, letter_profession = random.choice(letters), random.choice(letters)
@@ -150,8 +126,12 @@ External Cause CoC: {external_cause_coc}
             except:
                 print("Error in parsing output")
                 breakpoint()
+            
             data = [out_vars[k] for k in list_var]
             story_file = f'{DATA_DIR}/{CSV_NAME}.csv'
+            with open(f'{DATA_DIR}/effects.csv', 'a') as file:
+                file.write(f'{out_vars["Good CC"]},{out_vars["Harm CC"]},{out_vars["Good CoC"]},{out_vars["Harm CoC"]}\n')
+
             with open(story_file, 'a') as csvfile:
                 writer = csv.writer(csvfile, delimiter=';')
                 # print(data)
