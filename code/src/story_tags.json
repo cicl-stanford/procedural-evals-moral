@@ -1,0 +1,19 @@
+{
+    "Context": "{context}",
+    "Situation CC": "{cc}",
+    "Mild Harm CC": "{mild_harm_cc}",
+    "Extreme Harm CC": "{extreme_harm_cc}",
+    "Mild Good CC": "{mild_good_cc}",
+    "Extreme Good CC": "{extreme_good_cc}",
+    "Action CC": "{action_cc}",
+    "Prevention CC": "{prevention_cc}",
+    "External Cause CC": "{external_cause_cc}",
+    "Situation CoC": "{coc}",
+    "Mild Good CoC": "{mild_good_coc}",
+    "Extreme Good CoC": "{extreme_good_coc}",
+    "Mild Harm CoC": "{mild_harm_coc}",
+    "Extreme Harm CoC": "{extreme_harm_coc}",
+    "Action CoC": "{action_coc}",
+    "Prevention CoC": "{prevention_coc}",
+    "External Cause CoC": "{external_cause_coc}"
+}

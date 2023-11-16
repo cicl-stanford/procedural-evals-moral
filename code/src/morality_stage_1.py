@@ -4,6 +4,7 @@ import tqdm
 import argparse
 import ast
 import os
+import json
 
 from langchain.schema import (
     AIMessage,
@@ -19,6 +20,9 @@ DATA_DIR = '../../data'
 PROMPT_DIR = '../prompt_instructions'
 WORDS_DIR = '../words'
 CSV_NAME = 'morality_stage_1_new'
+
+# Map story items to tags
+STORY_TAGS = json.load(open('story_tags.json'))
 
 parser = argparse.ArgumentParser()
 parser.add_argument('--model', type=str, default='openai/gpt-4-0314', help='model name')
@@ -44,25 +48,9 @@ def get_human_message(args):
 
 
 def gen_chat(args):
-    response_template = """Here is the story:
-Context: {context}
-Situation CC: {cc}
-Mild Harm CC: {mild_harm_cc} 
-Extreme Harm CC: {extreme_harm_cc} 
-Mild Good CC: {mild_good_cc} 
-Extreme Good CC: {extreme_good_cc} 
-Action CC: {action_cc}
-Prevention CC: {prevention_cc}
-External Cause CC: {external_cause_cc}
-Situation CoC: {coc}
-Mild Good CoC: {mild_good_coc} 
-Extreme Good CoC: {extreme_good_coc} 
-Mild Harm CoC: {mild_harm_coc}
-Extreme Harm CoC: {extreme_harm_coc}
-Action CoC: {action_coc}
-Prevention CoC: {prevention_coc}
-External Cause CoC: {external_cause_coc}
-"""
+    response_template = "Here is the story:\n"
+    for tag in STORY_TAGS:
+        response_template += f"{tag}: {STORY_TAGS[tag]}\n"
 
     llm = get_llm(args)
     with(open(f'{PROMPT_DIR}/morality_stage_1.txt', 'r')) as f:
@@ -76,9 +64,7 @@ External Cause CoC: {external_cause_coc}
     human_message_1 = HumanMessage(content=new_message[0])
     
     examples = []
-    template_var = ["context", "cc", "mild_harm_cc", "extreme_harm_cc", "mild_good_cc", "extreme_good_cc", 
-                    "action_cc", "prevention_cc", "external_cause_cc", "coc", "mild_good_coc", "extreme_good_coc", 
-                    "mild_harm_coc", "extreme_harm_coc", "action_coc", "prevention_coc", "external_cause_coc"]
+    template_var = [tag.strip("{}") for tag in STORY_TAGS.values()]
     csv_file = f'{DATA_DIR}/{CSV_NAME}.csv'
 
     prompt_tokens_used = 0
@@ -90,17 +76,13 @@ External Cause CoC: {external_cause_coc}
         new_message = s.split("Story (the")
         human_message_1 = HumanMessage(content=new_message[0])
    
-        # read examples from csv file every iteration to add generated samples to the pool of seed examples
+        # Read examples from csv file every iteration to add generated samples to the pool of seed examples
         if args.verbose:
             print(f"Reading examples from {csv_file} with existing {get_num_items(csv_file)} examples")
-        # read a few examples from the csv file
+        # Read a few examples from the csv file
         with open(csv_file, 'r') as f:
             for line in f.readlines():
                 params = line.split(';')
-                print(params)
-                for v, k in enumerate(template_var):
-                    print(v, k)
-                    print(params[v])
                 example = {k: params[v].strip() for v, k in enumerate(template_var)} 
                 examples.append(example)
         random.shuffle(examples)
@@ -111,7 +93,6 @@ External Cause CoC: {external_cause_coc}
             if i == len(examples):
                 break
             messages.append(human_message_0)
-
             messages.append(AIMessage(content=response_template.format(**examples[i])))	
         messages.append(human_message_1)	
         if args.verbose:
@@ -124,27 +105,61 @@ External Cause CoC: {external_cause_coc}
         # update tqdm progress bar with price
         # tqdm.tqdm.write(f"Price: {price:.2f} USD, Price per story: {price/(n_story+args.num_completions):.2f} USD")
         for g, generation in enumerate(responses.generations[0]):
-            # print(f"AYESHA LOOK HERE \n: {generation.text}")
             if args.verbose:
                 print(f"------ Generated Story {n_story+g} ------")
                 print(generation.text)
+                # TODO - generate the table of story
                 print("------------ Fin --------------")
-            list_var = ["Context", "Situation CC", "Mild Harm CC", "Extreme Harm CC", "Mild Good CC","Extreme Good CC", "Action CC", "Prevention CC", "External Cause CC", "Situation CoC", "Mild Good CoC", "Extreme Good CoC", "Mild Harm CoC", "Extreme Harm CoC", "Action CoC", "Prevention CoC", "External Cause CoC"]
+     
+            list_var = list(STORY_TAGS.keys())
             try:
                 out_vars = get_vars_from_out(generation.text, list_var)
                 # breakpoint()
             except:
                 print("Error in parsing output")
                 breakpoint()
-            
+
+            # Stitch together a story for each condition
+            """
+            +-------------+------------+-------------+--------------+--------------+
+            |             | Mild harm, | Mild harm,  | Severe harm, | Severe harm, |
+            |             | Mild good  | Severe good | Mild good    | Severe good  |      
+            +=============+============+=============+==============+==============+
+            | Means,      |
+            | Evitable,   |
+            | Action      | 
+            +-------------+
+            | Means,      |
+            | Inevitable, |
+            | Action      |     
+            +-------------+
+            | Side Effect,|
+            | Evitable,   |
+            | Prevention  |      
+            +-------------+
+            | Side Effect,| 
+            | Evitable,   | 
+            | Action      | 
+            +-------------+
+            """
+
+            # Context + 
+           
+            print(out_vars)
+            print('Condition 1: Causal Chain (CC).')
+            print('----[Means, Evitable, Action] x [Mild harm, Mild good]----')
+            print(" ".join([out_vars['Context'], out_vars['Situation CC'], out_vars['Action CC'], out_vars['Mild Harm CC'], out_vars['Mild Good CC']]))
+            print('----[Means, Evitable, Action] x [Mild harm, Mild good]----')
+
             data = [out_vars[k] for k in list_var]
+            
+
             story_file = f'{DATA_DIR}/{CSV_NAME}.csv'
             with open(f'{DATA_DIR}/effects.csv', 'a') as file:
                 file.write(f'{out_vars["Mild Good CC"]},{out_vars["Extreme Good CC"]},{out_vars["Mild Harm CC"]},{out_vars["Extreme Harm CC"]},{out_vars["Mild Good CoC"]},{out_vars["Extreme Good CoC"]}{out_vars["Mild Harm CoC"]},{out_vars["Extreme Harm CoC"]}\n')
 
             with open(story_file, 'a') as csvfile:
                 writer = csv.writer(csvfile, delimiter=';')
-                # print(data)
                 writer.writerow(data)
         # push to github
         # push_data(DATA_DIR, REPO_URL)
