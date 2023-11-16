@@ -4,3 +4,4 @@ seaborn
 matplotlib
 pandas
 pydantic
+openai==0.28.1
