@@ -5,13 +5,11 @@ import argparse
 import ast
 import os
 
-from langchain.chat_models import ChatOpenAI, AzureChatOpenAI
 from langchain.schema import (
     AIMessage,
     HumanMessage,
     SystemMessage
 )
-# from crfm import crfmChatLLM
 
 from utils import push_data, get_num_items, get_vars_from_out, get_llm
 
@@ -20,7 +18,7 @@ letters = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L',
 DATA_DIR = '../../data'
 PROMPT_DIR = '../prompt_instructions'
 WORDS_DIR = '../words'
-CSV_NAME = 'morality_stage_1'
+CSV_NAME = 'morality_stage_1_new'
 
 parser = argparse.ArgumentParser()
 parser.add_argument('--model', type=str, default='openai/gpt-4-0314', help='model name')
@@ -49,14 +47,18 @@ def gen_chat(args):
     response_template = """Here is the story:
 Context: {context}
 Situation CC: {cc}
-Harm CC: {harm_cc}
-Good CC: {good_cc}
+Mild Harm CC: {mild_harm_cc} 
+Extreme Harm CC: {extreme_harm_cc} 
+Mild Good CC: {mild_good_cc} 
+Extreme Good CC: {extreme_good_cc} 
 Action CC: {action_cc}
 Prevention CC: {prevention_cc}
 External Cause CC: {external_cause_cc}
 Situation CoC: {coc}
-Good CoC: {good_coc}
-Harm CoC: {harm_coc}
+Mild Good CoC: {mild_good_coc} 
+Extreme Good CoC: {extreme_good_coc} 
+Mild Harm CoC: {mild_harm_coc}
+Extreme Harm CoC: {extreme_harm_coc}
 Action CoC: {action_coc}
 Prevention CoC: {prevention_coc}
 External Cause CoC: {external_cause_coc}
@@ -74,7 +76,9 @@ External Cause CoC: {external_cause_coc}
     human_message_1 = HumanMessage(content=new_message[0])
     
     examples = []
-    template_var = ["context", "cc", "harm_cc", "good_cc", "action_cc", "prevention_cc", "external_cause_cc", "coc", "good_coc", "harm_coc", "action_coc", "prevention_coc", "external_cause_coc"]
+    template_var = ["context", "cc", "mild_harm_cc", "extreme_harm_cc", "mild_good_cc", "extreme_good_cc", 
+                    "action_cc", "prevention_cc", "external_cause_cc", "coc", "mild_good_coc", "extreme_good_coc", 
+                    "mild_harm_coc", "extreme_harm_coc", "action_coc", "prevention_coc", "external_cause_coc"]
     csv_file = f'{DATA_DIR}/{CSV_NAME}.csv'
 
     prompt_tokens_used = 0
@@ -93,6 +97,10 @@ External Cause CoC: {external_cause_coc}
         with open(csv_file, 'r') as f:
             for line in f.readlines():
                 params = line.split(';')
+                print(params)
+                for v, k in enumerate(template_var):
+                    print(v, k)
+                    print(params[v])
                 example = {k: params[v].strip() for v, k in enumerate(template_var)} 
                 examples.append(example)
         random.shuffle(examples)
@@ -100,6 +108,8 @@ External Cause CoC: {external_cause_coc}
         # 2-shots by default	
         messages = [system_message]	
         for i in range(args.num_shots):	
+            if i == len(examples):
+                break
             messages.append(human_message_0)
 
             messages.append(AIMessage(content=response_template.format(**examples[i])))	
@@ -119,7 +129,7 @@ External Cause CoC: {external_cause_coc}
                 print(f"------ Generated Story {n_story+g} ------")
                 print(generation.text)
                 print("------------ Fin --------------")
-            list_var = ["Context", "Situation CC", "Harm CC", "Good CC", "Action CC", "Prevention CC", "External Cause CC", "Situation CoC", "Good CoC", "Harm CoC", "Action CoC", "Prevention CoC", "External Cause CoC"]
+            list_var = ["Context", "Situation CC", "Mild Harm CC", "Extreme Harm CC", "Mild Good CC","Extreme Good CC", "Action CC", "Prevention CC", "External Cause CC", "Situation CoC", "Mild Good CoC", "Extreme Good CoC", "Mild Harm CoC", "Extreme Harm CoC", "Action CoC", "Prevention CoC", "External Cause CoC"]
             try:
                 out_vars = get_vars_from_out(generation.text, list_var)
                 # breakpoint()
@@ -130,7 +140,7 @@ External Cause CoC: {external_cause_coc}
             data = [out_vars[k] for k in list_var]
             story_file = f'{DATA_DIR}/{CSV_NAME}.csv'
             with open(f'{DATA_DIR}/effects.csv', 'a') as file:
-                file.write(f'{out_vars["Good CC"]},{out_vars["Harm CC"]},{out_vars["Good CoC"]},{out_vars["Harm CoC"]}\n')
+                file.write(f'{out_vars["Mild Good CC"]},{out_vars["Extreme Good CC"]},{out_vars["Mild Harm CC"]},{out_vars["Extreme Harm CC"]},{out_vars["Mild Good CoC"]},{out_vars["Extreme Good CoC"]}{out_vars["Mild Harm CoC"]},{out_vars["Extreme Harm CoC"]}\n')
 
             with open(story_file, 'a') as csvfile:
                 writer = csv.writer(csvfile, delimiter=';')
