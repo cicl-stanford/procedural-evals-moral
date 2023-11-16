@@ -4,8 +4,8 @@ import os
 import argparse
 
 from tqdm import tqdm
-from crfm import crfmChatLLM
-from transformers import AutoModelForCausalLM, AutoTokenizer
+# from crfm import crfmChatLLM
+# from transformers import AutoModelForCausalLM, AutoTokenizer
 
 from langchain import HuggingFacePipeline
 from langchain.chat_models import ChatOpenAI, ChatAnthropic
@@ -13,6 +13,7 @@ from langchain.schema import (
     HumanMessage,
     SystemMessage
 )
+from utils import get_llm
 
 def parse_response(raw_response):
     if "a:" in raw_response.lower():
@@ -49,6 +50,7 @@ def parse_response(raw_response):
 parser = argparse.ArgumentParser()
 
 # model args
+parser.add_argument('--api', type=str, default='azure', help='which api to use')
 parser.add_argument('--model', type=str, default='gpt-4-0613', help='model name')
 parser.add_argument('--temperature', type=float, default=0.0, help='temperature')
 parser.add_argument('--max_tokens', type=int, default=10, help='max tokens')
@@ -122,9 +124,7 @@ if args.model in ["gpt-4-0613", "gpt-3.5-turbo"]:
     # llm = ChatOpenAI(model_name=args.model,
     #                 temperature=args.temperature,
     #                 max_tokens = args.max_tokens)
-    llm = crfmChatLLM(model_name=f"openai/{args.model}",
-                    temperature=args.temperature,
-                    max_tokens = args.max_tokens)
+    llm = get_llm(args)
 elif args.model in ["claude-2"]:
     llm = ChatAnthropic(model_name=args.model,
                     temperature=args.temperature,

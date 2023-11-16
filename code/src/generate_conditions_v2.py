@@ -110,11 +110,11 @@ def generate_conditions(completions):
                 good = dict_var['Good CoC'] # Good CoC
                 combine = dict_var['New Context CoC']
 
-                for evitabiltiy in EVITABILITY:
+                for evitability in EVITABILITY:
 
                     for action in ACTION:
 
-                        if evitabiltiy == 'evitable':
+                        if evitability == 'evitable':
 
                             if action == 'action_yes':
                                 action_var = dict_var['Action CoC']
@@ -134,7 +134,7 @@ def generate_conditions(completions):
                                 evitable_action = dict_var['Evitable Prevention CoC']
                                 action_sentence = dict_var['Prevention Sentence CoC'].split('.')[1][1:]
                     
-                        if evitabiltiy == 'inevitable':
+                        if evitability == 'inevitable':
 
                        
                             if action == 'action_yes':

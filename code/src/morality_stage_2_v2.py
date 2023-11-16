@@ -10,9 +10,9 @@ from langchain.schema import (
     HumanMessage,
     SystemMessage
 )
-from crfm import crfmChatLLM
+# from crfm import crfmChatLLM
 
-from utils import push_data, get_num_items, get_vars_from_out
+from utils import push_data, get_num_items, get_vars_from_out, get_llm
 
 DATA_DIR = '../../data'
 PROMPT_DIR = '../prompt_instructions'
@@ -28,17 +28,19 @@ parser.add_argument('--num_completions', type=int, default=1, help='number of co
 parser.add_argument('--num_shots', type=int, default=1, help='number of shots')
 parser.add_argument('--num_stories', type=int, default=1, help='number of stories to generate')
 parser.add_argument('--verbose', action='store_true', help='verbose')
+parser.add_argument('--api', type=str, default='azure', help='which api to use')
 
 
-def get_llm(args):
-    llm = crfmChatLLM(
-        model_name=args.model,
-        temperature=args.temperature,
-        max_tokens=args.max_tokens,
-        num_completions=args.num_completions,
-        request_timeout=180
-    )
-    return llm
+
+# def get_llm(args):
+#     llm = crfmChatLLM(
+#         model_name=args.model,
+#         temperature=args.temperature,
+#         max_tokens=args.max_tokens,
+#         num_completions=args.num_completions,
+#         request_timeout=180
+#     )
+#     return llm
 
 def get_system_message(args):
     with(open(f'{PROMPT_DIR}/morality_stage_2_v2.txt', 'r')) as f:
@@ -122,6 +124,7 @@ Prevention CoC: {prevention_coc}"""
                 story_file = f'{DATA_DIR}/{CSV_NAME_SAVE}.csv'
                 with open(story_file, 'a') as csvfile:
                     writer = csv.writer(csvfile, delimiter=';')
+                    print(data)
                     writer.writerow(data)
                 # breakpoint()
     

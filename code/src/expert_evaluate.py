@@ -9,6 +9,11 @@ from utils import push_data, get_num_items, edit_csv_row
 
 app = Flask(__name__)
 DATA_DIR = '../../data'
+VARS = ['context', 'cc', 'harm_cc', 'good_cc', 'action_cc', 'prevention_cc', 'external_cause_cc', 'coc', 
+        'good_coc', 'harm_coc', 'action_coc', 'prevention_coc', 'external_cause_coc', 'evitable_action_cc',
+        'inevitable_action_cc', 'evitable_prevention_cc', 'inevitable_prevention_cc', 'action_sentence_coc',
+        'prevention_sentence_cc', 'evitable_action_coc', 'inevitable_action_coc', 'evitable_prevention_coc',
+        'inevitable_prevention_coc', 'action_sentence_coc', 'prevention_sentence_coc']
 
 # get index
 @app.route('/')
@@ -39,31 +44,10 @@ def get_stories(evaluator):
         stories = list(csv.reader(f, delimiter=';'))
     if idx >= len(stories):
         raise Exception('No more stories to rate')
-    story_dict['context'] = stories[idx][0]
-    story_dict['cc'] = stories[idx][1]
-    story_dict['harm_cc'] = stories[idx][2]
-    story_dict['good_cc'] = stories[idx][3]
-    story_dict['action_cc'] = stories[idx][4]
-    story_dict['prevention_cc'] = stories[idx][5]
-    story_dict['external_cause_cc'] = stories[idx][6]
-    story_dict['coc'] = stories[idx][7]
-    story_dict['good_coc'] = stories[idx][8]
-    story_dict['harm_coc'] = stories[idx][9]
-    story_dict['action_coc'] = stories[idx][10]
-    story_dict['prevention_coc'] = stories[idx][11]
-    story_dict['external_cause_coc'] = stories[idx][12]
-    story_dict['evitable_action_cc'] = stories[idx][13]
-    story_dict['inevitable_action_cc'] = stories[idx][14]
-    story_dict['evitable_prevention_cc'] = stories[idx][15]
-    story_dict['inevitable_prevention_cc'] = stories[idx][16]
-    story_dict['action_sentence_cc'] = stories[idx][17]
-    story_dict['prevention_sentence_cc'] = stories[idx][18]
-    story_dict['evitable_action_coc'] = stories[idx][19]
-    story_dict['inevitable_action_coc'] = stories[idx][20]
-    story_dict['evitable_prevention_coc'] = stories[idx][21]
-    story_dict['inevitable_prevention_coc'] = stories[idx][22]
-    story_dict['action_sentence_coc'] = stories[idx][23]
-    story_dict['prevention_sentence_coc'] = stories[idx][24]    
+    
+    for i in range(len(stories[idx])):
+        story_dict[vars[i]] = stories[idx][i]
+        
     return story_dict, idx
 
 # load story
