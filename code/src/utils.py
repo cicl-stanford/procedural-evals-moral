@@ -58,7 +58,6 @@ def edit_csv_row(filename, row_to_edit, new_data):
 def get_num_items(file_name: str) -> int:
     # Open the CSV file in append mode
     csv_file = f'{file_name}'
-    print(csv_file)
     if not os.path.exists(csv_file):
         return 0
     num_rows = 0

@@ -18,7 +18,6 @@ letters = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L',
            'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W','X', 'Y', 'Z']
 DATA_DIR = '../../data'
 PROMPT_DIR = '../prompt_instructions'
-WORDS_DIR = '../words'
 CSV_NAME = 'morality_stage_1_new'
 SEVERITY_LEVELS = ['Mild', 'Extreme']
 
@@ -37,15 +36,13 @@ parser.add_argument('--num_stories', type=int, default=2, help='number of storie
 parser.add_argument('--verbose', type=bool, default=True, help='verbose')
 parser.add_argument('--api', type=str, default='azure', help='which api to use')
 
-def get_human_message(args):
-    letter_name, letter_profession = random.choice(letters), random.choice(letters)
-
-    with(open(f'{PROMPT_DIR}/reminder_stage_1.txt', 'r')) as f:
+def get_human_message(prompt_file):
+    
+    with(open(f'{PROMPT_DIR}/{prompt_file}.txt', 'r')) as f:
         msg = f.read().strip()
-
+    letter_name, letter_profession = random.choice(letters), random.choice(letters)
     msg = msg.replace("[name_letter]", letter_name)
     msg = msg.replace("[profession_letter]", letter_profession)
-
     return msg
 
 
@@ -55,17 +52,7 @@ def gen_chat(args):
         response_template += f"{tag}: {STORY_TAGS[tag]}\n"
 
     llm = get_llm(args)
-    with(open(f'{PROMPT_DIR}/morality_stage_1.txt', 'r')) as f:
-        instruction_text = f.read()
-
-    system_message = SystemMessage(content=instruction_text)
-    # 2-shots by default
-    human_message_0 = HumanMessage(content='Generate a story')
-    s = get_human_message(args)
-    new_message = s.split("Story (the")
-    human_message_1 = HumanMessage(content=new_message[0])
     
-    examples = []
     template_var = [tag.strip("{}") for tag in STORY_TAGS.values()]
     csv_file = f'{DATA_DIR}/{CSV_NAME}.csv'
 
@@ -74,14 +61,21 @@ def gen_chat(args):
 
     # run loop with n stories, increase by num_completions
     for n_story in tqdm.tqdm(range(0, args.num_stories, args.num_completions)):
-        s = get_human_message(args)
-        new_message = s.split("Story (the")
-        human_message_1 = HumanMessage(content=new_message[0])
-   
+        # s = get_human_message('reminder_stage_1') # Why two text files?
+        # new_message = s.split("Story (the")
+        # human_message_1 = HumanMessage(content=new_message[0])
+        instruction_text = get_human_message('morality_stage_1')
+    
+
+        system_message = SystemMessage(content=instruction_text)
+        human_message_0 = HumanMessage(content='Generate a story')
+    
         # Read examples from csv file every iteration to add generated samples to the pool of seed examples
         if args.verbose:
             print(f"Reading examples from {csv_file} with existing {get_num_items(csv_file)} examples")
+
         # Read a few examples from the csv file
+        examples = []
         with open(csv_file, 'r') as f:
             for line in f.readlines():
                 params = line.split(';')
@@ -96,10 +90,10 @@ def gen_chat(args):
                 break
             messages.append(human_message_0)
             messages.append(AIMessage(content=response_template.format(**examples[i])))	
-        messages.append(human_message_1)	
+        # messages.append(human_message_1)	
         # if args.verbose:
-        #     print(f"------ messages ------")	
-        #     print(messages)	
+        #     # print(f"------ messages ------")	
+        #     # print(messages)	
         responses = llm.generate([messages], stop=["System:"])
         # prompt_tokens_used += responses.llm_output['token_usage']['prompt_tokens']
         # completion_tokens_used += responses.llm_output['token_usage']['completion_tokens']
