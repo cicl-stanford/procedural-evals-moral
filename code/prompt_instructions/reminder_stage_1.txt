@@ -1,5 +1,3 @@
-he name of the agent must start with [name_letter]. The profession of the agent must start with [profession_letter] and be a profession that involves moral and ethical decision making. 
-
 Context: [Agent], [profession], faces a moral dilemma. [Note, dont use titles such as Dr., Prof. or the likes. Just use a name.]
 
 Condition 1: Causal Chain (CC). 
