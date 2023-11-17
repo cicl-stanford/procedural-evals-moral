@@ -20,9 +20,11 @@ DATA_DIR = '../../data'
 PROMPT_DIR = '../prompt_instructions'
 WORDS_DIR = '../words'
 CSV_NAME = 'morality_stage_1_new'
+SEVERITY_LEVELS = ['Mild', 'Extreme']
 
 # Map story items to tags
 STORY_TAGS = json.load(open('story_tags.json'))
+
 
 parser = argparse.ArgumentParser()
 parser.add_argument('--model', type=str, default='openai/gpt-4-0314', help='model name')
@@ -95,9 +97,9 @@ def gen_chat(args):
             messages.append(human_message_0)
             messages.append(AIMessage(content=response_template.format(**examples[i])))	
         messages.append(human_message_1)	
-        if args.verbose:
-            print(f"------ messages ------")	
-            print(messages)	
+        # if args.verbose:
+        #     print(f"------ messages ------")	
+        #     print(messages)	
         responses = llm.generate([messages], stop=["System:"])
         # prompt_tokens_used += responses.llm_output['token_usage']['prompt_tokens']
         # completion_tokens_used += responses.llm_output['token_usage']['completion_tokens']
@@ -121,10 +123,10 @@ def gen_chat(args):
 
             # Stitch together a story for each condition
             """
-            +-------------+------------+-------------+--------------+--------------+
-            |             | Mild harm, | Mild harm,  | Severe harm, | Severe harm, |
-            |             | Mild good  | Severe good | Mild good    | Severe good  |      
-            +=============+============+=============+==============+==============+
+            +-------------+------------+--------------+---------------+--------------+
+            |             | Mild harm, | Mild harm,   | Extreme harm, | Extreme harm,|
+            |             | Mild good  | Extreme good | Mild good     | Extreme good |      
+            +=============+============+==============+===============+===============+
             | Means,      |
             | Evitable,   |
             | Action      | 
@@ -142,17 +144,41 @@ def gen_chat(args):
             | Action      | 
             +-------------+
             """
+            
+            all_conditions = ""
+            for harm_type in SEVERITY_LEVELS:
+                for good_type in SEVERITY_LEVELS:
+                    # Run through 4 conditions
 
-            # Context + 
-           
-            print(out_vars)
-            print('Condition 1: Causal Chain (CC).')
-            print('----[Means, Evitable, Action] x [Mild harm, Mild good]----')
-            print(" ".join([out_vars['Context'], out_vars['Situation CC'], out_vars['Action CC'], out_vars['Mild Harm CC'], out_vars['Mild Good CC']]))
-            print('----[Means, Evitable, Action] x [Mild harm, Mild good]----')
+                    # (1) Means, Evitable, Action
+                    all_conditions += f'----[Means, Evitable, Action] x [{harm_type} harm, {good_type} good]----\n'
+                    all_conditions += " ".join([out_vars['Context'], out_vars['Situation CC'], 
+                                    out_vars['Action CC'], out_vars[f'{harm_type} Harm CC'], 
+                                    out_vars[f'{good_type} Good CC']]) + "\n\n"
+
+                    # (2) Means, Inevitable, Action
+                    all_conditions += f'----[Means, Inevitable, Action] x [{harm_type} harm, {good_type} good]----\n'
+                    all_conditions += " ".join([out_vars['Context'], out_vars['Situation CC'], 
+                                    out_vars['Action CC'], out_vars[f'{harm_type} Harm CC'], 
+                                    out_vars[f'{good_type} Good CC'], out_vars['External Cause CC']]) + "\n\n"
+                
+                    # (3) Side Effect, Evitable, Prevention
+                    all_conditions += f'----[Side Effect, Evitable, Prevention] x [{harm_type} harm, {good_type} good]----\n'
+                    all_conditions += " ".join([out_vars['Context'], out_vars['Situation CoC'], 
+                                    out_vars['Prevention CoC'], out_vars[f'{harm_type} Harm CoC'], 
+                                    out_vars[f'{good_type} Good CoC']]) + "\n\n"
+                
+                    # (4) Side Effect, Evitable, Action
+                    all_conditions += f'----[Side Effect, Evitable, Action] x [{harm_type} harm, {good_type} good]----\n'
+                    all_conditions += " ".join([out_vars['Context'], out_vars['Situation CoC'], 
+                                    out_vars['Action CoC'], out_vars[f'{harm_type} Harm CoC'], 
+                                    out_vars[f'{good_type} Good CoC']]) + "\n\n"
 
             data = [out_vars[k] for k in list_var]
             
+            # TODO - remove this later
+            with open(f'{DATA_DIR}/temp_stories.txt', 'a') as file:
+                file.write(all_conditions)
 
             story_file = f'{DATA_DIR}/{CSV_NAME}.csv'
             with open(f'{DATA_DIR}/effects.csv', 'a') as file:
