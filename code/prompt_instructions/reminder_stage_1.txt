@@ -1,21 +1,25 @@
-The name of the agent must start with [name_letter]. The profession of the agent must start with [profession_letter].
+he name of the agent must start with [name_letter]. The profession of the agent must start with [profession_letter] and be a profession that involves moral and ethical decision making. 
 
 Context: [Agent], [profession], faces a moral dilemma. [Note, dont use titles such as Dr., Prof. or the likes. Just use a name.]
 
 Condition 1: Causal Chain (CC). 
-Situation CC: REMINDER: ******THE HARM MUST BE CAUSED BY THE ACTION******. THE HARM IS A ******NECESSARY MEANS******FOR THE GOOD. ******WITHOUT HARM, THERE CAN BE NO GOOD******.
-Harm CC: [Harm necessary for Good].
-Good CC:  [Good outcome].
+Situation CC: REMINDER: ******THE HARM MUST BE CAUSED BY THE ACTION. THE GOOD MUST BE CAUSED BY THE HARM, AND THE HARM MUST BE NECESSARY FOR THE GOOD TO HAPPEN.************WITHOUT HARM, THERE CAN BE NO GOOD******.
+Mild Harm CC: [Mild Harm necessary for Good].
+Extreme Harm CC: [Extreme necessary for Good].
+Mild Good CC: [Mild Good outcome].
+Extreme Good CC: [Extreme Good outcome].
 Action CC: [Action Causes <Harm CC>. <Harm CC> Causes <Good CC>].
 Prevention CC: [Action Prevents <Harm CC>. No <Harm CC> means no <Good CC>. This sentence must use the word 'PREVENTS'].
-External Cause CC: [Specify another Cause of Harm (This should be an Action)]. DONT SAY SIMILAR HERE. **BE CREATIVE**
+External Cause CC: [Specify another Cause of Harm that is independent of the Situation CC but causes the same harm as the Agent's action anyways (This should be an Action)]. 
 
 Condition 2: Common Cause (CoC). 
 Situation CoC: REMINDER: *****THE GOOD MUST IMMEDIATELY BE CAUSED BY THE ACTION******. ******THE HARM IS A SIDE EFFECT OF THE ACTION, BUT IT IS NOT NECESSARY FOR THE GOOD******. WITHOUT HARM, THERE CAN STILL BE GOOD. BUT IN THIS CASE, THE HARM IS A SIDE EFFECT OF THE GOOD.
-Good CC:  [Good outcome].
-Harm CC: [Harm as side effect of Good].
+Mild Good CC:  [Mild Good outcome].
+Extreme Good CC:  [Extreme Good outcome].
+Mild Harm CC: [Mild Harm as side effect of Good].
+Extreme Harm CC: [Extreme Harm as side effect of Good].
 Action CoC: [Action Causes <Good CC>. As a SIDE EFFECT, Action Causes <Harm CC>].
 Prevention CoC: [Action Prevents <Good CC>. As a SIDE EFFECT, Action Prevents <Harm CC>. This sentence must use the word 'prevents'].
-External Cause CoC: [Specify another Cause of Harm (This should be an Action)]. DONT SAY SIMILAR HERE. **BE CREATIVE**
+External Cause CoC: [Specify another Cause of Harm that is independent of the Situation CoC but causes the same harm as the Agent's action anyways (This should be an Action)]. 
 
 ***MAKE THE NEW SCENARIO COMPLETELY DIFFERENT FROM THE EXAMPLES ABOVE. YOU ARE NOT ALLOWED TO REPEAT SIMILAR CONTENT***
