@@ -1,16 +1,20 @@
 import random
 import csv
 import tqdm
+import os
 import argparse
 import ast
 import os
 import json
 
+#from langchain.chat_models import ChatOpenAI, AzureChatOpenAI
 from langchain.schema import (
     AIMessage,
     HumanMessage,
     SystemMessage
 )
+
+# from crfm import crfmChatLLM
 
 from utils import push_data, get_num_items, get_vars_from_out, get_llm
 
@@ -95,11 +99,7 @@ def gen_chat(args):
         #     # print(f"------ messages ------")	
         #     # print(messages)	
         responses = llm.generate([messages], stop=["System:"])
-        # prompt_tokens_used += responses.llm_output['token_usage']['prompt_tokens']
-        # completion_tokens_used += responses.llm_output['token_usage']['completion_tokens']
-        # price = (prompt_tokens_used * 0.03 + completion_tokens_used * 0.06) / 1000.
-        # update tqdm progress bar with price
-        # tqdm.tqdm.write(f"Price: {price:.2f} USD, Price per story: {price/(n_story+args.num_completions):.2f} USD")
+       
         for g, generation in enumerate(responses.generations[0]):
             if args.verbose:
                 print(f"------ Generated Story {n_story+g} ------")
@@ -181,13 +181,10 @@ def gen_chat(args):
             with open(story_file, 'a') as csvfile:
                 writer = csv.writer(csvfile, delimiter=';')
                 writer.writerow(data)
-        # push to github
-        # push_data(DATA_DIR, REPO_URL)
+   
     
     
 if __name__ == "__main__":
     args = parser.parse_args()
-    # print(f"Generating {args.num_stories} stories")
-    # if args.verbose:
-    #     print(args)
+    
     gen_chat(args)
