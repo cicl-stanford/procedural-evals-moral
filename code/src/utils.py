@@ -58,7 +58,6 @@ def edit_csv_row(filename, row_to_edit, new_data):
 def get_num_items(file_name: str) -> int:
     # Open the CSV file in append mode
     csv_file = f'{file_name}'
-    print(csv_file)
     if not os.path.exists(csv_file):
         return 0
     num_rows = 0
@@ -72,8 +71,8 @@ def get_vars_from_out(out:str, var_list: list) -> dict[str, str]:
     # Get the variables from the output
     var_dict = {}
     out = out.split('\n')
-    out = [l for l in out if l!= 'Here is the story:']
-    out = [l for l in out if l!= '']
+    out = [l for l in out if l != 'Here is the story:']
+    out = [l for l in out if l != '']
     out = [l for l in out if ':' in l]
     out = [l for l in out if '(CC)' not in l and '(CoC)' not in l]
     for i, lines in enumerate(out):

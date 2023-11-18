@@ -1,19 +1,23 @@
-Generate a new story based on the following template. Make the moral harm in the story completely different from the examples. The name of the agent must start with [name_letter]. The profession of the agent must start with [profession_letter]. 
+Generate a new story based on the following template. Make the moral harm in the story completely different from the examples. The harm MUST relate to moral beliefs and values. The name of the agent must start with [name_letter]. The profession of the agent must start with [profession_letter] and be a profession that involves moral, ethical, social, or scientific decision making. 
 
 Context: [Agent], [profession], faces a moral dilemma. [Note, dont use titles such as Dr., Prof. or the likes. Just use a name.]
 
 Condition 1: Causal Chain (CC). 
-Situation CC: [***THE HARM MUST BE CAUSED FIRST***. Specific information matching structure of a CAUSAL CHAIN where the Harm is a NECESSARY means to achieve the Good. Use two sentences separated by “.”. Important: The Harm must be a necessary requirement, it can not be something that occurs as a side-effect. Without Harm, we can have no Good].
-Harm CC: [Harm necessary for Good].
-Good CC:  [Good outcome].
+Situation CC: [***THE HARM MUST BE CAUSED BEFORE THE GOOD***. Specific information matching structure of a CAUSAL CHAIN where the Harm happening before the Good causes the Good to happen. Use two sentences separated by “.”. Important: The Harm must be a necessary requirement, it can not be something that occurs as a side-effect. Without Harm, we can have no Good].
+Mild Harm CC: [Mild harm necessary for Good].
+Extreme Harm CC: [Extreme harm necessary for Good].
+Mild Good CC: [Mild Good outcome].
+Extreme Good CC: [Extreme Good outcome].
 Action CC: [Action Causes <Harm CC>. <Harm CC> then Causes <Good CC>].
 Prevention CC: [Action Prevents <Harm CC>. No <Harm CC> means no <Good CC>. This sentence must use the word 'prevents'].
 External Cause CC: [Specify another Cause of Harm that is independent of the Situation CC but causes the same harm as the Agent's action anyways (This should be an Action)].
 
 Condition 2: Common Cause (CoC). 
-Situation CoC: [Specific information matching structure of a COMMON CAUSE story where the Harm is a side effect of the Good. Use two sentences separated by “.” This is independent from Situation CC and must work as a stand alone so don't say 'alternative' or 'another' or similar things in here]. IMPORTANT: HARM MUST NOT BE NECESSARY TO ACHIEVE GOOD. IT IS A SIDE EFFECT.
-Good CC:  [Good outcome].
-Harm CC: [Harm as side effect of Good].
+Situation CoC: [Specific information matching structure of a COMMON CAUSE story where the Harm is a side effect of the Good. Use two sentences separated by “.” This is independent from Situation CC and must work as a stand alone so don't say 'alternative' or 'another' or similar things in here]. IMPORTANT: THE GOOD MUST NOT DEPEND ON THE HARM. IT IS A SIDE EFFECT.
+Mild Harm CC: [Mild Harm as side effect of Good].
+Extreme Harm CC: [Extreme Harm as side effect of Good].
+Mild Good CC: [Mild Good outcome].
+Extreme Good CC: [Extreme Good outcome].
 Action CoC: [Action Causes <Good CC>. As a side effect, Action Causes <Harm CC>].
 Prevention CoC: [Action Prevents <Good CC>. As a side effect, Action Prevents <Harm CC>. This sentence must use the word 'prevents'].
 External Cause CoC: [Specify another Cause of Harm that is independent of the Situation CoC but causes the same harm as the Agent's action anyways (This should be an Action)].
