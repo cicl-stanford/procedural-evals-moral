@@ -45,19 +45,6 @@ def get_human_message(prompt_file):
     msg = msg.replace("[profession_letter]", f"\'{letter_profession.lower()}\'")
     return msg
 
-"""
-Counterfactual language: If not Action, then no Harm. 
-Ex.:  If William did not reveal the third party’s private information, 
-      the innocent third party’s reputation would not have been damaged. 
-"""
-def means_evitable_action(out_vars, harm_type, good_type):
-    story = " ".join([out_vars['Context'], out_vars['Situation CC']])
-    story += " ".join([out_vars['Action CC'], out_vars[f'{harm_type} Harm CC'], 
-                       out_vars[f'{good_type} Good CC']]) + "\n\n"
-
-    raise
-    return story
-
 def gen_chat(args):
     response_template = "Here is the story:\n"
     for tag in STORY_TAGS:
@@ -149,11 +136,10 @@ def gen_chat(args):
                     # Run through 4 conditions
                     mea = ""
                     # (1) Means, Evitable, Action
-                    mea += f'----[Means, Evitable, Action] x [{harm_type} harm, {good_type} good]----\n'
-                    mea += means_evitable_action(out_vars, harm_type, good_type)
-                 
-                    all_conditions += mea
-          
+                    all_conditions += f'----[Means, Evitable, Action] x [{harm_type} harm, {good_type} good]----\n'
+                    all_conditions = " ".join([out_vars['Context'], out_vars['Situation CC'], 
+                                        out_vars['Action CC'], out_vars[f'{harm_type} Harm CC'], 
+                                        out_vars[f'{good_type} Good CC']]) + "\n\n"                 
 
                     # (2) Means, Inevitable, Action
                     all_conditions += f'----[Means, Inevitable, Action] x [{harm_type} harm, {good_type} good]----\n'
