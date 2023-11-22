@@ -2,22 +2,22 @@ Context: [Agent], [profession], faces a moral dilemma. [Note, dont use titles su
 
 Condition 1: Causal Chain (CC). 
 Situation CC: REMINDER: ******THE HARM MUST BE CAUSED BY THE ACTION. THE GOOD MUST BE CAUSED BY THE HARM, AND THE HARM MUST BE NECESSARY FOR THE GOOD TO HAPPEN.************WITHOUT HARM, THERE CAN BE NO GOOD******.
-Mild Harm CC: [Mild Harm necessary for Good].
-Extreme Harm CC: [Extreme necessary for Good].
-Mild Good CC: [Mild Good outcome].
-Extreme Good CC: [Extreme Good outcome].
+Mild Harm CC: [Mild harm necessary for Good. A harm is mild if the harm is short-term or confined to a local area and can be fixed with moderate effort.].
+Extreme Harm CC: [Extreme harm necessary for Good. A harm is extreme if the harm is wide-scale or long-term across multiple sectors of society and can be irreversible. ***THIS MUST BE A WORSE VERSION OF <Mild Harm CC>.***].
+Mild Good CC: [Mild Good outcome. A good is mild if it is short-term or benefits a local area.].
+Extreme Good CC: [Extreme Good outcome. A good is extreme if it is wide-scale or long-term and can benefit multiple sectors of society. ***THIS MUST BE A BETTER VERSION OF <Mild Good CC>.***].
 Action CC: [Action Causes <Harm CC>. <Harm CC> Causes <Good CC>].
 Prevention CC: [Action Prevents <Harm CC>. No <Harm CC> means no <Good CC>. This sentence must use the word 'PREVENTS'].
 External Cause CC: [Specify another Cause of Harm that is independent of the Situation CC but causes the same harm as the Agent's action anyways (This should be an Action)]. 
 
 Condition 2: Common Cause (CoC). 
 Situation CoC: REMINDER: *****THE GOOD MUST IMMEDIATELY BE CAUSED BY THE ACTION******. ******THE HARM IS A SIDE EFFECT OF THE ACTION, BUT IT IS NOT NECESSARY FOR THE GOOD******. WITHOUT HARM, THERE CAN STILL BE GOOD. BUT IN THIS CASE, THE HARM IS A SIDE EFFECT OF THE GOOD.
-Mild Good CC:  [Mild Good outcome].
-Extreme Good CC:  [Extreme Good outcome].
-Mild Harm CC: [Mild Harm as side effect of Good].
-Extreme Harm CC: [Extreme Harm as side effect of Good].
-Action CoC: [Action Causes <Good CC>. As a SIDE EFFECT, Action Causes <Harm CC>].
-Prevention CoC: [Action Prevents <Good CC>. As a SIDE EFFECT, Action Prevents <Harm CC>. This sentence must use the word 'prevents'].
+Mild Harm CoC: [Mild Harm as side effect of Good. A harm is mild if the harm is short-term or confined to a local area and can be fixed with moderate effort.].
+Extreme Harm CoC: [Extreme Harm as side effect of Good. A harm is extreme if the harm is wide-scale or long-term across multiple sectors of society and can be irreversible. ***THIS MUST BE A WORSE VERSION OF <Mild Harm CC/CoC>.***].
+Mild Good CoC: [Mild Good outcome. A good is mild if it is short-term or benefits a local area.].
+Extreme Good CoC: [Extreme Good outcome. A good is extreme if it is wide-scale or long-term and can benefit multiple sectors of society. ***THIS MUST BE A BETTER VERSION OF <Mild Good CoC>***.].
+Action CoC: [Action Causes <Mild Good CoC> or <Extreme Good CoC>. As a SIDE EFFECT, Action Causes <Mild Harm CoC> or <Extreme Harm CoC>].
+Prevention CoC: [Action Prevents <Mild Good CC> or <Extreme Good CC>. As a SIDE EFFECT, Action Prevents <Mild Harm CoC> or <Extreme Harm CoC>. This sentence must use the word 'prevents'].
 External Cause CoC: [Specify another Cause of Harm that is independent of the Situation CoC but causes the same harm as the Agent's action anyways (This should be an Action)]. 
 
 ***MAKE THE NEW SCENARIO COMPLETELY DIFFERENT FROM THE EXAMPLES ABOVE. YOU ARE NOT ALLOWED TO REPEAT SIMILAR CONTENT***
