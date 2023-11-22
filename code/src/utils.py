@@ -77,6 +77,7 @@ def get_vars_from_out(out:str, var_list: list) -> dict[str, str]:
     out = [l for l in out if '(CC)' not in l and '(CoC)' not in l]
     for i, lines in enumerate(out):
         var_dict[var_list[i]] = lines.split(': ')[1].strip()
+
     return var_dict
 
 def get_llm(args):

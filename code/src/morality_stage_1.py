@@ -42,9 +42,21 @@ def get_human_message(prompt_file):
         msg = f.read().strip()
     letter_name, letter_profession = random.choice(letters), random.choice(letters)
     msg = msg.replace("[name_letter]", letter_name)
-    msg = msg.replace("[profession_letter]", letter_profession)
+    msg = msg.replace("[profession_letter]", f"\'{letter_profession.lower()}\'")
     return msg
 
+"""
+Counterfactual language: If not Action, then no Harm. 
+Ex.:  If William did not reveal the third party’s private information, 
+      the innocent third party’s reputation would not have been damaged. 
+"""
+def means_evitable_action(out_vars, harm_type, good_type):
+    story = " ".join([out_vars['Context'], out_vars['Situation CC']])
+    story += " ".join([out_vars['Action CC'], out_vars[f'{harm_type} Harm CC'], 
+                       out_vars[f'{good_type} Good CC']]) + "\n\n"
+
+    raise
+    return story
 
 def gen_chat(args):
     response_template = "Here is the story:\n"
@@ -59,16 +71,13 @@ def gen_chat(args):
     prompt_tokens_used = 0
     completion_tokens_used = 0
 
-    # run loop with n stories, increase by num_completions
+    # Run loop with n stories, increase by num_completions
     for n_story in tqdm.tqdm(range(0, args.num_stories, args.num_completions)):
-        # s = get_human_message('reminder_stage_1') # Why two text files?
-        # new_message = s.split("Story (the")
-        # human_message_1 = HumanMessage(content=new_message[0])
         instruction_text = get_human_message('morality_stage_1')
     
 
         system_message = SystemMessage(content=instruction_text)
-        human_message_0 = HumanMessage(content='Generate a story')
+        human_message= HumanMessage(content='Generate a story')
     
         # Read examples from csv file every iteration to add generated samples to the pool of seed examples
         if args.verbose:
@@ -88,12 +97,9 @@ def gen_chat(args):
         for i in range(args.num_shots):	
             if i == len(examples):
                 break
-            messages.append(human_message_0)
+            messages.append(human_message)
             messages.append(AIMessage(content=response_template.format(**examples[i])))	
-        # messages.append(human_message_1)	
-        # if args.verbose:
-        #     # print(f"------ messages ------")	
-        #     # print(messages)	
+  
         responses = llm.generate([messages], stop=["System:"])
         # prompt_tokens_used += responses.llm_output['token_usage']['prompt_tokens']
         # completion_tokens_used += responses.llm_output['token_usage']['completion_tokens']
@@ -104,7 +110,6 @@ def gen_chat(args):
             if args.verbose:
                 print(f"------ Generated Story {n_story+g} ------")
                 print(generation.text)
-                # TODO - generate the table of story
                 print("------------ Fin --------------")
      
             list_var = list(STORY_TAGS.keys())
@@ -138,17 +143,17 @@ def gen_chat(args):
             | Action      | 
             +-------------+
             """
-            
             all_conditions = ""
             for harm_type in SEVERITY_LEVELS:
                 for good_type in SEVERITY_LEVELS:
                     # Run through 4 conditions
-
+                    mea = ""
                     # (1) Means, Evitable, Action
-                    all_conditions += f'----[Means, Evitable, Action] x [{harm_type} harm, {good_type} good]----\n'
-                    all_conditions += " ".join([out_vars['Context'], out_vars['Situation CC'], 
-                                    out_vars['Action CC'], out_vars[f'{harm_type} Harm CC'], 
-                                    out_vars[f'{good_type} Good CC']]) + "\n\n"
+                    mea += f'----[Means, Evitable, Action] x [{harm_type} harm, {good_type} good]----\n'
+                    mea += means_evitable_action(out_vars, harm_type, good_type)
+                 
+                    all_conditions += mea
+          
 
                     # (2) Means, Inevitable, Action
                     all_conditions += f'----[Means, Inevitable, Action] x [{harm_type} harm, {good_type} good]----\n'
@@ -167,6 +172,13 @@ def gen_chat(args):
                     all_conditions += " ".join([out_vars['Context'], out_vars['Situation CoC'], 
                                     out_vars['Action CoC'], out_vars[f'{harm_type} Harm CoC'], 
                                     out_vars[f'{good_type} Good CoC']]) + "\n\n"
+                    
+
+    #                     # Make sure components are full sentences before they're stitched together into a story
+    # agent_name = var_dict['Context'].split(',')[0].strip()
+    # ext_cause = var_dict['External Cause CC']
+    # if 'regardless' not in ext_cause.lower():
+    #     var_dict['External Cause CC'] = f"Regardless of {agent_name}'s decision, there is " + ext_cause.lower()
 
             data = [out_vars[k] for k in list_var]
             
@@ -187,7 +199,4 @@ def gen_chat(args):
     
 if __name__ == "__main__":
     args = parser.parse_args()
-    # print(f"Generating {args.num_stories} stories")
-    # if args.verbose:
-    #     print(args)
     gen_chat(args)
