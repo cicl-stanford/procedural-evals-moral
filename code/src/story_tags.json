@@ -7,6 +7,8 @@
     "External Cause CC": "external_cause_cc",
     "Evitable Action CC": "evitable_action_cc",
     "Inevitable Action CC": "inevitable_action_cc",
+    "Evitable Prevention CC": "evitable_prevention_cc",
+    "Inevitable Prevention CC": "inevitable_prevention_cc",
     "Situation CoC": "situation_coc",
     "Mild Harm CoC": "mild_harm_coc",
     "Extreme Harm CoC": "extreme_harm_coc",
@@ -16,5 +18,7 @@
     "Prevention CoC": "prevention_coc",
     "External Cause CoC": "external_cause_coc",
     "Evitable Action CoC": "evitable_action_coc",
-    "Evitable Prevention CoC": "evitable_prevention_coc"
+    "Inevitable Action CoC": "inevitable_action_coc",
+    "Evitable Prevention CoC": "evitable_prevention_coc",
+    "Inevitable Prevention CoC": "inevitable_prevention_coc"
 }

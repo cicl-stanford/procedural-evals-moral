@@ -102,50 +102,37 @@ def gen_chat(args):
      
             out_vars = get_vars_from_out(generation.text)
            
-            # Stitch together a story for each condition
-            """
-            +-------------+------------+--------------+---------------+--------------+
-            |             | Mild harm, | Mild harm,   | Extreme harm, | Extreme harm,|
-            |             | Mild good  | Extreme good | Mild good     | Extreme good |      
-            +=============+============+==============+===============+===============+
-            | Means,      |
-            | Evitable,   |
-            | Action      | 
-            +-------------+
-            | Means,      |
-            | Inevitable, |
-            | Action      |     
-            +-------------+
-            | Side Effect,|
-            | Evitable,   |
-            | Prevention  |      
-            +-------------+
-            | Side Effect,| 
-            | Evitable,   | 
-            | Action      | 
-            +-------------+
-            """
+          
             # Give unique story ID to cross-reference later
             story_id = uuid.uuid1().hex
             conditions = [story_id]
-            for harm_type in SEVERITY_LEVELS:
-                for good_type in SEVERITY_LEVELS:
-                    # (1) Means, Evitable, Action
-                    condition = " ".join([out_vars['Context'], out_vars['Situation CC'], out_vars['Evitable Action CC']]) 
-                    conditions.append(condition)
 
-                    # (2) Means, Inevitable, Action
-                    condition = " ".join([out_vars['Context'], out_vars['Situation CC'], out_vars['Inevitable Action CC']])
-                    conditions.append(condition)
+            # Stitch together a story for each condition
+            # for harm_type in SEVERITY_LEVELS:
+            #     for good_type in SEVERITY_LEVELS:
+            # TODO - add severities back in
 
-                    # (3) Side Effect, Evitable, Prevention
-                    condition = " ".join([out_vars['Context'], out_vars['Situation CoC'], out_vars['Evitable Prevention CoC']]) 
-                    conditions.append(condition)
+            # Means is CC, Side effect is CoC
+            for intent in ['CC', 'CoC']:
+                # (1) Evitable, Action
+                condition = " ".join([out_vars['Context'], out_vars[f'Situation {intent}'], out_vars[f'Action {intent}'],
+                            out_vars[f'Evitable Action {intent}']]) 
+                conditions.append(condition)
 
-                    # (4) Side Effect, Evitable, Action
-                    condition = " ".join([out_vars['Context'], out_vars['Situation CoC'], out_vars['Evitable Action CoC']]) 
-                    conditions.append(condition)
+                # (2) Inevitable, Action
+                condition = " ".join([out_vars['Context'], out_vars[f'Situation {intent}'], out_vars[f'Action {intent}'], 
+                            out_vars[f'External Cause {intent}'], out_vars[f'Inevitable Action {intent}']])
+                conditions.append(condition)
 
+                # (3) Evitable, Prevention
+                condition = " ".join([out_vars['Context'], out_vars[f'Situation {intent}'], out_vars[f'Prevention {intent}'], 
+                            out_vars[f'Evitable Prevention {intent}']]) 
+                conditions.append(condition)
+
+                # (4) Inevitable, Prevention
+                condition = " ".join([out_vars['Context'], out_vars[f'Situation {intent}'], out_vars[f'External Cause {intent}'], 
+                            out_vars[f'Prevention {intent}'], out_vars[f'Inevitable Prevention {intent}']])
+                conditions.append(condition)
             
             data = [out_vars[k] for k in STORY_TAGS]
             data.insert(0, story_id) 
@@ -155,7 +142,7 @@ def gen_chat(args):
                 writer = csv.writer(csvfile, delimiter=';')
                 writer.writerow(data)
 
-            # For 4x4 table 
+            # For 8x4 table 
             with open(f'{DATA_DIR}/all_conditions.csv', 'a') as csvfile:
                 writer = csv.writer(csvfile, delimiter=';')
                 writer.writerow(conditions)
