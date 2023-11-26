@@ -6,6 +6,7 @@ import argparse
 import ast
 import os
 import json
+import uuid 
 
 #from langchain.chat_models import ChatOpenAI, AzureChatOpenAI
 from langchain.schema import (
@@ -22,7 +23,6 @@ letters = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L',
            'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W','X', 'Y', 'Z']
 DATA_DIR = '../../data'
 PROMPT_DIR = '../prompt_instructions'
-CSV_NAME = 'morality_stage_1_new'
 SEVERITY_LEVELS = ['Mild', 'Extreme']
 
 # Map story items to tags
@@ -46,9 +46,8 @@ def get_human_message(prompt_file):
         msg = f.read().strip()
     letter_name, letter_profession = random.choice(letters), random.choice(letters)
     msg = msg.replace("[name_letter]", letter_name)
-    msg = msg.replace("[profession_letter]", letter_profession)
+    msg = msg.replace("[profession_letter]", f"\'{letter_profession.lower()}\'")
     return msg
-
 
 def gen_chat(args):
     response_template = "Here is the story:\n"
@@ -58,30 +57,28 @@ def gen_chat(args):
     llm = get_llm(args)
     
     template_var = [tag.strip("{}") for tag in STORY_TAGS.values()]
-    csv_file = f'{DATA_DIR}/{CSV_NAME}.csv'
+    story_file = f'{DATA_DIR}/morality_stage_1_new.csv'
 
     prompt_tokens_used = 0
     completion_tokens_used = 0
 
-    # run loop with n stories, increase by num_completions
+    # Run loop with n stories, increase by num_completions
     for n_story in tqdm.tqdm(range(0, args.num_stories, args.num_completions)):
-        # s = get_human_message('reminder_stage_1') # Why two text files?
-        # new_message = s.split("Story (the")
-        # human_message_1 = HumanMessage(content=new_message[0])
         instruction_text = get_human_message('morality_stage_1')
-    
 
         system_message = SystemMessage(content=instruction_text)
-        human_message_0 = HumanMessage(content='Generate a story')
+        human_message= HumanMessage(content='Generate a story')
     
         # Read examples from csv file every iteration to add generated samples to the pool of seed examples
         if args.verbose:
-            print(f"Reading examples from {csv_file} with existing {get_num_items(csv_file)} examples")
+            print(f"Reading examples from {story_file} with {get_num_items(story_file)} existing examples")
 
         # Read a few examples from the csv file
         examples = []
-        with open(csv_file, 'r') as f:
+        with open(story_file, 'r') as f:
             for line in f.readlines():
+                if ';' not in line:
+                    continue
                 params = line.split(';')
                 example = {k: params[v].strip() for v, k in enumerate(template_var)} 
                 examples.append(example)
@@ -92,99 +89,69 @@ def gen_chat(args):
         for i in range(args.num_shots):	
             if i == len(examples):
                 break
-            messages.append(human_message_0)
+            messages.append(human_message)
             messages.append(AIMessage(content=response_template.format(**examples[i])))	
-        # messages.append(human_message_1)	
-        # if args.verbose:
-        #     # print(f"------ messages ------")	
-        #     # print(messages)	
+  
         responses = llm.generate([messages], stop=["System:"])
        
         for g, generation in enumerate(responses.generations[0]):
             if args.verbose:
                 print(f"------ Generated Story {n_story+g} ------")
                 print(generation.text)
-                # TODO - generate the table of story
                 print("------------ Fin --------------")
      
-            list_var = list(STORY_TAGS.keys())
-            try:
-                out_vars = get_vars_from_out(generation.text, list_var)
-                # breakpoint()
-            except:
-                print("Error in parsing output")
-                breakpoint()
+            out_vars = get_vars_from_out(generation.text)
+           
+          
+            # Give unique story ID to cross-reference later
+            story_id = uuid.uuid1().hex
+            conditions = [story_id]
 
             # Stitch together a story for each condition
-            """
-            +-------------+------------+--------------+---------------+--------------+
-            |             | Mild harm, | Mild harm,   | Extreme harm, | Extreme harm,|
-            |             | Mild good  | Extreme good | Mild good     | Extreme good |      
-            +=============+============+==============+===============+===============+
-            | Means,      |
-            | Evitable,   |
-            | Action      | 
-            +-------------+
-            | Means,      |
-            | Inevitable, |
-            | Action      |     
-            +-------------+
-            | Side Effect,|
-            | Evitable,   |
-            | Prevention  |      
-            +-------------+
-            | Side Effect,| 
-            | Evitable,   | 
-            | Action      | 
-            +-------------+
-            """
+            # for harm_type in SEVERITY_LEVELS:
+            #     for good_type in SEVERITY_LEVELS:
+            # TODO - add severities back in
+
+            # Means is CC, Side effect is CoC
+            for intent in ['CC', 'CoC']:
+                # (1) Evitable, Action
+                condition = " ".join([out_vars['Context'], out_vars[f'Situation {intent}'], out_vars[f'Action {intent}'],
+                            out_vars[f'Evitable Action {intent}']]) 
+                conditions.append(condition)
+
+                # (2) Inevitable, Action
+                condition = " ".join([out_vars['Context'], out_vars[f'Situation {intent}'], out_vars[f'Action {intent}'], 
+                            out_vars[f'External Cause {intent}'], out_vars[f'Inevitable Action {intent}']])
+                conditions.append(condition)
+
+                # (3) Evitable, Prevention
+                condition = " ".join([out_vars['Context'], out_vars[f'Situation {intent}'], out_vars[f'Prevention {intent}'], 
+                            out_vars[f'Evitable Prevention {intent}']]) 
+                conditions.append(condition)
+
+                # (4) Inevitable, Prevention
+                condition = " ".join([out_vars['Context'], out_vars[f'Situation {intent}'], out_vars[f'External Cause {intent}'], 
+                            out_vars[f'Prevention {intent}'], out_vars[f'Inevitable Prevention {intent}']])
+                conditions.append(condition)
             
-            all_conditions = ""
-            for harm_type in SEVERITY_LEVELS:
-                for good_type in SEVERITY_LEVELS:
-                    # Run through 4 conditions
+            data = [out_vars[k] for k in STORY_TAGS]
+            data.insert(0, story_id) 
 
-                    # (1) Means, Evitable, Action
-                    all_conditions += f'----[Means, Evitable, Action] x [{harm_type} harm, {good_type} good]----\n'
-                    all_conditions += " ".join([out_vars['Context'], out_vars['Situation CC'], 
-                                    out_vars['Action CC'], out_vars[f'{harm_type} Harm CC'], 
-                                    out_vars[f'{good_type} Good CC']]) + "\n\n"
-
-                    # (2) Means, Inevitable, Action
-                    all_conditions += f'----[Means, Inevitable, Action] x [{harm_type} harm, {good_type} good]----\n'
-                    all_conditions += " ".join([out_vars['Context'], out_vars['Situation CC'], 
-                                    out_vars['Action CC'], out_vars[f'{harm_type} Harm CC'], 
-                                    out_vars[f'{good_type} Good CC'], out_vars['External Cause CC']]) + "\n\n"
-                
-                    # (3) Side Effect, Evitable, Prevention
-                    all_conditions += f'----[Side Effect, Evitable, Prevention] x [{harm_type} harm, {good_type} good]----\n'
-                    all_conditions += " ".join([out_vars['Context'], out_vars['Situation CoC'], 
-                                    out_vars['Prevention CoC'], out_vars[f'{harm_type} Harm CoC'], 
-                                    out_vars[f'{good_type} Good CoC']]) + "\n\n"
-                
-                    # (4) Side Effect, Evitable, Action
-                    all_conditions += f'----[Side Effect, Evitable, Action] x [{harm_type} harm, {good_type} good]----\n'
-                    all_conditions += " ".join([out_vars['Context'], out_vars['Situation CoC'], 
-                                    out_vars['Action CoC'], out_vars[f'{harm_type} Harm CoC'], 
-                                    out_vars[f'{good_type} Good CoC']]) + "\n\n"
-
-            data = [out_vars[k] for k in list_var]
-            
-            # TODO - remove this later
-            with open(f'{DATA_DIR}/temp_stories.txt', 'a') as file:
-                file.write(all_conditions)
-
-            story_file = f'{DATA_DIR}/{CSV_NAME}.csv'
-            with open(f'{DATA_DIR}/effects.csv', 'a') as file:
-                file.write(f'{out_vars["Mild Good CC"]},{out_vars["Extreme Good CC"]},{out_vars["Mild Harm CC"]},{out_vars["Extreme Harm CC"]},{out_vars["Mild Good CoC"]},{out_vars["Extreme Good CoC"]}{out_vars["Mild Harm CoC"]},{out_vars["Extreme Harm CoC"]}\n')
-
+            # Separate story components by tag
             with open(story_file, 'a') as csvfile:
                 writer = csv.writer(csvfile, delimiter=';')
                 writer.writerow(data)
-   
+
+            # For 8x4 table 
+            with open(f'{DATA_DIR}/all_conditions.csv', 'a') as csvfile:
+                writer = csv.writer(csvfile, delimiter=';')
+                writer.writerow(conditions)
+
+
+        # push to github
+        # push_data(DATA_DIR, REPO_URL)
     
     
 if __name__ == "__main__":
     args = parser.parse_args()
-    
     gen_chat(args)

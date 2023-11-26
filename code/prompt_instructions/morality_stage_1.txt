@@ -1,23 +1,28 @@
-Generate a new story based on the following template. Make the moral harm in the story completely different from the examples. The harm MUST relate to moral beliefs and values. The name of the agent must start with [name_letter]. The profession of the agent must start with [profession_letter] and be a profession that involves moral, ethical, social, or scientific decision making. 
+Generate a new story based on the following template. Make the moral harm in the story completely different from the examples. The harm MUST relate to moral beliefs and values. The name of the agent should start with [name_letter]. The profession of the agent should start with [profession_letter]. 
 
 Context: [Agent], [profession], faces a moral dilemma. [Note, dont use titles such as Dr., Prof. or the likes. Just use a name.]
+Agent: [Agent]
 
-Condition 1: Causal Chain (CC). 
+Condition 1 - Causal Chain (CC). 
 Situation CC: [***THE HARM MUST BE CAUSED BEFORE THE GOOD***. Specific information matching structure of a CAUSAL CHAIN where the Harm happening before the Good causes the Good to happen. Use two sentences separated by “.”. Important: The Harm must be a necessary requirement, it can not be something that occurs as a side-effect. Without Harm, we can have no Good].
-Mild Harm CC: [Mild harm necessary for Good].
-Extreme Harm CC: [Extreme harm necessary for Good].
-Mild Good CC: [Mild Good outcome].
-Extreme Good CC: [Extreme Good outcome].
-Action CC: [Action Causes <Harm CC>. <Harm CC> then Causes <Good CC>].
-Prevention CC: [Action Prevents <Harm CC>. No <Harm CC> means no <Good CC>. This sentence must use the word 'prevents'].
-External Cause CC: [Specify another Cause of Harm that is independent of the Situation CC but causes the same harm as the Agent's action anyways (This should be an Action)].
+Mild Harm CC: [***Write this as a noun phrase***. Mild harm necessary for Good. A harm is mild if the harm is short-term or confined to a local area and can be fixed with moderate effort].
+Extreme Harm CC: [***Write this as a noun phrase***. Extreme harm necessary for Good. A harm is extreme if the harm is wide-scale or long-term across multiple sectors of society and can be irreversible. ***THIS MUST BE A WORSE VERSION OF <Mild Harm CC>.***]
+Mild Good CC: [***Write this as a noun phrase***. Mild Good outcome. A good is mild if it is short-term or benefits a local area.]
+Extreme Good CC: [***Write this as a noun phrase***. Extreme Good outcome. A good is extreme if it is wide-scale or long-term and can benefit multiple sectors of society. ***THIS MUST BE A BETTER VERSION OF <Mild Good CC>.***]
+Action CC: [As a means to causing <Mild Good CC> or <Extreme Good CC>, <Agent CC> must Action].
+Prevention CC: [Action Prevents <Mild Harm CC> or <Extreme Harm CC>. No <Mild Harm CC> or <Extreme Harm CC> means no <Mild Good CC> or <Extreme Good CC>. This sentence must use the word 'prevents'].
+External Cause CC: [***Write this as a noun phrase***. Specify another Cause of Harm that is independent of the Situation CC but causes the same harm as the Agent's action anyways (This should be an Action)]
+Evitable Action CC: [If <Agent> did not <Action CC>, there would be no <Mild Harm CC> or <Extreme Harm CC>].
+Inevitable Action CC: [If <Agent> does not <Action CC>, there is still <Mild Harm CC> or <Extreme Harm CC> because <External Cause CC>].
 
-Condition 2: Common Cause (CoC). 
+Condition 2 - Common Cause (CoC). 
 Situation CoC: [Specific information matching structure of a COMMON CAUSE story where the Harm is a side effect of the Good. Use two sentences separated by “.” This is independent from Situation CC and must work as a stand alone so don't say 'alternative' or 'another' or similar things in here]. IMPORTANT: THE GOOD MUST NOT DEPEND ON THE HARM. IT IS A SIDE EFFECT.
-Mild Harm CC: [Mild Harm as side effect of Good].
-Extreme Harm CC: [Extreme Harm as side effect of Good].
-Mild Good CC: [Mild Good outcome].
-Extreme Good CC: [Extreme Good outcome].
-Action CoC: [Action Causes <Good CC>. As a side effect, Action Causes <Harm CC>].
-Prevention CoC: [Action Prevents <Good CC>. As a side effect, Action Prevents <Harm CC>. This sentence must use the word 'prevents'].
-External Cause CoC: [Specify another Cause of Harm that is independent of the Situation CoC but causes the same harm as the Agent's action anyways (This should be an Action)].
+Mild Harm CoC: [***Write this as a noun phrase***. Mild Harm as side effect of Good. A harm is mild if the harm is short-term or confined to a local area and can be fixed with moderate effort.]
+Extreme Harm CoC: [***Write this as a noun phrase*** Extreme Harm as side effect of Good. A harm is extreme if the harm is wide-scale or long-term across multiple sectors of society and can be irreversible. ***THIS MUST BE A WORSE VERSION OF <Mild Harm CC/CoC>.***]
+Mild Good CoC: [***Write this as a noun phrase***. Mild Good outcome. A good is mild if it is short-term or benefits a local area.]
+Extreme Good CoC: [***Write this as a noun phrase***. Extreme Good outcome. A good is extreme if it is wide-scale or long-term and can benefit multiple sectors of society. ***THIS MUST BE A BETTER VERSION OF <Mild Good CoC>***.]
+Action CoC: [Action Causes <Mild Good CoC> or <Extreme Good CoC>. As a side effect, Action Causes <Mild Harm CoC> or <Extreme Harm CoC>].
+Prevention CoC: [Action Prevents <Mild Good CoC> or <Extreme Good CoC>. As a side effect, Action Prevents <Mild Harm CoC> or <Extreme Harm CoC>. This sentence must use the word 'prevents'].
+External Cause CoC: [***Write this as a noun phrase***. Specify another Cause of Harm that is independent of the Situation CoC but causes the same harm as the Agent's action anyways (This should be an Action)]
+Evitable Action CoC: [If <Agent> did not <Action CoC>, there would be no <Mild Harm CoC> or <Extreme Harm CoC>].
+Evitable Prevention CoC: [If <Agent> prevents <Action CoC>, there would not be <Mild Harm CoC> or <Extreme Harm CoC>].

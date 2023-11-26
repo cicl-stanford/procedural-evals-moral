@@ -2,6 +2,7 @@ import os
 import csv
 from subprocess import Popen, PIPE
 import itertools
+import pandas as pd
 from langchain.chat_models import ChatOpenAI, AzureChatOpenAI
 # from crfm import crfmChatLLM
 
@@ -60,23 +61,16 @@ def get_num_items(file_name: str) -> int:
     csv_file = f'{file_name}'
     if not os.path.exists(csv_file):
         return 0
-    num_rows = 0
-    with open(csv_file, 'r') as csvfile:
-        reader = csv.reader(csvfile)
-        for row in reader:
-            num_rows += 1
-    return num_rows
+    df = pd.read_csv(csv_file)
+    return len(df)
 
-def get_vars_from_out(out:str, var_list: list) -> dict[str, str]:
-    # Get the variables from the output
+def get_vars_from_out(out:str) -> dict[str, str]:
     var_dict = {}
     out = out.split('\n')
-    out = [l for l in out if l != 'Here is the story:']
-    out = [l for l in out if l != '']
-    out = [l for l in out if ':' in l]
-    out = [l for l in out if '(CC)' not in l and '(CoC)' not in l]
-    for i, lines in enumerate(out):
-        var_dict[var_list[i]] = lines.split(': ')[1].strip()
+    out = [l for l in out if ':' in l and 'Agent' not in l]
+    for line in out:
+        elems = line.split(': ')
+        var_dict[elems[0]] = elems[1].strip()
     return var_dict
 
 def get_llm(args):
