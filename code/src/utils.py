@@ -70,6 +70,10 @@ def get_vars_from_out(out:str) -> dict[str, str]:
     out = [l for l in out if ':' in l and 'Agent' not in l]
     for line in out:
         elems = line.split(': ')
+        if 'Inevitable' in elems[0]:
+            elems[1] = elems[1].replace(' anyways', '')
+        if len(elems) < 2:
+            continue
         var_dict[elems[0]] = elems[1].strip()
     return var_dict
 
