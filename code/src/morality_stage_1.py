@@ -115,28 +115,28 @@ def gen_chat(args):
 
             # Means is CC, Side effect is CoC
             for intent in ['CC', 'CoC']:
+                intent_phrase = '\"As a means to\"' if intent == 'CC' else '\"As a side effect\"' 
+                background = " ".join([out_vars['Context'], out_vars[f'Situation {intent}']])
+                intro = " ".join([background, out_vars[f'{intent_phrase} {intent}']])
+
                 # (1) Evitable, Action
-                intent_phrase = '\"As a means to\"' 
-                if intent == 'CoC': 
-                    intent_phrase = '\"As a side effect\"' 
-                condition = " ".join([out_vars['Context'], out_vars[f'Situation {intent}'], out_vars[f'{intent_phrase} {intent}'],
-                            out_vars[f'Evitable Action {intent}'], out_vars[f'Action {intent}']]) 
+                condition = " ".join([intro, out_vars[f'Evitable Action {intent}'], out_vars[f'Action {intent}']]) 
                 conditions.append(condition)
 
                 # (2) Inevitable, Action
-                condition = " ".join([out_vars['Context'], out_vars[f'Situation {intent}'], out_vars[f'{intent_phrase} {intent}'],
-                            out_vars[f'External Cause {intent}'], out_vars[f'Inevitable Action {intent}'], out_vars[f'Action {intent}']])
+                condition = " ".join([intro, out_vars[f'External Cause {intent}'], 
+                            out_vars[f'Inevitable Action {intent}'], out_vars[f'Action {intent}']])
                 conditions.append(condition)
 
                 # (3) Evitable, Prevention
-                condition = " ".join([out_vars['Context'], out_vars[f'Situation {intent}'], out_vars[f'{intent_phrase} {intent}'],
-                            out_vars[f'Evitable Prevention {intent}'], out_vars[f'Prevention {intent}']]) 
+                condition = " ".join([intro, out_vars[f'Other Cause {intent}'], out_vars[f'Evitable Prevention {intent}'], 
+                            out_vars[f'Prevention {intent}']]) 
                 conditions.append(condition)
 
                 # (4) Inevitable, Prevention
-                condition = " ".join([out_vars['Context'], out_vars[f'Situation {intent}'], out_vars[f'External Cause {intent}'], 
-                            out_vars[f'Inevitable Prevention {intent}'], out_vars[f'{intent_phrase} {intent}'], 
-                            out_vars[f'Prevention {intent}']])
+                condition = " ".join([background, out_vars[f'External Cause {intent}'], 
+                            out_vars[f'{intent_phrase} {intent}'], out_vars[f'Other Cause {intent}'], 
+                            out_vars[f'Inevitable Prevention {intent}'], out_vars[f'Prevention {intent}']])
                 conditions.append(condition)
             
             data = [out_vars[k] for k in STORY_TAGS]

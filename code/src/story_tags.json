@@ -8,6 +8,7 @@
     "Inevitable Action CC": "inevitable_action_cc",
     "Evitable Prevention CC": "evitable_prevention_cc",
     "Inevitable Prevention CC": "inevitable_prevention_cc",
+    "Other Cause CC": "other_cause_cc",
     "Situation CoC": "situation_coc",
     "Action CC": "action_cc",
     "Action CoC": "action_coc",
@@ -15,6 +16,7 @@
     "External Cause CoC": "external_cause_coc",
     "Evitable Action CoC": "evitable_action_coc",
     "Inevitable Action CoC": "inevitable_action_coc",
+    "Other Cause CoC": "other_cause_coc",
     "Evitable Prevention CoC": "evitable_prevention_coc",
     "Inevitable Prevention CoC": "inevitable_prevention_coc"
 }

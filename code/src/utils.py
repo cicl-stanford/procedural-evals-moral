@@ -67,7 +67,7 @@ def get_num_items(file_name: str) -> int:
 def get_vars_from_out(out:str) -> dict[str, str]:
     var_dict = {}
     out = out.split('\n')
-    out = [l for l in out if ':' in l and 'Agent' not in l]
+    out = [l for l in out if ':' in l]
     for line in out:
         elems = line.split(': ')
         if 'Inevitable' in elems[0]:
