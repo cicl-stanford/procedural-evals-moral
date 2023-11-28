@@ -49,6 +49,39 @@ def get_human_message(prompt_file):
     msg = msg.replace("[profession_letter]", f"\'{letter_profession.lower()}\'")
     return msg
 
+
+"""
+8x1 with evitable vs. inevitable and action vs. prevention for both CC and CoC. 
+"""
+def gen_conditions(conditions, vars):
+    # Means is CC, Side effect is CoC
+    for intent in ['CC', 'CoC']:
+        intent_phrase = '\"As a means to\"' if intent == 'CC' else '\"As a side effect\"' 
+        background = " ".join([vars['Context'], vars[f'Situation {intent}']])
+        intro = " ".join([background, vars[f'{intent_phrase} {intent}']])
+
+        # (1) Evitable, Action
+        condition = " ".join([intro, vars[f'Evitable Action {intent}'], vars[f'Action {intent}']]) 
+        conditions.append(condition)
+
+        # (2) Inevitable, Action
+        condition = " ".join([intro, vars[f'External Cause {intent}'], 
+                    vars[f'Inevitable Action {intent}'], vars[f'Action {intent}']])
+        conditions.append(condition)
+
+        # (3) Evitable, Prevention
+        condition = " ".join([intro, vars[f'Other Cause {intent}'], vars[f'Evitable Prevention {intent}'], 
+                    vars[f'Prevention {intent}']]) 
+        conditions.append(condition)
+
+        # (4) Inevitable, Prevention
+        condition = " ".join([background, vars[f'External Cause {intent}'], 
+                    vars[f'{intent_phrase} {intent}'], vars[f'Other Cause {intent}'], 
+                    vars[f'Inevitable Prevention {intent}'], vars[f'Prevention {intent}']])
+        conditions.append(condition)
+    return conditions
+
+
 def gen_chat(args):
     response_template = "Here is the story:\n"
     for tag in STORY_TAGS:
@@ -56,7 +89,7 @@ def gen_chat(args):
 
     llm = get_llm(args)
     
-    template_var = [tag.strip("{}") for tag in STORY_TAGS.values()]
+    template_var = [tag for tag in STORY_TAGS.values()]
     story_file = f'{DATA_DIR}/morality_stage_1_new.csv'
 
     prompt_tokens_used = 0
@@ -75,14 +108,15 @@ def gen_chat(args):
 
         # Read a few examples from the csv file
         examples = []
-        with open(story_file, 'r') as f:
-            for line in f.readlines():
-                if ';' not in line:
-                    continue
-                params = line.split(';')
-                example = {k: params[v].strip() for v, k in enumerate(template_var)} 
-                examples.append(example)
-        random.shuffle(examples)
+        # TODO - add this back in once stable
+        # with open(story_file, 'r') as f:
+        #     for line in f.readlines():
+        #         if ';' not in line:
+        #             continue
+        #         params = line.split(';')
+        #         example = {k: params[v].strip() for v, k in enumerate(template_var)} 
+        #         examples.append(example)
+        # random.shuffle(examples)
 
         # 2-shots by default	
         messages = [system_message]	
@@ -100,41 +134,19 @@ def gen_chat(args):
                 print(generation.text)
                 print("------------ Fin --------------")
      
-            out_vars = get_vars_from_out(generation.text)
+            vars = get_vars_from_out(generation.text)
            
           
             # Give unique story ID to cross-reference later
             story_id = uuid.uuid1().hex
-            conditions = [story_id]
 
             # Stitch together a story for each condition
             # for harm_type in SEVERITY_LEVELS:
             #     for good_type in SEVERITY_LEVELS:
             # TODO - add severities back in
-
-            # Means is CC, Side effect is CoC
-            for intent in ['CC', 'CoC']:
-                # (1) Evitable, Action
-                condition = " ".join([out_vars['Context'], out_vars[f'Situation {intent}'], out_vars[f'Action {intent}'],
-                            out_vars[f'Evitable Action {intent}']]) 
-                conditions.append(condition)
-
-                # (2) Inevitable, Action
-                condition = " ".join([out_vars['Context'], out_vars[f'Situation {intent}'], out_vars[f'Action {intent}'], 
-                            out_vars[f'External Cause {intent}'], out_vars[f'Inevitable Action {intent}']])
-                conditions.append(condition)
-
-                # (3) Evitable, Prevention
-                condition = " ".join([out_vars['Context'], out_vars[f'Situation {intent}'], out_vars[f'Prevention {intent}'], 
-                            out_vars[f'Evitable Prevention {intent}']]) 
-                conditions.append(condition)
-
-                # (4) Inevitable, Prevention
-                condition = " ".join([out_vars['Context'], out_vars[f'Situation {intent}'], out_vars[f'External Cause {intent}'], 
-                            out_vars[f'Prevention {intent}'], out_vars[f'Inevitable Prevention {intent}']])
-                conditions.append(condition)
+            conditions = gen_conditions([story_id], vars)
             
-            data = [out_vars[k] for k in STORY_TAGS]
+            data = [vars[k] for k in STORY_TAGS]
             data.insert(0, story_id) 
 
             # Separate story components by tag
