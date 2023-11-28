@@ -49,6 +49,39 @@ def get_human_message(prompt_file):
     msg = msg.replace("[profession_letter]", f"\'{letter_profession.lower()}\'")
     return msg
 
+
+"""
+8x1 with evitable vs. inevitable and action vs. prevention for both CC and CoC. 
+"""
+def gen_conditions(conditions, vars):
+    # Means is CC, Side effect is CoC
+    for intent in ['CC', 'CoC']:
+        intent_phrase = '\"As a means to\"' if intent == 'CC' else '\"As a side effect\"' 
+        background = " ".join([vars['Context'], vars[f'Situation {intent}']])
+        intro = " ".join([background, vars[f'{intent_phrase} {intent}']])
+
+        # (1) Evitable, Action
+        condition = " ".join([intro, vars[f'Evitable Action {intent}'], vars[f'Action {intent}']]) 
+        conditions.append(condition)
+
+        # (2) Inevitable, Action
+        condition = " ".join([intro, vars[f'External Cause {intent}'], 
+                    vars[f'Inevitable Action {intent}'], vars[f'Action {intent}']])
+        conditions.append(condition)
+
+        # (3) Evitable, Prevention
+        condition = " ".join([intro, vars[f'Other Cause {intent}'], vars[f'Evitable Prevention {intent}'], 
+                    vars[f'Prevention {intent}']]) 
+        conditions.append(condition)
+
+        # (4) Inevitable, Prevention
+        condition = " ".join([background, vars[f'External Cause {intent}'], 
+                    vars[f'{intent_phrase} {intent}'], vars[f'Other Cause {intent}'], 
+                    vars[f'Inevitable Prevention {intent}'], vars[f'Prevention {intent}']])
+        conditions.append(condition)
+    return conditions
+
+
 def gen_chat(args):
     response_template = "Here is the story:\n"
     for tag in STORY_TAGS:
@@ -101,45 +134,19 @@ def gen_chat(args):
                 print(generation.text)
                 print("------------ Fin --------------")
      
-            out_vars = get_vars_from_out(generation.text)
+            vars = get_vars_from_out(generation.text)
            
           
             # Give unique story ID to cross-reference later
             story_id = uuid.uuid1().hex
-            conditions = [story_id]
 
             # Stitch together a story for each condition
             # for harm_type in SEVERITY_LEVELS:
             #     for good_type in SEVERITY_LEVELS:
             # TODO - add severities back in
-
-            # Means is CC, Side effect is CoC
-            for intent in ['CC', 'CoC']:
-                intent_phrase = '\"As a means to\"' if intent == 'CC' else '\"As a side effect\"' 
-                background = " ".join([out_vars['Context'], out_vars[f'Situation {intent}']])
-                intro = " ".join([background, out_vars[f'{intent_phrase} {intent}']])
-
-                # (1) Evitable, Action
-                condition = " ".join([intro, out_vars[f'Evitable Action {intent}'], out_vars[f'Action {intent}']]) 
-                conditions.append(condition)
-
-                # (2) Inevitable, Action
-                condition = " ".join([intro, out_vars[f'External Cause {intent}'], 
-                            out_vars[f'Inevitable Action {intent}'], out_vars[f'Action {intent}']])
-                conditions.append(condition)
-
-                # (3) Evitable, Prevention
-                condition = " ".join([intro, out_vars[f'Other Cause {intent}'], out_vars[f'Evitable Prevention {intent}'], 
-                            out_vars[f'Prevention {intent}']]) 
-                conditions.append(condition)
-
-                # (4) Inevitable, Prevention
-                condition = " ".join([background, out_vars[f'External Cause {intent}'], 
-                            out_vars[f'{intent_phrase} {intent}'], out_vars[f'Other Cause {intent}'], 
-                            out_vars[f'Inevitable Prevention {intent}'], out_vars[f'Prevention {intent}']])
-                conditions.append(condition)
+            conditions = gen_conditions([story_id], vars)
             
-            data = [out_vars[k] for k in STORY_TAGS]
+            data = [vars[k] for k in STORY_TAGS]
             data.insert(0, story_id) 
 
             # Separate story components by tag
