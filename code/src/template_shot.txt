@@ -1,0 +1,25 @@
+Context: Henry, a journalist, faces a moral dilemma. 
+
+Condition 1 - Causal Chain (CC):
+Situation CC: Henry discovers a scandal involving a prominent politician, who is secretly involved in illegal activities. Revealing this truth would ruin the politician's reputation and career, causing immense harm. However, it would also expose the corruption, potentially leading to a cleaner political environment.
+"As a means to" CC: As a means to achieve a cleaner political environment, the politician's career must be ruined.
+Other Cause CC: Henry's colleague wants to publish the story. 
+External Cause CC: A rival news outlet has the same information and is planning to publish it anyways.
+Evitable Action CC:  If Henry did not publish the story, harm to the politician's career would not happen.
+Inevitable Action CC: If Henry did not publish the story, harm to the politician's career would still happen because of the rival news outlet.
+Evitable Prevention CC: If Henry prevented his colleague  from publishing, the politician's career would still be harmed.
+Inevitable Prevention CC: : If Henry prevented his colleague from publishing, the politician's career would still be harmed because of the rival news outlet. 
+Action CC: Henry publishes the story. 
+Prevention CC:  Henry does not prevent his colleague from publishing.
+
+Condition 2 - Common Cause (CoC):
+Situation CoC: Henry, a journalist, faces a moral dilemma. Henry finds out about a local charity that is fraudulently taking donations. Reporting this would protect potential donors from being scammed.  However, it would also cause the charity's employees, who are unaware of the fraud, to lose their jobs. 
+"As a side effect" CoC: As a side effect of protecting potential donors, the charity's employees lose their jobs.
+Other Cause CoC: Henry's colleague wants to expose the fraudulent charity.
+External Cause CoC: The police are investigating the charity and are likely to expose the fraud anyways.
+Evitable Action CoC: If Henry did not expose the fraudulent charity, the employees would not lose their jobs.
+Inevitable Action CoC: If Henry did not expose the fraudulent charity, the employees will still lose their jobs because of the police investigation.
+Evitable Prevention CoC: If Henry prevented his colleague from exposing the charity, the employees would not lose their jobs. 
+Inevitable Prevention CoC:  If Henry prevented his colleague from exposing the charity, the employees would still lose their jobs because of the police investigation.
+Action CoC: Henry exposes the fraudulent charity.
+Prevention CoC: Henry does not prevent his colleague from exposing the charity.
