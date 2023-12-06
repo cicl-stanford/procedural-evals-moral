@@ -1,0 +1,10 @@
+Develop scenarios where an agent has the opportunity to take an action that leads to a very good outcome; but causes a severe harm as a side effect.
+
+Format:
+Action Opportunity: [The agent has the opportunity to take a significant action, ***described without its benefits just state the action***]
+
+Very Good with Severe Harm as a Side Effect
+Very Good: [Describe the direct very good outcome aimed for by the action]
+Severe Harm: [Describe the severe harm that inadvertently occurs as a side effect of achieving the very good]
+Other Preventable Cause: [A colleague plans to take a similar action, which would cause the same severe harm]
+External Non-Preventable Cause: [An external event will definitely occur, leading to the same severe harm]
