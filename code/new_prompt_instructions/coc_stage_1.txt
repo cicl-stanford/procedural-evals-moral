@@ -1,0 +1,28 @@
+Develop scenarios where an agent has the opportunity to take an action aimed at a good outcome, which inadvertently leads to different levels of harm as a side effect.
+
+Format:
+Action Opportunity: [The agent has the opportunity to take a significant action, ***described without its benefits just state the action***]
+
+Mild Good with Mild Harm as a Side Effect
+Mild Good: [Describe the direct mild good outcome aimed for by the action]
+Mild Harm: [Describe the mild harm that inadvertently occurs as a side effect of achieving the mild good]
+Other Preventable Cause: [A colleague plans to take a similar action, which would cause the same harm]
+External Non-Preventable Cause: [An external event will definitely occur, leading to the same harm]
+
+Very Good with Mild Harm as a Side Effect
+Very Good: [Describe the direct very good outcome aimed for by the action]
+Mild Harm: [Describe the mild harm that inadvertently occurs as a side effect of achieving the very good]
+Other Preventable Cause: [A colleague plans to take a similar action, which would cause the same harm]
+External Non-Preventable Cause: [An external event will definitely occur, leading to the same harm]
+
+Mild Good with Severe Harm as a Side Effect
+Mild Good: [Describe the direct mild good outcome aimed for by the action]
+Severe Harm: [Describe the severe harm that inadvertently occurs as a side effect of achieving the mild good]
+Other Preventable Cause: [A colleague plans to take a similar action, which would cause the same harm]
+External Non-Preventable Cause: [An external event will definitely occur, leading to the same harm]
+
+Very Good with Severe Harm as a Side Effect
+Very Good: [Describe the direct very good outcome aimed for by the action]
+Severe Harm: [Describe the severe harm that inadvertently occurs as a side effect of achieving the very good]
+Other Preventable Cause: [A colleague plans to take a similar action, which would cause the same harm]
+External Non-Preventable Cause: [An external event will definitely occur, leading to the same harm]

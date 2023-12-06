@@ -91,13 +91,5 @@ def get_llm(args):
             openai_api_type="azure",
             temperature=args.temperature,
         )
-    # else:
-    #     llm = crfmChatLLM(
-    #         model_name=args.model,
-    #         temperature=args.temperature,
-    #         max_tokens=args.max_tokens,
-    #         num_completions=args.num_completions,
-    #         request_timeout=180
-    #     )
 
     return llm

@@ -1,0 +1,28 @@
+Develop scenarios where an agent has the opportunity to take an action that leads to different levels of harm, each necessary for achieving a good outcome.
+
+Format
+Action Opportunity: [The agent has the opportunity to take a significant action, ***described without its benefits just state the action***]
+
+Necessary Mild Harm -> Mild Good
+Necessary Mild Harm: [Describe the harm that is required by the action]
+Mild Good: [Describe the direct mild good outcome resulting from the harm]
+Other Preventable Cause: [A colleague plans to take a similar action, which would cause the same harm]
+External Non-Preventable Cause: [An external event will definitely occur, leading to the same harm]
+
+Necessary Mild Harm -> Very Good
+Necessary Mild Harm: [Describe the harm that is required by the action]
+Very Good: [Describe the direct very good outcome resulting from the harm]
+Other Preventable Cause: [A colleague plans to take a similar action, which would cause the same harm]
+External Non-Preventable Cause: [An external event will definitely occur, leading to the same harm]
+
+Necessary Severe Harm -> Mild Good
+Necessary Severe Harm: [Describe the severe harm required by the action]
+Mild Good: [Describe the direct mild good outcome of the severe harm]
+Other Preventable Cause: [A colleague plans to take a similar action, which would cause the same harm]
+External Non-Preventable Cause: [An external event will definitely occur, leading to the same harm]
+
+Necessary Severe Harm -> Very Good
+Necessary Severe Harm: [Describe the severe harm required by the action]
+Very Good: [Describe the direct very good outcome of the severe harm]
+Other Preventable Cause: [A colleague plans to take a similar action, which would cause the same harm]
+External Non-Preventable Cause: [An external event will definitely occur, leading to the same harm]
