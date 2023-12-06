@@ -1,6 +1,6 @@
 City Planner
-Teacher
 Engineer
+Teacher
 Nurse
 Chef
 Artist
