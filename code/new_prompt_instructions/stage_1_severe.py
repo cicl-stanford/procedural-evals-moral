@@ -115,7 +115,7 @@ def gen_chat(args):
         # load profession
         profession = professions[i + args.start]
         # loop over conditions (CC, CoC)
-        rand_item = random.randint(0, 1) # random.randint(0, args.start - 1) # random example for few shot generation set to 1
+        rand_item = 1 #random.randint(1) # random.randint(0, args.start - 1) # random example for few shot generation set to 1
 
         for condition in CONDITION:
 
@@ -141,7 +141,7 @@ Reminder: You must follow this structure:
             messages.append(human_message_0)
             messages.append(ai_message_0)
             messages.append(human_message_1)
-            breakpoint()
+            
             responses = llm.generate([messages], stop=["System:"])
 
 
@@ -151,7 +151,7 @@ Reminder: You must follow this structure:
                     print(generation.text)
                     print("------------ Fin --------------")
 
-                breakpoint()
+                
                 vars = get_vars_from_out(generation.text)
                 if len(vars) == 6:
                     vars = vars[1:]
@@ -174,10 +174,10 @@ Reminder: You must follow this structure:
     
 
 parser = argparse.ArgumentParser()
-parser.add_argument('--start', type=int, default=1, help='start index')
-parser.add_argument('--end', type=int, default=2, help='end index')
+parser.add_argument('--start', type=int, default=2, help='start index')
+parser.add_argument('--end', type=int, default=3, help='end index')
 parser.add_argument('--model', type=str, default='openai/gpt-4-0314', help='model name')
-parser.add_argument('--temperature', type=float, default=0.1, help='temperature')
+parser.add_argument('--temperature', type=float, default=0, help='temperature')
 parser.add_argument('--max_tokens', type=int, default=2000, help='max tokens')
 # change num completions to 10
 parser.add_argument('--num_completions', type=int, default=1, help='number of completions')

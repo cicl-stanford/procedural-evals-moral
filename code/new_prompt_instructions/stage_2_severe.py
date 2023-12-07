@@ -26,6 +26,15 @@ def get_vars_from_out(out:str) -> List[str]:
         vars.append(elems[1].strip())
     return vars
 
+def get_context(name, profession):
+    # check if profession is noun
+    if profession.strip()[0].lower() in ['a', 'e', 'i', 'o', 'u']:
+        profession = f'an {profession.strip()}'
+    else:
+        profession = f'a {profession.strip()}'
+    context = f"{name.strip()}, {profession}, faces a moral dilemma."
+    return context
+
 
 def get_llm(args):
     if args.api == 'azure':
@@ -49,8 +58,9 @@ CONDITION = ['CC', 'CoC']
 def get_example(condition, rand_item):
 
     vars = {k: None for k in range(100)}
-    if condition == "CC":
-        with open(f'{PROMPT_DIR}/cc_stage_2.csv', 'r') as f:
+
+    if condition == "cc":
+        with open(f'{PROMPT_DIR}/cc_stage_2_severe.csv', 'r') as f:
             reader = csv.reader(f, delimiter=';')
             for i, row in enumerate(reader):
                 if i == rand_item:
@@ -71,8 +81,8 @@ Inevitable Prevention CC: {vars[10]}
 Action CC: {vars[11]}
 Prevention CC: {vars[12]}"""
 
-    elif condition == "CoC":
-        with open(f'{PROMPT_DIR}/coc_stage_2.csv', 'r') as f:  
+    elif condition == "coc":
+        with open(f'{PROMPT_DIR}/coc_stage_2_severe.csv', 'r') as f:  
             reader = csv.reader(f, delimiter=';')
             for i, row in enumerate(reader):
                 if i == rand_item:
@@ -98,54 +108,93 @@ def gen_chat(args, condition):
     llm = get_llm(args)
     
     vars = {k: None for k in range(100)}
-    # TODO COMPLETE THIS
+
+    # load names 
+    with(open(f'{PROMPT_DIR}/names.txt', 'r')) as f:
+        names = f.readlines()
+
+    # load professions
+    with(open(f'{PROMPT_DIR}/professions.txt', 'r')) as f: 
+        professions = f.readlines()
 
     
+    for i in range(args.start, args.end):
 
-            # messages sent to model 
-            messages = []
-            if condition == "CC":
-                with(open(f'{PROMPT_DIR}/cc_stage_2_severe.txt', 'r')) as f:
-                    system_prompt = f.read().strip()
-            elif condition == "CoC":
-                with(open(f'{PROMPT_DIR}/coc_stage_2_severe.txt', 'r')) as f:
-                    system_prompt = f.read().strip()
+        name = names[i]
+        profession = professions[i]
 
-            example = get_example(condition, rand_item)
-
-            system_message = SystemMessage(content=system_prompt)
-            human_message_0 = HumanMessage(content=f"Generate a completion for this context: {get_context(name=names[rand_item], profession=professions[rand_item])}")
-            ai_message_0 = AIMessage(content=example)
-            human_message_1 = HumanMessage(content=f"""Generate a new completion for this context: {get_context(name=name, profession=profession)}
-Reminder: You must follow this structure:
-{system_prompt}""")
-            messages.append(system_message)
-            messages.append(human_message_0)
-            messages.append(ai_message_0)
-            messages.append(human_message_1)
-            breakpoint()
-            responses = llm.generate([messages], stop=["System:"])
-
-
-            for g, generation in enumerate(responses.generations[0]):
-                if args.verbose:
-                    print(f"------ Generated Story ------")
-                    print(generation.text)
-                    print("------------ Fin --------------")
-
-                breakpoint()
-                vars = get_vars_from_out(generation.text)
-                if len(vars) == 6:
-                    vars = vars[1:]
+        # load example
+        rand_item = 1 #random.randint(0, 1)
+        example = get_example(condition, rand_item=rand_item)
     
-                if condition == "CC":
-                    with open(f'{PROMPT_DIR}/cc_stage_2_severe.csv', 'a') as csvfile:
-                        writer = csv.writer(csvfile, delimiter=';')
-                        writer.writerow(vars)
-                elif condition == "CoC":
-                    with open(f'{PROMPT_DIR}/coc_stage_2_severe.csv', 'a') as csvfile:
-                        writer = csv.writer(csvfile, delimiter=';')
-                        writer.writerow(vars)
+
+    
+        # messages sent to model 
+        messages = []
+        if condition == "cc":
+            with(open(f'{PROMPT_DIR}/cc_stage_2.txt', 'r')) as f:
+                system_prompt = f.read().strip()
+            
+            with(open(f'{PROMPT_DIR}/cc_stage_1_severe.csv', 'r')) as f:
+                reader = csv.reader(f, delimiter=';')
+                new_item = list(reader)[i]
+     
+            human_message_1 = HumanMessage(content=f"""Generate a new completion for this context: 
+Context: {get_context(name=name, profession=profession)}
+Action Opportunity: {new_item[0]}
+Harm CC: {new_item[1]}
+Good CC: {new_item[2]}
+Preventable Cause CC: {new_item[3]}
+Non-Preventable Cause CC: {new_item[4]}""")
+
+        elif condition == "coc":
+            with(open(f'{PROMPT_DIR}/coc_stage_2.txt', 'r')) as f:
+                system_prompt = f.read().strip()
+
+            with(open(f'{PROMPT_DIR}/coc_stage_1_severe.csv', 'r')) as f:
+                reader = csv.reader(f, delimiter=';')
+                new_item = list(reader)[i]
+
+            human_message_1 = HumanMessage(content=f"""Generate a new completion for this context: 
+Context: {get_context(name=name, profession=profession)}
+Action Opportunity: {new_item[0]}
+Good CoC: {new_item[1]}
+Harm CoC: {new_item[2]}
+Preventable Cause CoC: {new_item[3]}
+Non-Preventable Cause CoC: {new_item[4]}""")
+
+        system_message = SystemMessage(content=system_prompt)
+        human_message_0 = HumanMessage(content=f"Generate a completion.")
+        ai_message_0 = AIMessage(content=example)
+    
+
+
+        messages.append(system_message)
+        messages.append(human_message_0)
+        messages.append(ai_message_0)
+        messages.append(human_message_1)
+
+        responses = llm.generate([messages], stop=["System:"])
+
+
+        for g, generation in enumerate(responses.generations[0]):
+            if args.verbose:
+                print(f"------ Generated Story ------")
+                print(generation.text)
+                print("------------ Fin --------------")
+
+  
+            new_vars = get_vars_from_out(generation.text)
+            vars = [get_context(name=name, profession=profession)] + new_item + new_vars
+    
+            if condition == "cc":
+                with open(f'{PROMPT_DIR}/cc_stage_2_severe.csv', 'a') as csvfile:
+                    writer = csv.writer(csvfile, delimiter=';')
+                    writer.writerow(vars)
+            elif condition == "coc":
+                with open(f'{PROMPT_DIR}/coc_stage_2_severe.csv', 'a') as csvfile:
+                    writer = csv.writer(csvfile, delimiter=';')
+                    writer.writerow(vars)
 
            
             
@@ -173,4 +222,4 @@ parser.add_argument('--api', type=str, default='azure', help='which api to use')
 
 if __name__ == "__main__":
     args = parser.parse_args()
-    gen_chat(args)
+    gen_chat(args, condition='coc')

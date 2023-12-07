@@ -2,7 +2,7 @@ import os
 import csv
 
 DATA_DIR = './'
-CONDITION_DIR =  './conditions'
+CONDITION_DIR =  './conditions_severe_harm_very_good'
 CSV_NAME_CC = "cc_stage_2_severe.csv"
 CSV_NAME_COC = "coc_stage_2_severe.csv"
 
@@ -86,5 +86,5 @@ def generate_conditions(completions, csv_name=CSV_NAME_CC, structure="cc"):
 
 
 if __name__ == "__main__":  
-    completions = get_completions(csv_name=CSV_NAME_CC)
-    generate_conditions(completions, csv_name=CSV_NAME_CC, structure="cc")
+    completions = get_completions(csv_name=CSV_NAME_COC)
+    generate_conditions(completions, csv_name=CSV_NAME_COC, structure="coc")
