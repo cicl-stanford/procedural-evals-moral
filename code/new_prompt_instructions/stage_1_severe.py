@@ -30,7 +30,7 @@ def get_vars_from_out(out:str) -> List[str]:
 def get_llm(args):
     if args.api == 'azure':
         llm = AzureChatOpenAI(
-            azure_endpoint="https://philipp.openai.azure.com/",
+            # azure_endpoint="https://philipp.openai.azure.com/",
             openai_api_version="2023-05-15",
             deployment_name='gpt-4',
             openai_api_key=os.getenv("API_KEY"),
@@ -56,14 +56,14 @@ def get_context(name, profession):
     context = f"{name.strip()}, {profession}, faces a moral dilemma."
     return context
 
-def get_example(names, professions, condition, rand_item):
+def get_example(names, professions, condition, rand_item, severity):
     name = names[rand_item]
     profession = professions[rand_item]
     context = get_context(name, profession)
     
     vars = {k: None for k in range(17)}
     if condition == "CC":
-        with open(f'{PROMPT_DIR}/cc_stage_1_severe.csv', 'r') as f:
+        with open(f'{PROMPT_DIR}/cc_stage_1_{severity}.csv', 'r') as f:
             reader = csv.reader(f, delimiter=';')
             for i, row in enumerate(reader):
                 if i == rand_item:
@@ -124,13 +124,13 @@ def gen_chat(args):
             # messages sent to model 
             messages = []
             if condition == "CC":
-                with(open(f'{PROMPT_DIR}/cc_stage_1_P{severity}.txt', 'r')) as f:
+                with(open(f'{PROMPT_DIR}/cc_stage_1_{severity}.txt', 'r')) as f:
                     system_prompt = f.read().strip()
             elif condition == "CoC":
                 with(open(f'{PROMPT_DIR}/coc_stage_1_{severity}.txt', 'r')) as f:
                     system_prompt = f.read().strip()
 
-            example = get_example(names, professions, condition, rand_item)
+            example = get_example(names, professions, condition, rand_item, severity)
 
             system_message = SystemMessage(content=system_prompt)
             human_message_0 = HumanMessage(content=f"Generate a completion for this context: {get_context(name=names[rand_item], profession=professions[rand_item])}")
@@ -166,7 +166,7 @@ Reminder: You must follow this structure:
                         writer = csv.writer(csvfile, delimiter=';')
                         writer.writerow(vars)
 
-                breakpoint()
+                # breakpoint()
 
            
             
@@ -178,7 +178,7 @@ Reminder: You must follow this structure:
 
 parser = argparse.ArgumentParser()
 parser.add_argument('--start', type=int, default=3, help='start index')
-parser.add_argument('--end', type=int, default=5, help='end index')
+parser.add_argument('--end', type=int, default=8, help='end index')
 parser.add_argument('--model', type=str, default='openai/gpt-4-0314', help='model name')
 parser.add_argument('--temperature', type=float, default=0, help='temperature')
 parser.add_argument('--max_tokens', type=int, default=2000, help='max tokens')
