@@ -1,50 +1,16 @@
 import random
 import csv
 import tqdm
-import os
 import argparse
-import os
-from typing import List
-
 from langchain.schema import (
     AIMessage,
     HumanMessage,
     SystemMessage
 )
-
-from langchain.chat_models import AzureChatOpenAI
+from utils import get_llm, get_vars_from_out
 
 DATA_DIR = '../../data'
 PROMPT_DIR = '../new_prompt_instructions'
-
-def get_vars_from_out(out:str) -> List[str]:
-    vars = []
-    out = out.split('\n')
-    out = [l for l in out if ':' in l]
-    for line in out:
-        elems = line.split(': ')
-        vars.append(elems[1].strip())
-    return vars
-
-
-def get_llm(args):
-    if args.api == 'azure':
-        llm = AzureChatOpenAI(
-            # azure_endpoint="https://philipp.openai.azure.com/",
-            openai_api_version="2023-05-15",
-            deployment_name='gpt-4',
-            openai_api_key=os.getenv("API_KEY"),
-            openai_api_type="azure",
-            temperature=args.temperature,
-        )
-    else:
-        raise Exception(f"Unknown API {args.api}")
-    return llm
-
-
-
-CONDITION = ['CC', 'CoC']
-
 
 
 def get_context(name, profession):
@@ -114,21 +80,14 @@ def gen_chat(args):
     for i, name in enumerate(names[args.start:args.end]):
         # load profession
         profession = professions[i + args.start]
-        # loop over conditions (CC, CoC)
         rand_item = 1 #random.randint(1) # random.randint(0, args.start - 1) # random example for few shot generation set to 1
         # TODO - change later
         severity = 'mild'
-        for condition in CONDITION:
-
-
+        for condition in ['CC', 'CoC']:
             # messages sent to model 
             messages = []
-            if condition == "CC":
-                with(open(f'{PROMPT_DIR}/cc_stage_1_{severity}.txt', 'r')) as f:
-                    system_prompt = f.read().strip()
-            elif condition == "CoC":
-                with(open(f'{PROMPT_DIR}/coc_stage_1_{severity}.txt', 'r')) as f:
-                    system_prompt = f.read().strip()
+            with(open(f'{PROMPT_DIR}/{condition.lower()}_{severity}.txt', 'r')) as f:
+                system_prompt = f.read().strip()
 
             example = get_example(names, professions, condition, rand_item, severity)
 
@@ -157,23 +116,11 @@ Reminder: You must follow this structure:
                 if len(vars) == 6:
                     vars = vars[1:]
     
-                if condition == "CC":
-                    with open(f'{PROMPT_DIR}/cc_stage_1_{severity}.csv', 'a') as csvfile:
-                        writer = csv.writer(csvfile, delimiter=';')
-                        writer.writerow(vars)
-                elif condition == "CoC":
-                    with open(f'{PROMPT_DIR}/coc_stage_1_{severity}.csv', 'a') as csvfile:
-                        writer = csv.writer(csvfile, delimiter=';')
-                        writer.writerow(vars)
+                with open(f'{PROMPT_DIR}/{condition.lower()}_stage_1_{severity}.csv', 'a') as csvfile:
+                    writer = csv.writer(csvfile, delimiter=';')
+                    writer.writerow(vars)
 
                 # breakpoint()
-
-           
-            
-
-            
-            
-        
     
 
 parser = argparse.ArgumentParser()
