@@ -1,4 +1,5 @@
 Architect
+<<<<<<< HEAD
 Teacher
 Engineer
 Nurse
@@ -98,3 +99,7 @@ Anthropologist
 Photographer
 Archaeologist
 Optometrist
+=======
+Biologist
+Chef
+>>>>>>> e1b2c009af0c6c70185d8c78eab7f5a3d6125386

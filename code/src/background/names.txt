@@ -1,4 +1,5 @@
 Aria
+<<<<<<< HEAD
 Amir
 Alejandro
 Mei
@@ -98,3 +99,7 @@ Elina
 Jelena
 Tenzin
 Safiya
+=======
+Carlos
+Elena
+>>>>>>> e1b2c009af0c6c70185d8c78eab7f5a3d6125386

@@ -22,6 +22,7 @@ from utils import push_data, get_num_items, get_vars_from_out, get_llm
 DATA_DIR = '../../data'
 PROMPT_DIR = '../prompt_instructions'
 SEVERITY_LEVELS = ['Mild', 'Extreme']
+SAMPLES_DIR = '../new_prompt_instructions'
 
 # Map story items to tags
 STORY_TAGS = json.load(open('story_tags.json'))
@@ -75,7 +76,7 @@ def get_line(line_indx, filename):
 # Replace harm, good, ext_cause, other_cause in system message
 def replace_scenario_vars(line_indx, msg, harm_type, good_type):
     for condition in ['CC', 'CoC']:
-        line = get_line(line_indx, f'background/{condition.lower()}_example.txt')
+        line = get_line(line_indx, f'{SAMPLES_DIR}/{condition.lower()}_stage_1_severe.txt')
         mild_harm, extreme_harm, mild_good, extreme_good = line.strip().split(';')
         harm = mild_harm if harm_type == 'Mild' else extreme_harm
         good = mild_good if good_type == 'Mild' else extreme_good
@@ -83,7 +84,7 @@ def replace_scenario_vars(line_indx, msg, harm_type, good_type):
         msg = msg.replace(f"[Harm {condition}]", harm)
         msg = msg.replace(f"[Good {condition}]", good)
 
-        line = get_line(line_indx, f'background/{condition}_causes.txt')
+        line = get_line(line_indx, f'{SAMPLES_DIR}/{condition}_causes.txt')
         other_cause_mild, ext_cause_mild, other_cause_extreme, ext_cause_extreme = line.strip().split(';')
         other_cause = other_cause_mild if harm_type == 'Mild' else other_cause_extreme
         ext_cause = ext_cause_mild if harm_type == 'Mild' else ext_cause_extreme
@@ -177,7 +178,6 @@ def gen_chat(args):
                     with open(f'{DATA_DIR}/{harm_type.lower()}_harm_{good_type.lower()}_good.csv', 'a') as csvfile:
                         writer = csv.writer(csvfile, delimiter=';')
                         writer.writerow(conditions)
-                    print(conditions)
                 # push to github
                 # push_data(DATA_DIR, REPO_URL)
     
