@@ -86,5 +86,5 @@ def generate_conditions(completions, csv_name=CSV_NAME_CC, structure="cc"):
 
 
 if __name__ == "__main__":  
-    completions = get_completions(csv_name=CSV_NAME_COC)
-    generate_conditions(completions, csv_name=CSV_NAME_COC, structure="coc")
+    completions = get_completions(csv_name=CSV_NAME_CC)
+    generate_conditions(completions, csv_name=CSV_NAME_CC, structure="cc")
