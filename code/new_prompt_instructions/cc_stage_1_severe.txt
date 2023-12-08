@@ -6,7 +6,9 @@ Format
 Action Opportunity: [The agent has the opportunity to take a significant action, ***described without its benefits just state the action***]
 
 Necessary Severe Harm -> Very Good
-Necessary Severe Harm: [Describe the severe harm **REQUIRED** by the action. Use the word "required". The harm must occur before the good.]
+Necessary Severe Harm: [Describe the severe harm **REQUIRED** by the action. Use the word "required". The harm must occur before the good and can not be a "side effect"]
 Very Good: [Describe the direct very good outcome of the severe harm]
 Other Preventable Cause: [Exactly the same as Action Opportunity, only difference being that the sentence starts with "The [agent]'s colleague has the opportunity to" and then repeats the sentence in Action Opportunity **VERBATIM**]
 External Non-Preventable Cause: [An external event will definitely occur, leading to the same severe harm]
+
+This here is not a good example of a necessary harm: The treatment required will cause the patient severe pain and discomfort for a prolonged period. This is a side effect!

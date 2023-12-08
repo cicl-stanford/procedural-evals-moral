@@ -195,6 +195,8 @@ Non-Preventable Cause CoC: {new_item[4]}""")
                 with open(f'{PROMPT_DIR}/coc_stage_2_severe.csv', 'a') as csvfile:
                     writer = csv.writer(csvfile, delimiter=';')
                     writer.writerow(vars)
+            
+            breakpoint()
 
            
             
@@ -208,8 +210,8 @@ Non-Preventable Cause CoC: {new_item[4]}""")
     
 
 parser = argparse.ArgumentParser()
-parser.add_argument('--start', type=int, default=2, help='start index')
-parser.add_argument('--end', type=int, default=3, help='end index')
+parser.add_argument('--start', type=int, default=3, help='start index')
+parser.add_argument('--end', type=int, default=5, help='end index')
 parser.add_argument('--model', type=str, default='openai/gpt-4-0314', help='model name')
 parser.add_argument('--temperature', type=float, default=0.1, help='temperature')
 parser.add_argument('--max_tokens', type=int, default=2000, help='max tokens')

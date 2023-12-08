@@ -25,7 +25,7 @@ async function createTrialPages(condition) {
 
     // read stories rom a json file
     // let response = await fetch(`https://kanishkg.github.io/batch_${condition}.json`);
-    let response = await fetch(`test_items_0.json`);
+    let response = await fetch(`test_items_severe.json`);
     let trials = await response.json();
     shuffleArray(trials);
 
@@ -37,39 +37,41 @@ async function createTrialPages(condition) {
         trialPages += `
             <div id="trial-page-${i}" class="page d-none">
                 <h4> Scenario </h4>
-                <p> ${trials[i-1].text}</p>`;
+                <p><b>Background sentence</b>: ${trials[i-1].background}</p>
+
+                <p><b>Target sentence</b>: ${trials[i-1].target}</p>`;
         
         for (let q = 1; q <= 1; q++) {
             trialPages += `<div class="question" id="question-${i}-${q}">`;
             trialPages += `
-            <p>Rate how bad or good the event in the target sentence is:</p>
+            <p>Rate how good or bad the event in the target sentence is:</p>
                 <div class="form-check form-check-inline">
-                    <input class="form-check-input" type="radio" name="likert-${i}-${q}" id="likert-${i}-${q}-1" value="1">
-                    <label class="form-check-label" for="likert-${i}-${q}-1">Very Bad</label>
+                    <input class="form-check-input" type="radio" name="likert-${i}-${q}" id="likert-${i}-${q}-7" value="7">
+                    <label class="form-check-label" for="likert-${i}-${q}-7">Very Good</label>
                 </div>
                 <div class="form-check form-check-inline">
-                    <input class="form-check-input" type="radio" name="likert-${i}-${q}" id="likert-${i}-${q}-2" value="2">
-                    <label class="form-check-label" for="likert-${i}-${q}-2">Bad</label>
+                    <input class="form-check-input" type="radio" name="likert-${i}-${q}" id="likert-${i}-${q}-6" value="6">
+                    <label class="form-check-label" for="likert-${i}-${q}-6">Good</label>
                 </div>
                 <div class="form-check form-check-inline">
-                    <input class="form-check-input" type="radio" name="likert-${i}-${q}" id="likert-${i}-${q}-3" value="3">
-                    <label class="form-check-label" for="likert-${i}-${q}-3">Somewhat Bad</label>
+                    <input class="form-check-input" type="radio" name="likert-${i}-${q}" id="likert-${i}-${q}-5" value="5">
+                    <label class="form-check-label" for="likert-${i}-${q}-5">Somewhat Good</label>
                 </div>
                 <div class="form-check form-check-inline">
                     <input class="form-check-input" type="radio" name="likert-${i}-${q}" id="likert-${i}-${q}-4" value="4">
                     <label class="form-check-label" for="likert-${i}-${q}-4">Neither Good nor Bad</label>
                 </div>
                 <div class="form-check form-check-inline">
-                    <input class="form-check-input" type="radio" name="likert-${i}-${q}" id="likert-${i}-${q}-5" value="5">
-                    <label class="form-check-label" for="likert-${i}-${q}-5">Somewhat Good</label>
+                    <input class="form-check-input" type="radio" name="likert-${i}-${q}" id="likert-${i}-${q}-3" value="3">
+                    <label class="form-check-label" for="likert-${i}-${q}-3">Somewhat Bad</label>
                 </div>
                  <div class="form-check form-check-inline">
-                    <input class="form-check-input" type="radio" name="likert-${i}-${q}" id="likert-${i}-${q}-5" value="5">
-                    <label class="form-check-label" for="likert-${i}-${q}-5">Good</label>
+                    <input class="form-check-input" type="radio" name="likert-${i}-${q}" id="likert-${i}-${q}-2" value="2">
+                    <label class="form-check-label" for="likert-${i}-${q}-2">Bad</label>
                 </div>
                 <div class="form-check form-check-inline">
-                    <input class="form-check-input" type="radio" name="likert-${i}-${q}" id="likert-${i}-${q}-5" value="5">
-                    <label class="form-check-label" for="likert-${i}-${q}-5">Very Good</label>
+                    <input class="form-check-input" type="radio" name="likert-${i}-${q}" id="likert-${i}-${q}-1" value="1">
+                    <label class="form-check-label" for="likert-${i}-${q}-1">Very Bad</label>
                 </div>
             <br><br></div>
                     `;
@@ -140,17 +142,18 @@ $(document).ready(function () {
     function submitExitSurvey() {
         // Gather trial page answers
         surveyData.trialPages = {};
-        for (let i = 1; i <= 16; i++) {
+        for (let i = 1; i <= 12; i++) {
             let trialData = window.trials[i-1];
             surveyData.trialPages[`trial${i}`] = {
                 likertResponses: {},
-                text: trialData.text,
+                background: trialData.background,
+                target: trialData.target,
                 structure: trialData.structure,
                 type: trialData.type,
                 scenario_id: trialData.scenario_id,
                 strength: trialData.strength,
             };
-            for (let q = 1; q <= 2; q++) {
+            for (let q = 1; q <= 1; q++) {
                 surveyData.trialPages[`trial${i}`].likertResponses[`likert${q}`] = $('input[name="likert-' + i + '-' + q + '"]:checked').val();
             }
         }
@@ -167,7 +170,7 @@ $(document).ready(function () {
         // Submit the survey data using proliferate
         console.log('submitting');
         console.log(surveyData);
-        // proliferate.submit(surveyData); // Uncomment this line when you're ready to use Proliferate
+        proliferate.submit(surveyData); // Uncomment this line when you're ready to use Proliferate
         // Show a thank you message or redirect to a thank you page
         // alert("Thank you for completing the survey!");
     }

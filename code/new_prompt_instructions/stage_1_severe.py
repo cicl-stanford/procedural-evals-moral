@@ -150,8 +150,8 @@ Reminder: You must follow this structure:
                     print(f"------ Generated Story ------")
                     print(generation.text)
                     print("------------ Fin --------------")
-
                 
+
                 vars = get_vars_from_out(generation.text)
                 if len(vars) == 6:
                     vars = vars[1:]
@@ -165,6 +165,8 @@ Reminder: You must follow this structure:
                         writer = csv.writer(csvfile, delimiter=';')
                         writer.writerow(vars)
 
+                breakpoint()
+
            
             
 
@@ -174,8 +176,8 @@ Reminder: You must follow this structure:
     
 
 parser = argparse.ArgumentParser()
-parser.add_argument('--start', type=int, default=2, help='start index')
-parser.add_argument('--end', type=int, default=3, help='end index')
+parser.add_argument('--start', type=int, default=3, help='start index')
+parser.add_argument('--end', type=int, default=5, help='end index')
 parser.add_argument('--model', type=str, default='openai/gpt-4-0314', help='model name')
 parser.add_argument('--temperature', type=float, default=0, help='temperature')
 parser.add_argument('--max_tokens', type=int, default=2000, help='max tokens')

@@ -34,11 +34,11 @@ for cs in causal_structure:
         continue
     for s, story in enumerate(csv_data[:NUM_SCENARIOS]):
         if cs == 'cc':
-            test_items.append({"text": story[0] + " " + story[1], "scenario_id": s, "structure": cs, "type": "harm", "strength": "severe"})
-            test_items.append({"text": story[0] + " " + story[2], "scenario_id": s, "structure": cs, "type": "good", "strength": "severe"})
+            test_items.append({"background": story[0], "target": story[1], "scenario_id": s, "structure": cs, "type": "harm", "strength": "severe"})
+            test_items.append({"background": story[0], "target": story[2], "scenario_id": s, "structure": cs, "type": "good", "strength": "severe"})
         elif cs == 'coc':
-            test_items.append({"text": story[0] + " " + story[2], "scenario_id": s, "structure": cs, "type": "harm", "strength": "severe"})
-            test_items.append({"text": story[0] + " " + story[1], "scenario_id": s, "structure": cs, "type": "good", "strength": "severe"})
+            test_items.append({"background": story[0], "target": story[2], "scenario_id": s, "structure": cs, "type": "harm", "strength": "severe"})
+            test_items.append({"background": story[0], "target": story[1], "scenario_id": s, "structure": cs, "type": "good", "strength": "severe"})
 
 with open(f'test_items_0.json', 'w') as f:
     json.dump(test_items, f)
