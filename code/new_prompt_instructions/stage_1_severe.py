@@ -116,17 +116,18 @@ def gen_chat(args):
         profession = professions[i + args.start]
         # loop over conditions (CC, CoC)
         rand_item = 1 #random.randint(1) # random.randint(0, args.start - 1) # random example for few shot generation set to 1
-
+        # TODO - change later
+        severity = 'mild'
         for condition in CONDITION:
 
 
             # messages sent to model 
             messages = []
             if condition == "CC":
-                with(open(f'{PROMPT_DIR}/cc_stage_1_severe.txt', 'r')) as f:
+                with(open(f'{PROMPT_DIR}/cc_stage_1_P{severity}.txt', 'r')) as f:
                     system_prompt = f.read().strip()
             elif condition == "CoC":
-                with(open(f'{PROMPT_DIR}/coc_stage_1_severe.txt', 'r')) as f:
+                with(open(f'{PROMPT_DIR}/coc_stage_1_{severity}.txt', 'r')) as f:
                     system_prompt = f.read().strip()
 
             example = get_example(names, professions, condition, rand_item)
@@ -157,11 +158,11 @@ Reminder: You must follow this structure:
                     vars = vars[1:]
     
                 if condition == "CC":
-                    with open(f'{PROMPT_DIR}/cc_stage_1_severe.csv', 'a') as csvfile:
+                    with open(f'{PROMPT_DIR}/cc_stage_1_{severity}.csv', 'a') as csvfile:
                         writer = csv.writer(csvfile, delimiter=';')
                         writer.writerow(vars)
                 elif condition == "CoC":
-                    with open(f'{PROMPT_DIR}/coc_stage_1_severe.csv', 'a') as csvfile:
+                    with open(f'{PROMPT_DIR}/coc_stage_1_{severity}.csv', 'a') as csvfile:
                         writer = csv.writer(csvfile, delimiter=';')
                         writer.writerow(vars)
 
