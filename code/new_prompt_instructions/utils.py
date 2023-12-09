@@ -8,7 +8,8 @@ def get_vars_from_out(out:str) -> List[str]:
     out = [l for l in out if ':' in l]
     for line in out:
         elems = line.split(': ')
-        vars.append(elems[1].strip())
+        if elems[0] != 'Context':
+            vars.append(elems[1].strip())
     return vars
 
 
