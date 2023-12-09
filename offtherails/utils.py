@@ -25,4 +25,3 @@ def get_llm(args):
     else:
         raise Exception(f"Unknown API {args.api}")
     return llm
-

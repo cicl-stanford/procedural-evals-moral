@@ -82,11 +82,11 @@ def gen_chat(args):
         profession = professions[i + args.start]
         rand_item = 1 #random.randint(1) # random.randint(0, args.start - 1) # random example for few shot generation set to 1
         # TODO - change later
-        severity = 'mild'
+        severity = 'severe'
         for condition in ['CC', 'CoC']:
             # messages sent to model 
             messages = []
-            with(open(f'{PROMPT_DIR}/{condition.lower()}_{severity}.txt', 'r')) as f:
+            with(open(f'{PROMPT_DIR}/{condition.lower()}_stage_1_{severity}.txt', 'r')) as f:
                 system_prompt = f.read().strip()
 
             example = get_example(names, professions, condition, rand_item, severity)
@@ -113,6 +113,7 @@ Reminder: You must follow this structure:
                 
 
                 vars = get_vars_from_out(generation.text)
+                breakpoint()
                 if len(vars) == 6:
                     vars = vars[1:]
     
@@ -120,12 +121,12 @@ Reminder: You must follow this structure:
                     writer = csv.writer(csvfile, delimiter=';')
                     writer.writerow(vars)
 
-                # breakpoint()
+                breakpoint()
     
 
 parser = argparse.ArgumentParser()
-parser.add_argument('--start', type=int, default=3, help='start index')
-parser.add_argument('--end', type=int, default=8, help='end index')
+parser.add_argument('--start', type=int, default=9, help='start index')
+parser.add_argument('--end', type=int, default=10, help='end index')
 parser.add_argument('--model', type=str, default='openai/gpt-4-0314', help='model name')
 parser.add_argument('--temperature', type=float, default=0, help='temperature')
 parser.add_argument('--max_tokens', type=int, default=2000, help='max tokens')
