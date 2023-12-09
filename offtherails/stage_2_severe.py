@@ -212,7 +212,7 @@ Non-Preventable Cause CoC: {new_item[4]}""")
     
 
 parser = argparse.ArgumentParser()
-parser.add_argument('--start', type=int, default=5, help='start index')
+parser.add_argument('--start', type=int, default=9, help='start index')
 parser.add_argument('--end', type=int, default=10, help='end index')
 parser.add_argument('--model', type=str, default='openai/gpt-4-0314', help='model name')
 parser.add_argument('--temperature', type=float, default=0.1, help='temperature')
