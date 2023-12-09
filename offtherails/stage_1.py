@@ -125,7 +125,7 @@ Reminder: You must follow this structure:
     
 
 parser = argparse.ArgumentParser()
-parser.add_argument('--start', type=int, default=9, help='start index')
+parser.add_argument('--start', type=int, default=0, help='start index')
 parser.add_argument('--end', type=int, default=10, help='end index')
 parser.add_argument('--model', type=str, default='openai/gpt-4-0314', help='model name')
 parser.add_argument('--temperature', type=float, default=0, help='temperature')
