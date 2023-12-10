@@ -15,7 +15,7 @@ from langchain.schema import (
 from langchain.chat_models import AzureChatOpenAI
 
 DATA_DIR = '../../data'
-PROMPT_DIR = '../new_prompt_instructions'
+PROMPT_DIR = '../offtherails'
 
 def get_vars_from_out(out:str) -> List[str]:
     vars = []
@@ -186,6 +186,8 @@ Non-Preventable Cause CoC: {new_item[4]}""")
   
             new_vars = get_vars_from_out(generation.text)
             vars = [get_context(name=name, profession=profession)] + new_item + new_vars
+
+            breakpoint()
     
             if condition == "cc":
                 with open(f'{PROMPT_DIR}/cc_stage_2_severe.csv', 'a') as csvfile:
@@ -196,7 +198,7 @@ Non-Preventable Cause CoC: {new_item[4]}""")
                     writer = csv.writer(csvfile, delimiter=';')
                     writer.writerow(vars)
             
-            breakpoint()
+            # breakpoint()
 
            
             
@@ -210,8 +212,8 @@ Non-Preventable Cause CoC: {new_item[4]}""")
     
 
 parser = argparse.ArgumentParser()
-parser.add_argument('--start', type=int, default=3, help='start index')
-parser.add_argument('--end', type=int, default=5, help='end index')
+parser.add_argument('--start', type=int, default=9, help='start index')
+parser.add_argument('--end', type=int, default=10, help='end index')
 parser.add_argument('--model', type=str, default='openai/gpt-4-0314', help='model name')
 parser.add_argument('--temperature', type=float, default=0.1, help='temperature')
 parser.add_argument('--max_tokens', type=int, default=2000, help='max tokens')
@@ -224,4 +226,4 @@ parser.add_argument('--api', type=str, default='azure', help='which api to use')
 
 if __name__ == "__main__":
     args = parser.parse_args()
-    gen_chat(args, condition='coc')
+    gen_chat(args, condition='cc')

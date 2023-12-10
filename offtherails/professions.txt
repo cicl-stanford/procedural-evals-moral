@@ -6,11 +6,11 @@ Chef
 Artist
 Lawyer
 Mechanic
-Dentist
-Farmer
+Soldier
+Policeman
 Musician
 Carpenter
-Police
+Policeman
 Accountant
 Writer
 Pilot
