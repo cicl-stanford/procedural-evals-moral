@@ -11,6 +11,3 @@ Necessary Mild Harm: [Describe the mild harm **REQUIRED** by the action. Use the
 Mild Good: [Describe the mildly good outcome of the mild harm.]
 Other Preventable Cause: [Exactly the same as Action Opportunity, only difference being that the sentence starts with "The [agent]'s colleague has the opportunity to" and then repeats the sentence in Action Opportunity **VERBATIM**]
 External Non-Preventable Cause: [An external event will definitely occur, leading to the same mild harm]
-
-
-The harm should not be a side effect or pain/discomfort from a medical treatment that causes the good.

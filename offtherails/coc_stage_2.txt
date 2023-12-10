@@ -1,4 +1,4 @@
-Causal Chain (CoC):
+Common Cause (CoC):
 Context: [Agent], [Profession], faces a moral dilemma.
 Action Opportunity: [Action]
 Harm CoC: [Harm CoC]

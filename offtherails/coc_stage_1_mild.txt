@@ -10,5 +10,3 @@ Mild Good: [Describe the mildly good outcome aimed for by the action]
 Mild Harm "However, as a side effect...": [Describe the mild harm that inadvertently occurs as a side effect of achieving the mild good]
 Other Preventable Cause: [Exactly the same as Action Opportunity, only difference being that the sentence starts with "The [agent]'s colleague has the opportunity to" and then repeats the sentence in Action Opportunity **VERBATIM**]
 External Non-Preventable Cause: [An external event will definitely occur, leading to the same mild harm]
-
-The action should cause both the harm and good to happen. The harm is not necessary for the good; it should be a side effect of the happening. The harm should not be a side effect or pain/discomfort from a medical treatment that causes the good.
