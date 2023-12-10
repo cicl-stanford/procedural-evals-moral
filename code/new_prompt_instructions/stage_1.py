@@ -45,6 +45,9 @@ def get_example(names, professions, condition, rand_item, severity):
 def get_human_msg(name, profession, note=""):    
     return HumanMessage(content=f"Generate a completion for this context: {get_context(name, profession)} {note}")
 
+"""
+Generate action, harm, good, preventable cause, external non-prventable cause for both conditions 
+"""
 def gen_chat(args):
     llm = get_llm(args)
 
@@ -52,12 +55,12 @@ def gen_chat(args):
     names = open(f'{PROMPT_DIR}/names.txt', 'r').readlines()
     professions = open(f'{PROMPT_DIR}/professions.txt', 'r').readlines()
    
-    # Loop over names 
+    # Loop over all pairs of names & professions
     for i, name in enumerate(names[args.start:args.end]):
         profession = professions[i + args.start]
+
+        # TODO - change these to not be hardcoded 
         rand_item = 1 #random.randint(1) # random.randint(0, args.start - 1) # random example for few shot generation set to 1
-        
-        # TODO - change this to not be hardcoded 
         severity = 'Mild'
 
         for condition in ['CC', 'CoC']:
@@ -89,7 +92,9 @@ def gen_chat(args):
                     writer.writerow(vars)
 
                 # breakpoint()
-    
+
+def gen_story(args):
+    pass  
 
 parser = argparse.ArgumentParser()
 parser.add_argument('--start', type=int, default=3, help='start index')
