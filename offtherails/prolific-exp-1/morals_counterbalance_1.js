@@ -22,7 +22,7 @@ async function createTrialPages(condition) {
 
     // read stories rom a json file
     // let response = await fetch(`https://kanishkg.github.io/batch_${condition}.json`);
-    let response = await fetch('counter_balance_1.json');
+    let response = await fetch('counterbalance_1.json');
     let trials = await response.json();
     shuffleArray(trials);
 

@@ -5,6 +5,7 @@ function getUrlParameter(name) {
     return results === null ? '' : decodeURIComponent(results[1].replace(/\+/g, ' '));
 }
 
+
 function shuffleArray(array) {
     for (let i = array.length - 1; i > 0; i--) {
         let j = Math.floor(Math.random() * (i + 1)); // random index from 0 to i
@@ -135,6 +136,7 @@ $(document).ready(function () {
         return true;
     }
 
+   
     function submitExitSurvey() {
         // Gather trial page answers
         surveyData.trialPages = {};
@@ -166,6 +168,7 @@ $(document).ready(function () {
         // Submit the survey data using proliferate
         console.log('submitting');
         console.log(surveyData);
+
         proliferate.submit(surveyData); // Uncomment this line when you're ready to use Proliferate
         // Show a thank you message or redirect to a thank you page
         // alert("Thank you for completing the survey!");

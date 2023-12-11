@@ -37,19 +37,19 @@ for cs in causal_structure:
         continue
     for s, story in enumerate(csv_data_severe[START_SCENARIOS:END_SCENARIOS]):
         if cs == 'cc':
-            test_items.append({"background": story[0], "target": story[1], "scenario_id": s, "structure": cs, "type": "harm", "strength": "severe"})
-            test_items.append({"background": story[0], "target": story[2], "scenario_id": s, "structure": cs, "type": "good", "strength": "severe"})
+            test_items.append({"background": story[0], "target": story[1], "scenario_id": s + START_SCENARIOS, "structure": cs, "type": "harm", "strength": "severe"})
+            test_items.append({"background": story[0], "target": story[2], "scenario_id": s + START_SCENARIOS, "structure": cs, "type": "good", "strength": "severe"})
         elif cs == 'coc':
-            test_items.append({"background": story[0], "target": story[2], "scenario_id": s, "structure": cs, "type": "harm", "strength": "severe"})
-            test_items.append({"background": story[0], "target": story[1], "scenario_id": s, "structure": cs, "type": "good", "strength": "severe"})
+            test_items.append({"background": story[0], "target": story[2], "scenario_id": s + START_SCENARIOS, "structure": cs, "type": "harm", "strength": "severe"})
+            test_items.append({"background": story[0], "target": story[1], "scenario_id": s + START_SCENARIOS, "structure": cs, "type": "good", "strength": "severe"})
 
     for s, story in enumerate(csv_data_mild[START_SCENARIOS:END_SCENARIOS]):
         if cs == 'cc':
-            test_items.append({"background": story[0], "target": story[1], "scenario_id": s, "structure": cs, "type": "harm", "strength": "mild"})
-            test_items.append({"background": story[0], "target": story[2], "scenario_id": s, "structure": cs, "type": "good", "strength": "mild"})
+            test_items.append({"background": story[0], "target": story[1], "scenario_id": s + START_SCENARIOS, "structure": cs, "type": "harm", "strength": "mild"})
+            test_items.append({"background": story[0], "target": story[2], "scenario_id": s + START_SCENARIOS, "structure": cs, "type": "good", "strength": "mild"})
         elif cs == 'coc':
-            test_items.append({"background": story[0], "target": story[2], "scenario_id": s, "structure": cs, "type": "harm", "strength": "mild"})
-            test_items.append({"background": story[0], "target": story[1], "scenario_id": s, "structure": cs, "type": "good", "strength": "mild"})
+            test_items.append({"background": story[0], "target": story[2], "scenario_id": s + START_SCENARIOS, "structure": cs, "type": "harm", "strength": "mild"})
+            test_items.append({"background": story[0], "target": story[1], "scenario_id": s + START_SCENARIOS, "structure": cs, "type": "good", "strength": "mild"})
 
 
 with open(f'counterbalance_1.json', 'w') as f:
