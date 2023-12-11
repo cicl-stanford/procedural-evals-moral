@@ -17,14 +17,7 @@ from langchain.chat_models import AzureChatOpenAI
 DATA_DIR = '../../data'
 PROMPT_DIR = '../offtherails'
 
-def get_vars_from_out(out:str) -> List[str]:
-    vars = []
-    out = out.split('\n')
-    out = [l for l in out if ':' in l]
-    for line in out:
-        elems = line.split(': ')
-        vars.append(elems[1].strip())
-    return vars
+from utils import get_llm, get_vars_from_out
 
 def get_context(name, profession):
     # check if profession is noun
@@ -35,20 +28,6 @@ def get_context(name, profession):
     context = f"{name.strip()}, {profession}, faces a moral dilemma."
     return context
 
-
-def get_llm(args):
-    if args.api == 'azure':
-        llm = AzureChatOpenAI(
-            azure_endpoint="https://philipp.openai.azure.com/",
-            openai_api_version="2023-05-15",
-            deployment_name='gpt-4',
-            openai_api_key=os.getenv("API_KEY"),
-            openai_api_type="azure",
-            temperature=args.temperature,
-        )
-    else:
-        raise Exception(f"Unknown API {args.api}")
-    return llm
 
 
 
@@ -212,7 +191,7 @@ Non-Preventable Cause CoC: {new_item[4]}""")
     
 
 parser = argparse.ArgumentParser()
-parser.add_argument('--start', type=int, default=1, help='start index')
+parser.add_argument('--start', type=int, default=5, help='start index')
 parser.add_argument('--end', type=int, default=10, help='end index')
 parser.add_argument('--model', type=str, default='openai/gpt-4-0314', help='model name')
 parser.add_argument('--temperature', type=float, default=0.1, help='temperature')

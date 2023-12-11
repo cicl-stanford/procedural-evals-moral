@@ -1,4 +1,4 @@
-City Planner
+Architect
 Engineer
 Teacher
 Nurse

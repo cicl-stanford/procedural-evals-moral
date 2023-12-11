@@ -16,16 +16,12 @@ function shuffleArray(array) {
 async function createTrialPages(condition) {
 
     let trialPages = '';
-    let num_trials = 12;
-    let question_1 = 'The action that the agent took is morally permissible.';
-    let question_2 = 'The agent intended for the negative outcome to occur.';
-
-    // create a list of the questions
-    let questions = [question_1, question_2];
+    let num_trials = 40;
+ 
 
     // read stories rom a json file
     // let response = await fetch(`https://kanishkg.github.io/batch_${condition}.json`);
-    let response = await fetch(`test_items_severe.json`);
+    let response = await fetch('counterbalance_0.json');
     let trials = await response.json();
     shuffleArray(trials);
 
@@ -142,15 +138,15 @@ $(document).ready(function () {
     function submitExitSurvey() {
         // Gather trial page answers
         surveyData.trialPages = {};
-        for (let i = 1; i <= 12; i++) {
+        for (let i = 1; i <= 40; i++) {
             let trialData = window.trials[i-1];
             surveyData.trialPages[`trial${i}`] = {
                 likertResponses: {},
                 background: trialData.background,
                 target: trialData.target,
+                scenario_id: trialData.scenario_id,
                 structure: trialData.structure,
                 type: trialData.type,
-                scenario_id: trialData.scenario_id,
                 strength: trialData.strength,
             };
             for (let q = 1; q <= 1; q++) {

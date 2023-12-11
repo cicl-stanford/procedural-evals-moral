@@ -17,14 +17,7 @@ from langchain.chat_models import AzureChatOpenAI
 DATA_DIR = '../../data'
 PROMPT_DIR = '../offtherails'
 
-def get_vars_from_out(out:str) -> List[str]:
-    vars = []
-    out = out.split('\n')
-    out = [l for l in out if ':' in l]
-    for line in out:
-        elems = line.split(': ')
-        vars.append(elems[1].strip())
-    return vars
+from utils import get_llm, get_vars_from_out
 
 def get_context(name, profession):
     # check if profession is noun
@@ -34,22 +27,6 @@ def get_context(name, profession):
         profession = f'a {profession.strip()}'
     context = f"{name.strip()}, {profession}, faces a moral dilemma."
     return context
-
-
-def get_llm(args):
-    if args.api == 'azure':
-        llm = AzureChatOpenAI(
-            azure_endpoint="https://philipp.openai.azure.com/",
-            openai_api_version="2023-05-15",
-            deployment_name='gpt-4',
-            openai_api_key=os.getenv("API_KEY"),
-            openai_api_type="azure",
-            temperature=args.temperature,
-        )
-    else:
-        raise Exception(f"Unknown API {args.api}")
-    return llm
-
 
 
 CONDITION = ['CC', 'CoC']
@@ -217,7 +194,7 @@ parser.add_argument('--end', type=int, default=10, help='end index')
 parser.add_argument('--model', type=str, default='openai/gpt-4-0314', help='model name')
 parser.add_argument('--temperature', type=float, default=0.1, help='temperature')
 parser.add_argument('--max_tokens', type=int, default=2000, help='max tokens')
-# change num completions to 10
+# change num completions to 10_2    
 parser.add_argument('--num_completions', type=int, default=1, help='number of completions')
 parser.add_argument('--num_shots', type=int, default=3, help='number of shots')
 parser.add_argument('--num_stories', type=int, default=2, help='number of stories to generate')

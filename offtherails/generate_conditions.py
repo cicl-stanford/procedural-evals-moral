@@ -2,9 +2,9 @@ import os
 import csv
 
 DATA_DIR = './'
-CONDITION_DIR =  './conditions_severe_harm_very_good'
-CSV_NAME_CC = "cc_stage_2_severe.csv"
-CSV_NAME_COC = "coc_stage_2_severe.csv"
+CONDITION_DIR =  './conditions_mild_harm_mild_good'
+CSV_NAME_CC = "cc_stage_2_mild.csv"
+CSV_NAME_COC = "coc_stage_2_mild.csv"
 
 EVITABILITY = ['evitable', 'inevitable']
 ACTION = ['action_yes', 'prevention_no']
