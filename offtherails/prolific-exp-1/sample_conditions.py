@@ -51,6 +51,5 @@ for cs in causal_structure:
             test_items.append({"background": story[0], "target": story[2], "scenario_id": s + START_SCENARIOS, "structure": cs, "type": "harm", "strength": "mild"})
             test_items.append({"background": story[0], "target": story[1], "scenario_id": s + START_SCENARIOS, "structure": cs, "type": "good", "strength": "mild"})
 
-
-with open(f'counterbalance_1.json', 'w') as f:
-    json.dump(test_items, f)
+# with open(f'batch_1.json', 'w') as f:
+#     json.dump(test_items, f)
