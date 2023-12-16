@@ -6,8 +6,8 @@ import numpy as np
 # Constants
 DATA_DIR = '../'
 NUM_CONDITIONS = 8
-START_SCENARIOS = 0
-END_SCENARIOS = 5
+START_SCENARIOS = 5
+END_SCENARIOS = 10
 NUM_BATCHES = 1
 
 
@@ -52,5 +52,5 @@ for cs in causal_structure:
             test_items.append({"background": story[0], "target": story[1], "scenario_id": s + START_SCENARIOS, "structure": cs, "type": "good", "strength": "mild"})
 
 
-with open(f'counterbalance_0.json', 'w') as f:
+with open(f'counterbalance_1.json', 'w') as f:
     json.dump(test_items, f)
