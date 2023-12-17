@@ -2,21 +2,20 @@ import os
 import csv
 
 DATA_DIR = './'
-CONDITION_DIR =  './conditions_mild_harm_mild_good'
-CSV_NAME_CC = "cc_stage_2_mild.csv"
-CSV_NAME_COC = "coc_stage_2_mild.csv"
+CONDITION_DIR =  '../data/conditions_severe_harm_very_good'
+
 
 EVITABILITY = ['evitable', 'inevitable']
 ACTION = ['action_yes', 'prevention_no']
 
 
-def get_completions(csv_name=CSV_NAME_CC):
+def get_completions(csv_name="cc_stage_2_severe.csv"):
     with open(csv_name, "r") as f:
         reader = csv.reader(f, delimiter=";")
         completions = list(reader)
     return completions
 
-def generate_conditions(completions, csv_name=CSV_NAME_CC, structure="cc"):
+def generate_conditions(completions, csv_name="cc_stage_2_severe.csv", structure="cc"):
     list_var = ["Context", 
                 "Action Opportunity", 
                 "Harm", 
@@ -82,9 +81,9 @@ def generate_conditions(completions, csv_name=CSV_NAME_CC, structure="cc"):
                     if structure == "cc":
                         writer.writerow([context, action_var, dict_var["Structure"], evitable_action, action_sentence])
                     elif structure == "coc":    
-                        writer.writerow([context, action_var, dict_var["Harm"], dict_var["Good"], evitable_action, action_sentence]) # harm and good are flipped here 
+                        writer.writerow([context, action_var, dict_var["Harm"], dict_var["Structure"], evitable_action, action_sentence]) # harm and good are flipped here 
 
 
 if __name__ == "__main__":  
-    completions = get_completions(csv_name=CSV_NAME_CC)
-    generate_conditions(completions, csv_name=CSV_NAME_CC, structure="cc")
+    completions = get_completions(csv_name="coc_stage_2_severe.csv")
+    generate_conditions(completions, csv_name="coc_stage_2_severe.csv", structure="coc")
