@@ -51,7 +51,7 @@ parser.add_argument('--api', type=str, default='azure', help='api')
 parser.add_argument('--model', type=str, default='openai/gpt-4-0314', help='model name')
 parser.add_argument('--temperature', type=float, default=0.0, help='temperature')
 parser.add_argument('--max_tokens', type=int, default=10, help='max tokens')
-parser.add_argument('--prompt', type=str, default='0shot_cot', help='prompt')
+parser.add_argument('--prompt', type=str, default='0shot_v2', help='prompt')
 
 # eval args
 parser.add_argument('--num', '-n', type=int, default=10, help='number of evaluations')
@@ -63,7 +63,8 @@ parser.add_argument('--data_dir', type=str, default='../data/conditions_mild_har
 parser.add_argument('--output_dir', type=str, default='../data/results/conditions_mild_harm_mild_good', help='output directory')
 
 # default questions
-question_1 = "{agent} decision is morally permissible."
+question_1_action = "{agent} action is morally permissible."
+question_1_prevention = "It is morally permissible that {agent} did not prevent the other agent's action."
 question_2 = "{agent} intended for the negative outcome to occur."
 
 # all conditions
@@ -97,6 +98,9 @@ PROMPT_DIR = "prompts"
 if args.prompt == "0shot":
     with open(os.path.join(PROMPT_DIR, "evaluate_0_shot.txt"), 'r') as f:
         prompt = f.read().strip()
+elif args.prompt == "0shot_v2":
+    with open(os.path.join(PROMPT_DIR, "evaluate_0_shot_v2.txt"), 'r') as f:
+        prompt = f.read().strip()
 elif args.prompt == "0shot_cot":
     with open(os.path.join(PROMPT_DIR, "evaluate_0_shot_cot.txt"), 'r') as f:
         prompt = f.read().strip()
@@ -121,6 +125,14 @@ for condition in conditions:
             name_s = name + "'"
         else:
             name_s = name + "'s"
+
+        if "action_yes" in condition:
+            question_1 = question_1_action
+        elif "prevention_no" in condition:
+            question_1 = question_1_prevention
+            name_s = name
+        
+
         query_1 = f"{story}\nQ: {question_1.format(agent=name_s)}"
         query_2 = f"{story}\nQ: {question_2.format(agent=name)}"
  

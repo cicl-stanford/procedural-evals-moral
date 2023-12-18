@@ -26,7 +26,7 @@ for cs, ev, ac, model, method in [(cs, ev, ac, model, method)
                                              for ev in ['evitable', 'inevitable']
                                              for ac in ['action_yes', 'prevention_no']
                                              for model in ['openai_gpt-4-0314']
-                                             for method in ['0shot', '0shot_cot']]:
+                                             for method in ['0shot', '0shot_cot', '0shot_v2']]:
     
 
     try:
@@ -59,4 +59,4 @@ for cs, ev, ac, model, method in [(cs, ev, ac, model, method)
 df = pd.DataFrame(full_df)
 
 # save to csv
-df.to_csv(os.path.join(DATA_PATH, "model_results_mild.csv"), index=False)
+df.to_csv(os.path.join("model_results_mild.csv"), index=False)

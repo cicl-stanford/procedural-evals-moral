@@ -66,25 +66,38 @@ def change_saturation(rgb, change=0.6):
     return df
 
 
-def filter_data(df, model, method, factor, factor_value, rating_type):
+def filter_data(df, model, method, factor, factor_value, rating_type, control_factors=None, control_factor_values=None):
+    if not control_factors:
+        return list(df[(df['model'] == model) & (df['method'] == method) & (df[factor] == factor_value)][rating_type])
+    else:
+        # filter based on control factors
+        for control_factor, control_factor_value in zip(control_factors, control_factor_values):
+            df = df[df[control_factor] == control_factor_value]
     return list(df[(df['model'] == model) & (df['method'] == method) & (df[factor] == factor_value)][rating_type])
 
 
-def prepare_data(df_model, df_human, factor1, factor2, rating_type):
+def prepare_data(
+        df_model, 
+        df_human, 
+        factor1, 
+        factor2, 
+        rating_type,
+        control_factors=None,
+        control_factor_values=None):
     model_filters = [
-        ('claude-2', '0shot'),
-        ('claude-2', '0shot_cot'),
+        # ('claude-2', '0shot'),
+        # ('claude-2', '0shot_cot'),
         ('openai_gpt-4-0314', '0shot'),
         ('openai_gpt-4-0314', '0shot_cot'),
-        ('human', '0shot'),
+        # ('human', '0shot'),
     ]
     
     data = {}
     for model, method in model_filters:
         key = f"{model}-{method}"
         data[key] = {
-            '0': filter_data(df_model, model, method, factor1, factor2[0], rating_type),
-            '1': filter_data(df_model, model, method, factor1, factor2[1], rating_type),
+            '0': filter_data(df_model, model, method, factor1, factor2[0], rating_type, control_factors, control_factor_values),
+            '1': filter_data(df_model, model, method, factor1, factor2[1], rating_type, control_factors, control_factor_values),
         }
     
     
