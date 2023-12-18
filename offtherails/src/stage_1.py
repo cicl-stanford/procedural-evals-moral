@@ -1,29 +1,32 @@
 import random
 import csv
-import tqdm
 import argparse
+
 from langchain.schema import (
     AIMessage,
     HumanMessage,
     SystemMessage
 )
+
 from utils import get_llm, get_vars_from_out
 
 DATA_DIR = '../../data'
 PROMPT_DIR = '../new_prompt_instructions'
 
-"""
-Format agent name and profession into full sentence
-"""
+
 def get_context(name, profession):
+    """
+    Format agent name and profession into full sentence
+    """
     article = 'an' if profession.strip()[0].lower() in 'aeiou' else 'a'
     context = f"{name.strip()}, {article} {profession}, faces a moral dilemma. "
     return context
 
-"""
-Pull a random item from csv file to use as a shot
-"""
+
 def get_example(names, professions, condition, rand_item, severity):
+    """
+    Pull a random item from csv file to use as a shot
+    """
     name = names[rand_item]
     profession = professions[rand_item]
     context = get_context(name, profession)
@@ -59,8 +62,7 @@ def gen_chat(args):
     for i, name in enumerate(names[args.start:args.end]):
         profession = professions[i + args.start]
 
-        # TODO - change these to not be hardcoded 
-        rand_item = 1 #random.randint(1) # random.randint(0, args.start - 1) # random example for few shot generation set to 1
+        rand_item = random.randint(0, args.start - 1) # random example for few shot generation set to 1
         severity = 'Mild'
 
         for condition in ['CC', 'CoC']:
@@ -99,7 +101,7 @@ def gen_story(args):
 parser = argparse.ArgumentParser()
 parser.add_argument('--start', type=int, default=3, help='start index')
 parser.add_argument('--end', type=int, default=5, help='end index')
-parser.add_argument('--model', type=str, default='openai/gpt-4-0314', help='model name')
+parser.add_argument('--model', type=str, default='openai/gpt-4-0613', help='model name')
 parser.add_argument('--temperature', type=float, default=0, help='temperature')
 parser.add_argument('--max_tokens', type=int, default=2000, help='max tokens')
 # change num completions to 10

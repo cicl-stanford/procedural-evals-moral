@@ -29,7 +29,7 @@ STORY_TAGS = json.load(open('story_tags.json'))
 
 
 parser = argparse.ArgumentParser()
-parser.add_argument('--model', type=str, default='openai/gpt-4-0314', help='model name')
+parser.add_argument('--model', type=str, default='openai/gpt-4-0613', help='model name')
 parser.add_argument('--temperature', type=float, default=0.3, help='temperature')
 parser.add_argument('--max_tokens', type=int, default=2000, help='max tokens')
 # change num completions to 10

@@ -1,18 +1,15 @@
-# evaluation script for morality
 import csv
 import os
 import argparse
-
 from tqdm import tqdm
 
-
-from langchain import HuggingFacePipeline
-from langchain.chat_models import ChatOpenAI, ChatAnthropic
 from langchain.schema import (
     HumanMessage,
     SystemMessage
 )
+
 from utils import get_llm
+
 
 def parse_response(raw_response):
     # parse answer
@@ -27,49 +24,55 @@ def parse_response(raw_response):
             return parsed_response
     elif "answer:" in raw_response.lower():
         response = raw_response.split("Answer:")[1].lower().strip()
-
     # getr metrics
     if "strongly agree" in response or "5" in response:
         parsed_response = 5
     elif "strongly disagree" in response or "1" in response:
         parsed_response = 1
+    elif "disagree" in response or "2" in response:
+        parsed_response = 2
     elif "agree" in response or "4" in response:
         parsed_response = 4
     elif "neutral" in response or "3" in response:
         parsed_response = 3
-    elif "disagree" in response or "2" in response:
-        parsed_response = 2
     else:
         print(f"Response {raw_response} not found.")
         parsed_response = int(input("Enter response(1-5):"))
     return parsed_response
 
+
 parser = argparse.ArgumentParser()
+
 
 # model args
 parser.add_argument('--api', type=str, default='azure', help='api')
-parser.add_argument('--model', type=str, default='openai/gpt-4-0314', help='model name')
+parser.add_argument('--model', type=str, default='openai/gpt-4-0613', help='model name')
 parser.add_argument('--temperature', type=float, default=0.0, help='temperature')
 parser.add_argument('--max_tokens', type=int, default=10, help='max tokens')
-parser.add_argument('--prompt', type=str, default='0shot_v2', help='prompt')
+parser.add_argument('--prompt', type=str, default='0shot_cot_kant', help='prompt')
+
 
 # eval args
 parser.add_argument('--num', '-n', type=int, default=10, help='number of evaluations')
 parser.add_argument('--offset', '-o', type=int, default=0, help='offset')
 parser.add_argument('--verbose', '-v', type=bool, default=True, help='verbose')
 
+
 # data args
 parser.add_argument('--data_dir', type=str, default='../data/conditions_mild_harm_mild_good/', help='data directory')
 parser.add_argument('--output_dir', type=str, default='../data/results/conditions_mild_harm_mild_good', help='output directory')
 
+
 # default questions
-question_1 = "{agent} action is morally permissible."
-question_2 = "{agent} intended for the negative outcome to occur."
+question_1 = """What {agent} did is morally permissible."""
+question_2 = """{agent} intended for the negative outcome to occur."""
+
 
 # all conditions
 variable_1 = ["cc", "coc"]
 variable_2 = ["evitable", "inevitable"]
 variable_3 = ["action_yes", "prevention_no"]
+
 
 # join all variables
 conditions = []
@@ -78,8 +81,10 @@ for v1 in variable_1:
         for v3 in variable_3:
             conditions.append(f"{v1}_{v2}_{v3}")
 
+
 # parse args
 args = parser.parse_args()
+
 
 # read data
 data = {}
@@ -100,36 +105,40 @@ if args.prompt == "0shot":
 elif args.prompt == "0shot_cot":
     with open(os.path.join(PROMPT_DIR, "evaluate_0_shot_cot.txt"), 'r') as f:
         prompt = f.read().strip()
+elif args.prompt == "0shot_cot_kant":
+    with open(os.path.join(PROMPT_DIR, "evaluate_0_shot_cot_kant.txt"), 'r') as f:
+        prompt = f.read().strip()
 else:
     raise ValueError(f"Prompt {args.prompt} not found.")
 
+
 # initialize LLM
-if args.model == 'openai/gpt-4-0314':
+if args.model == 'openai/gpt-4-0613':
     llm = get_llm(args)
 else:
     raise ValueError(f"Model {args.model} not found.")
 
+
 # evaluate
 for condition in conditions:
-    print(condition)
     predicted_answers_1, predicted_answers_2 = [], []
     graded_answers_1, graded_answers_2 = [], []
     for i in tqdm(range(args.offset, args.num)):
         story = data[condition][i]
+        story_sentences = story.split(".")
+        story_sentences = [sentence for sentence in story_sentences if sentence]
+        story_sentences[-1] = "\nDecision:" + story_sentences[-1] + "."
+        story = ". ".join(story_sentences)
         name = story.split(",")[0]
-        if name[-1] == 's':
-            name_s = name + "'"
-        else:
-            name_s = name + "'s"
-
-        query_1 = f"{story}\nQ: {question_1.format(agent=name_s)}"
-        query_2 = f"{story}\nQ: {question_2.format(agent=name)}"
+       
+        query_1 = f"Story: {story}\n\nStatement: {question_1.format(agent=name)}"
+        query_2 = f"Story: {story}\n\nStatement: {question_2.format(agent=name)}"
  
-        
         messages_1 = [SystemMessage(content=prompt), HumanMessage(content=query_1)]
         messages_2 = [SystemMessage(content=prompt), HumanMessage(content=query_2)]
-        response_1 = llm.generate([messages_1], stop=["Q:"]).generations[0][0].text
-        response_2 = llm.generate([messages_2], stop=["Q:"]).generations[0][0].text
+
+        response_1 = llm.generate([messages_1], stop=["Statement:"]).generations[0][0].text
+        response_2 = llm.generate([messages_2], stop=["Statement:"]).generations[0][0].text
       
         # parse response
         parsed_response_1 = parse_response(response_1)

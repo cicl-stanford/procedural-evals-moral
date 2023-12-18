@@ -20,7 +20,7 @@ CSV_NAME_LOAD = 'morality_stage_1'
 CSV_NAME_SAVE = 'morality_stage_2'
 
 parser = argparse.ArgumentParser()
-parser.add_argument('--model', type=str, default='openai/gpt-4-0314', help='model name')
+parser.add_argument('--model', type=str, default='openai/gpt-4-0613', help='model name')
 parser.add_argument('--temperature', type=float, default=0.05, help='temperature')
 parser.add_argument('--max_tokens', type=int, default=2000, help='max tokens')
 # change num completions to 10

@@ -70,7 +70,7 @@ class crfmChatLLM(SimpleChatModel):
         .. code-block:: python
 
             from crfm_chat_llm import crfmChatLLM
-            chat = crfmChatLLM(model_name="openai/gpt-4-0314")
+            chat = crfmChatLLM(model_name="openai/gpt-4-0613")
 
             system_message = SystemMessage(content="You are a helpful AI Assistant.")
             human_message_0 = HumanMessage(content="Tell me a joke")
@@ -87,7 +87,7 @@ class crfmChatLLM(SimpleChatModel):
             response = chat.generate([messages], stop=["System:"])
     """
     client: Any  #: :meta private:
-    model_name: str = "openai/gpt-4-0314"
+    model_name: str = "openai/gpt-4-0613"
     """Model name to use."""
     temperature: float = 0.7
     """What sampling temperature to use."""

@@ -87,9 +87,9 @@ def prepare_data(
     model_filters = [
         # ('claude-2', '0shot'),
         # ('claude-2', '0shot_cot'),
-        ('openai_gpt-4-0314', '0shot'),
-        ('openai_gpt-4-0314', '0shot_cot'),
-        # ('human', '0shot'),
+        ('openai_gpt-4-0613', '0shot'),
+        ('openai_gpt-4-0613', '0shot_cot'),
+        ('openai_gpt-4-0613', '0shot_cot_kant'),
     ]
     
     data = {}
