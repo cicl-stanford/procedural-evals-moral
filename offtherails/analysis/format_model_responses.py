@@ -26,7 +26,7 @@ for cs, ev, ac, model, method in [(cs, ev, ac, model, method)
                                              for ev in ['evitable', 'inevitable']
                                              for ac in ['action_yes', 'prevention_no']
                                              for model in ['openai_gpt-4-0613']
-                                             for method in ['0shot', '0shot_cot', '0shot_cot_kant']]:
+                                             for method in ['0shot', '0shot_cot', '0shot_cot_kant', '0shot_cot_utilitarian']]:
     
 
     try:

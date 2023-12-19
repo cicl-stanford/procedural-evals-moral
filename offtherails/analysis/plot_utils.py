@@ -90,6 +90,8 @@ def prepare_data(
         ('openai_gpt-4-0613', '0shot'),
         ('openai_gpt-4-0613', '0shot_cot'),
         ('openai_gpt-4-0613', '0shot_cot_kant'),
+        ('openai_gpt-4-0613', '0shot_cot_utilitarian'),
+
     ]
     
     data = {}

@@ -49,7 +49,7 @@ parser.add_argument('--api', type=str, default='azure', help='api')
 parser.add_argument('--model', type=str, default='openai/gpt-4-0613', help='model name')
 parser.add_argument('--temperature', type=float, default=0.0, help='temperature')
 parser.add_argument('--max_tokens', type=int, default=10, help='max tokens')
-parser.add_argument('--prompt', type=str, default='0shot_cot_kant', help='prompt')
+parser.add_argument('--prompt', type=str, default='0shot_cot_utilitarian', help='prompt')
 
 
 # eval args
@@ -107,6 +107,9 @@ elif args.prompt == "0shot_cot":
         prompt = f.read().strip()
 elif args.prompt == "0shot_cot_kant":
     with open(os.path.join(PROMPT_DIR, "evaluate_0_shot_cot_kant.txt"), 'r') as f:
+        prompt = f.read().strip()
+elif args.prompt == "0shot_cot_utilitarian":
+    with open(os.path.join(PROMPT_DIR, "evaluate_0_shot_cot_utilitarian.txt"), 'r') as f:
         prompt = f.read().strip()
 else:
     raise ValueError(f"Prompt {args.prompt} not found.")
