@@ -10,8 +10,8 @@ from langchain.schema import (
 
 from utils import get_llm, get_vars_from_out
 
-DATA_DIR = '../../data'
-PROMPT_DIR = '../new_prompt_instructions'
+DATA_DIR = '../data'
+PROMPT_DIR = 'prompts'
 
 
 def get_context(name, profession):
@@ -62,7 +62,7 @@ def gen_chat(args):
     for i, name in enumerate(names[args.start:args.end]):
         profession = professions[i + args.start]
 
-        rand_item = random.randint(0, args.start - 1) # random example for few shot generation set to 1
+        rand_item = 0#  random.randint(0, args.start - 1) # random example for few shot generation set to 1
         severity = 'Mild'
 
         for condition in ['CC', 'CoC']:
@@ -88,8 +88,8 @@ def gen_chat(args):
 
                 vars = get_vars_from_out(generation.text)
                 assert(len(vars) == 5) # TODO - change this later
-
-                with open(f'{PROMPT_DIR}/{condition.lower()}_stage_1_{severity.lower()}.csv', 'a') as csvfile:
+                breakpoint()
+                with open(f'{DATA_DIR}/{condition.lower()}_stage_1_{severity.lower()}.csv', 'a') as csvfile:
                     writer = csv.writer(csvfile, delimiter=';')
                     writer.writerow(vars)
 
@@ -99,8 +99,8 @@ def gen_story(args):
     pass  
 
 parser = argparse.ArgumentParser()
-parser.add_argument('--start', type=int, default=3, help='start index')
-parser.add_argument('--end', type=int, default=5, help='end index')
+parser.add_argument('--start', type=int, default=10, help='start index')
+parser.add_argument('--end', type=int, default=12, help='end index')
 parser.add_argument('--model', type=str, default='openai/gpt-4-0613', help='model name')
 parser.add_argument('--temperature', type=float, default=0, help='temperature')
 parser.add_argument('--max_tokens', type=int, default=2000, help='max tokens')
