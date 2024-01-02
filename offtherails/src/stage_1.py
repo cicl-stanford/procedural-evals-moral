@@ -31,7 +31,7 @@ def get_example(names, professions, condition, rand_item, severity):
     profession = professions[rand_item]
     context = get_context(name, profession)
     
-    with open(f'{PROMPT_DIR}/{condition.lower()}_stage_1_{severity.lower()}.csv', 'r') as f:
+    with open(f'{DATA_DIR}/{condition.lower()}_stage_1_{severity.lower()}.csv', 'r') as f:
         reader = list(csv.reader(f, delimiter=';'))
         row = reader[rand_item]
         vars = [elem.strip() for elem in row]
@@ -48,10 +48,11 @@ def get_example(names, professions, condition, rand_item, severity):
 def get_human_msg(name, profession, note=""):    
     return HumanMessage(content=f"Generate a completion for this context: {get_context(name, profession)} {note}")
 
-"""
-Generate action, harm, good, preventable cause, external non-prventable cause for both conditions 
-"""
+
 def gen_chat(args):
+    """
+    Generate action, harm, good, preventable cause, external non-prventable cause for both conditions 
+    """
     llm = get_llm(args)
 
     # Load names & professions
@@ -88,7 +89,6 @@ def gen_chat(args):
 
                 vars = get_vars_from_out(generation.text)
                 assert(len(vars) == 5) # TODO - change this later
-                breakpoint()
                 with open(f'{DATA_DIR}/{condition.lower()}_stage_1_{severity.lower()}.csv', 'a') as csvfile:
                     writer = csv.writer(csvfile, delimiter=';')
                     writer.writerow(vars)
@@ -99,8 +99,8 @@ def gen_story(args):
     pass  
 
 parser = argparse.ArgumentParser()
-parser.add_argument('--start', type=int, default=10, help='start index')
-parser.add_argument('--end', type=int, default=12, help='end index')
+parser.add_argument('--start', type=int, default=9, help='start index')
+parser.add_argument('--end', type=int, default=20, help='end index')
 parser.add_argument('--model', type=str, default='openai/gpt-4-0613', help='model name')
 parser.add_argument('--temperature', type=float, default=0, help='temperature')
 parser.add_argument('--max_tokens', type=int, default=2000, help='max tokens')
